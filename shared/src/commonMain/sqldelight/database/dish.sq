@@ -1,0 +1,28 @@
+CREATE TABLE dishEntity (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    description TEXT NOT NULL ,
+    rating INTEGER NOT NULL,
+    created INTEGER NOT NULL
+);
+
+getAllDishes:
+SELECT * FROM dishEntity;
+
+getDishById:
+SELECT * FROM dishEntity
+WHERE id = ?;
+
+insertDish:
+INSERT OR REPLACE
+INTO dishEntity(
+id,
+title,
+description,
+rating,
+created
+) VALUES(?,?,?,?,?);
+
+deleteDishById:
+DELETE FROM dishEntity
+WHERE id = ?;
