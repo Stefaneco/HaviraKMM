@@ -1,6 +1,8 @@
 package com.example.havira.android.dish.create.presentation
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material.Button
+import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import com.example.havira.dish.presentation.create.CreateDishEvent
@@ -21,6 +23,10 @@ fun CreateDishScreen(
             value = state.desc,
             onValueChange = {
                 onEvent(CreateDishEvent.EditDescription(it))
-            })
+            },
+            singleLine = false)
+        Button(onClick =  { onEvent(CreateDishEvent.CreateDish()) }) {
+            Text(text = "Save")
+        }
     }
 }
