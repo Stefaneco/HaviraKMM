@@ -33,7 +33,7 @@ class CreateDishViewModel(
             }
             is CreateDishEvent.EditDescription -> {
                 _state.update { it.copy(
-                    description = event.description
+                    desc = event.description
                 ) }
             }
             is CreateDishEvent.CreateDish -> {
@@ -52,7 +52,7 @@ class CreateDishViewModel(
 
             val result = dishInteractors.addDish(Dish(
                 title = state.title,
-                description = state.description,
+                desc = state.desc,
                 created = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())))
 
             if (result.isFailure) {

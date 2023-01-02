@@ -5,7 +5,7 @@ import kotlinx.datetime.LocalDateTime
 data class Dish(
     val id: Long? = null,
     val title: String,
-    val description: String,
+    val desc: String,
     val rating : Int = 0,
     val created : LocalDateTime
 )

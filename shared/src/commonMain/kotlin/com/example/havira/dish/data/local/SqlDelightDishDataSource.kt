@@ -28,7 +28,7 @@ class SqlDelightDishDataSource(
         queries.insertDish(
             id = dish.id,
             title = dish.title,
-            description = dish.description,
+            description = dish.desc,
             rating = dish.rating.toLong(),
             created = dish.created.toInstant(TimeZone.currentSystemDefault()).toEpochMilliseconds()
         )

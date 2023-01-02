@@ -10,7 +10,7 @@ fun DishEntity.toDish(): Dish {
     return Dish(
         id = id,
         title = title,
-        description = description,
+        desc = description,
         created = Instant.fromEpochMilliseconds(created).toLocalDateTime(TimeZone.currentSystemDefault()),
         rating = rating.toInt()
     )
