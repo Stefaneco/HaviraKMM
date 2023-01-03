@@ -7,5 +7,7 @@ data class Dish(
     val title: String,
     val desc: String,
     val rating : Int = 0,
+    val nofRatings : Int = 0,
+    val lastMade : LocalDateTime? = null,
     val created : LocalDateTime
 )

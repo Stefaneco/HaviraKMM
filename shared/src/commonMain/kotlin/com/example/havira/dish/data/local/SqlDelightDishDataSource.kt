@@ -30,6 +30,9 @@ class SqlDelightDishDataSource(
             title = dish.title,
             description = dish.desc,
             rating = dish.rating.toLong(),
+            nof_ratings = dish.nofRatings.toLong(),
+            last_made = dish.lastMade?.toInstant(TimeZone.currentSystemDefault())
+                ?.toEpochMilliseconds(),
             created = dish.created.toInstant(TimeZone.currentSystemDefault()).toEpochMilliseconds()
         )
     }

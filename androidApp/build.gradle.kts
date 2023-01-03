@@ -36,11 +36,16 @@ android {
 
 dependencies {
     implementation(project(":shared"))
+    implementation(Deps.material3)
+    implementation(Deps.material3WindowSize)
+
+    implementation(Deps.kotlinDateTime)
+
     implementation(Deps.composeUi)
     implementation(Deps.composeUiTooling)
     implementation(Deps.composeUiToolingPreview)
     implementation(Deps.composeFoundation)
-    implementation(Deps.composeMaterial)
+    //implementation(Deps.composeMaterial)
     implementation(Deps.activityCompose)
     implementation(Deps.composeIconsExtended)
     implementation(Deps.composeNavigation)

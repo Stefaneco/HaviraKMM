@@ -40,7 +40,9 @@ class CreateDishViewModel(
                 createDish(_state.value, event.onCreate)
             }
             is CreateDishEvent.OnErrorSeen -> {
-
+                _state.update { it.copy(
+                    error = null
+                ) }
             }
         }
     }
@@ -56,6 +58,7 @@ class CreateDishViewModel(
                 created = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())))
 
             if (result.isFailure) {
+                println(result.exceptionOrNull()?.message)
                 _state.update { it.copy(
                     error = result.exceptionOrNull()?.message,
                     isCreating = false
