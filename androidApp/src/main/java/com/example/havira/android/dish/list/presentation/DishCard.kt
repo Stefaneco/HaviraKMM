@@ -13,31 +13,40 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun DishCard(
     headline : String,
-    supportingText : String,
-    trailingSupportingText : String,
+    supportingText : String = "",
+    supportingText2: String = "",
+    trailingSupportingText : String = "",
     modifier : Modifier = Modifier
 ) {
     Card(
         modifier = modifier,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-        ),
         shape = MaterialTheme.shapes.medium
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp, vertical = 4.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 4.dp, vertical = 4.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(
-                modifier = Modifier.padding(4.dp).fillMaxWidth(0.8f)
+                modifier = Modifier
+                    .padding(4.dp)
+                    .fillMaxWidth(0.7f)
             ) {
                 Text(text = headline, style = MaterialTheme.typography.headlineSmall)
                 Text(text = supportingText, style = MaterialTheme.typography.bodySmall)
+
             }
-            Text(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                text = trailingSupportingText)
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                Text(text = trailingSupportingText, style = MaterialTheme.typography.bodyLarge)
+                Text(text = supportingText2, style = MaterialTheme.typography.bodySmall)
+            }
         }
     }
 }
