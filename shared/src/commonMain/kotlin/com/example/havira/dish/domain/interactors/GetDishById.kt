@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.flow
 class GetDishById(
   private val dishRepository: IDishRepository
 ) {
-    suspend operator fun invoke(id: Long) : CommonFlow<Resource<Dish>> = flow {
+    operator fun invoke(id: Long) : CommonFlow<Resource<Dish>> = flow {
 
         try {
             val dish = dishRepository.getDishById(id)

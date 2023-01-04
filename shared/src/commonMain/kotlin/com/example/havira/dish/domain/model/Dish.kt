@@ -9,5 +9,6 @@ data class Dish(
     val rating : Int = 0,
     val nofRatings : Int = 0,
     val lastMade : LocalDateTime? = null,
-    val created : LocalDateTime
+    val created : LocalDateTime,
+    var dishPreps : List<DishPrep>? = null
 )

@@ -29,7 +29,8 @@ fun DishListScreen(
             items(state.dishes) { dish ->
                 DishCard(
                     headline = dish.title,
-                    supportingText = dish.lastMade?.let { DateTimeUtil.formatDate(it) } ?: "New dish",
+                    supportingText =  dish.lastMade?.let { DateTimeUtil.formatDate(it) } ?: "New dish",
+                    supportingText2 = "0 ratings",
                     trailingSupportingText = dish.rating.toString(),
                     modifier = Modifier.clickable { onEvent(DishListEvent.SelectDish(dish.id!!)) })
             }
