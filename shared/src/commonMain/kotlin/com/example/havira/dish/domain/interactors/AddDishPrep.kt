@@ -1,17 +1,28 @@
 package com.example.havira.dish.domain.interactors
 
+import com.example.havira.core.domain.util.Resource
 import com.example.havira.dish.domain.IDishRepository
+import com.example.havira.dish.domain.model.Dish
 import com.example.havira.dish.domain.model.DishPrep
 
 class AddDishPrep(
     private val dishRepository: IDishRepository
 ) {
-    suspend operator fun invoke(dishPrep: DishPrep) : Result<Unit?>{
+    /*
+    Inserts into database new dishPrep and updates rating, nofRatings, lastMade of Dish
+    Gets new dishPrep database id
+    Adds new dishPrep to Dish and returns Dish
+     */
+    suspend operator fun invoke(dishPrep: DishPrep, dish: Dish) : Resource<Dish>{
         return try {
-            dishRepository.insertDishPrep(dishPrep)
-            Result.success(null)
+            val newDishPrepId = dishRepository.insertDishPrep(dishPrep, dish + dishPrep)
+            val newDishPrep = dishPrep.copy(
+                id = newDishPrepId
+            )
+            val newDish = dish + newDishPrep
+            return Resource.Success(newDish)
         } catch (e: Exception){
-            Result.failure(e)
+            Resource.Error(e)
         }
     }
 }

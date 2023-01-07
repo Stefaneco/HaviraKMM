@@ -21,7 +21,7 @@ class SqlDelightDishDataSource(
     override suspend fun getDishById(id: Long): Dish? {
         val dish = dishQueries.getDishById(id).executeAsOneOrNull()?.toDish() ?: return null
         val dishPreps = dishPrepQueries.getDishPrepsByDishId(id).executeAsList().map { it.toDishPrep() }
-        dish.dishPreps = dishPreps
+        dish.dishPreps = dishPreps.sortedByDescending { it.date }
         return dish
     }
 
@@ -34,21 +34,33 @@ class SqlDelightDishDataSource(
             id = dish.id,
             title = dish.title,
             description = dish.desc,
-            rating = dish.rating.toLong(),
+            rating = dish.rating.toDouble(),
             nof_ratings = dish.nofRatings.toLong(),
-            last_made = dish.lastMade?.toInstant(TimeZone.currentSystemDefault())
-                ?.toEpochMilliseconds(),
+            last_made = dish.lastMade?.toInstant(TimeZone.currentSystemDefault())?.toEpochMilliseconds(),
             created = dish.created.toInstant(TimeZone.currentSystemDefault()).toEpochMilliseconds()
         )
     }
 
-    override suspend fun insertDishPrep(dishPrep: DishPrep) {
-        dishPrepQueries.insertDishPrep(
-            id = dishPrep.id,
-            dish_id = dishPrep.dishId,
-            rating = dishPrep.rating.toLong(),
-            date = dishPrep.date
-        )
+    override suspend fun insertDishPrep(dishPrep: DishPrep, dish: Dish) : Long {
+        val id : Long = dishPrepQueries.transactionWithResult {
+            dishQueries.insertDish(
+                id = dish.id,
+                title = dish.title,
+                description = dish.desc,
+                rating = dish.rating.toDouble(),
+                nof_ratings = dish.nofRatings.toLong(),
+                last_made = dish.lastMade?.toInstant(TimeZone.currentSystemDefault())?.toEpochMilliseconds(),
+                created = dish.created.toInstant(TimeZone.currentSystemDefault()).toEpochMilliseconds()
+            )
+            dishPrepQueries.insertDishPrep(
+                id = dishPrep.id,
+                dish_id = dishPrep.dishId,
+                rating = dishPrep.rating.toLong(),
+                date = dishPrep.date
+            )
+            dishPrepQueries.getLastInsertedRowId().executeAsOne()
+        }
+        return id
     }
 
 }

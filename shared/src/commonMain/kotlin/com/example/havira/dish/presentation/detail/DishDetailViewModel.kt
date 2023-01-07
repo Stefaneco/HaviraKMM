@@ -1,7 +1,9 @@
 package com.example.havira.dish.presentation.detail
 
+import com.example.havira.core.domain.util.DateTimeUtil
 import com.example.havira.core.domain.util.Resource
 import com.example.havira.core.domain.util.toCommonStateFlow
+import com.example.havira.dish.domain.model.DishPrep
 import com.example.havira.dish.interactors.DishInteractors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -34,6 +36,35 @@ class DishDetailViewModel(
                 _state.update { it.copy(
                     isDishPrepCreatorOpen = false
                 )  }
+                viewModelScope.launch {
+                    val dish = _state.value.dish ?: return@launch // ?: throw error
+                    val dishId = dish.id ?: return@launch // ?: throw error
+                    val newDishResource = dishInteractors.addDishPrep(DishPrep
+                        (
+                            rating = _state.value.newDishPrepRating,
+                            date = DateTimeUtil.toEpochMillis(_state.value.newDishPrepDate),
+                            dishId = dishId
+                        ),
+                        dish
+                    )
+                    when(newDishResource){
+                        is Resource.Success -> {
+                            _state.update { it.copy(
+                                dish = newDishResource.data
+                            ) }
+                        }
+                        is Resource.Error -> {
+                            _state.update { it.copy(
+                                error = newDishResource.throwable?.message
+                            ) }
+                        }
+                    }
+                }
+            }
+            is DishDetailEvent.SetDishPrepCreatorRating -> {
+                _state.update { it.copy(
+                    newDishPrepRating = event.rating
+                ) }
             }
             is DishDetailEvent.Edit -> {
 
@@ -47,9 +78,11 @@ class DishDetailViewModel(
             dishInteractors.getDishById(dishId).collect { dishResource ->
                 when(dishResource) {
                     is Resource.Success -> {
+                        val rating = (dishResource.data?.rating ?: 5).toInt()
                         _state.update { it.copy(
                             dish = dishResource.data,
-                            isLoading = false
+                            isLoading = false,
+                            newDishPrepRating = if(rating != 0) rating else 4
                         ) }
                     }
                     is Resource.Error -> {

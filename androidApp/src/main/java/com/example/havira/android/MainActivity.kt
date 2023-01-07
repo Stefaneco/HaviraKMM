@@ -24,6 +24,7 @@ import com.example.havira.android.dish.details.presentation.AndroidDishDetailVie
 import com.example.havira.android.dish.details.presentation.DishDetailScreen
 import com.example.havira.android.dish.list.presentation.AndroidDishListViewModel
 import com.example.havira.android.dish.list.presentation.DishListScreen
+import com.example.havira.dish.presentation.create.CreateDishEvent
 import com.example.havira.dish.presentation.list.DishListEvent
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -61,7 +62,18 @@ fun HaviraRoot(){
                 val state by viewModel.state.collectAsState()
 
                 CreateDishScreen(state = state, onEvent = { event ->
-                    viewModel.onEvent(event)
+                    when(event){
+                        is CreateDishEvent.CreateDish -> {
+                            viewModel.onEvent(
+                                CreateDishEvent.CreateDish{
+                                navController.navigate(Routes.DISH_LIST) {
+                                    popUpTo(Routes.CREATE_DISH)
+                                }
+                            })
+                        }
+                        else -> viewModel.onEvent(event)
+                    }
+
                 })
             }
             composable(Routes.DISH_LIST){

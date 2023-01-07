@@ -14,8 +14,10 @@ object Deps {
     const val composeUiTooling = "androidx.compose.ui:ui-tooling:$composeVersion"
     const val composeUiToolingPreview = "androidx.compose.ui:ui-tooling-preview:$composeVersion"
     const val composeFoundation = "androidx.compose.foundation:foundation:$composeVersion"
-    //const val composeMaterial = "androidx.compose.material:material:$composeVersion"
     const val composeIconsExtended = "androidx.compose.material:material-icons-extended:$composeVersion"
+
+    //MATERIAL 2 COMPOSE - USED FOR SWIPE (swipeable is internal in material3 1.0.1)
+    //const val material2 = "androidx.compose.material:material:$composeVersion"
 
     private const val composeNavigationVersion = "2.5.3"
     const val composeNavigation = "androidx.navigation:navigation-compose:$composeNavigationVersion"

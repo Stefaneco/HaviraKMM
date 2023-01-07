@@ -15,6 +15,6 @@ class DishRepository(
 
     override suspend fun insertDish(dish: Dish) = localDishDataSource.insertDish(dish)
 
-    override suspend fun insertDishPrep(dishPrep: DishPrep) = localDishDataSource.insertDishPrep(dishPrep)
+    override suspend fun insertDishPrep(dishPrep: DishPrep, dish: Dish) = localDishDataSource.insertDishPrep(dishPrep, dish)
 
 }

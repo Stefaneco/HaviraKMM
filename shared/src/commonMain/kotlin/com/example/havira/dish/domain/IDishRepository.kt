@@ -9,5 +9,5 @@ interface IDishRepository {
     suspend fun getDishById(id: Long) : Dish?
     suspend fun deleteDishById(id: Long)
     suspend fun insertDish(dish: Dish)
-    suspend fun insertDishPrep(dishPrep: DishPrep)
+    suspend fun insertDishPrep(dishPrep: DishPrep, dish: Dish) : Long
 }

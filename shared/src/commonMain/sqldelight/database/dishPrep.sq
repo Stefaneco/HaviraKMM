@@ -9,6 +9,10 @@ getDishPrepsByDishId:
 SELECT * FROM dishPrepEntity
 WHERE dish_id = ?;
 
+getDishPrepById:
+SELECT * FROM dishPrepEntity
+WHERE id = ?;
+
 insertDishPrep:
 INSERT OR REPLACE
 INTO dishPrepEntity(
@@ -17,3 +21,7 @@ dish_id,
 rating,
 date
 ) VALUES (?,?,?,?);
+
+getLastInsertedRowId:
+SELECT last_insert_rowid();
+

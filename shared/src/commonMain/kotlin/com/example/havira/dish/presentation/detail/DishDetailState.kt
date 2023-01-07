@@ -8,13 +8,6 @@ import kotlinx.datetime.toLocalDateTime
 
 data class DishDetailState(
     val dish : Dish? = null,
-/*    val title: String = "",
-    val desc: String = "",
-    val rating: Int = 0,
-    val lastMade : String = "New dish",
-    val nofRatings : Int = 0,
-    val created : String = "",
-    val dishPreps : List<DishPrep> = emptyList(),*/
     val isLoading : Boolean = true,
     val error : String? = null,
     val isAddingDishPrep : Boolean = false,
