@@ -69,6 +69,9 @@ class DishDetailViewModel(
             is DishDetailEvent.Edit -> {
 
             }
+            is DishDetailEvent.BackButtonPressed -> {
+
+            }
         }
     }
 

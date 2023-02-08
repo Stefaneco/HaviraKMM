@@ -6,4 +6,5 @@ sealed class DishDetailEvent {
     object OpenDishPrepCreator : DishDetailEvent()
     object CloseDishPrepCreator : DishDetailEvent()
     data class SetDishPrepCreatorRating(val rating: Int) : DishDetailEvent()
+    object BackButtonPressed : DishDetailEvent()
 }

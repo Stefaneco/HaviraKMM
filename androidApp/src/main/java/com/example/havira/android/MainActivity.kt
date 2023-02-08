@@ -25,6 +25,7 @@ import com.example.havira.android.dish.details.presentation.DishDetailScreen
 import com.example.havira.android.dish.list.presentation.AndroidDishListViewModel
 import com.example.havira.android.dish.list.presentation.DishListScreen
 import com.example.havira.dish.presentation.create.CreateDishEvent
+import com.example.havira.dish.presentation.detail.DishDetailEvent
 import com.example.havira.dish.presentation.list.DishListEvent
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -100,7 +101,13 @@ fun HaviraRoot(){
                 val dishId = backStackEntry.arguments?.getString("dishId")?.toLong() ?: -1
                 viewModel.loadDish(dishId)
                 DishDetailScreen(state = state, onEvent = {event ->
-                    viewModel.onEvent(event)
+                    when(event){
+                        is DishDetailEvent.BackButtonPressed -> {
+                            navController.popBackStack()
+                        }
+                        else -> { viewModel.onEvent(event) }
+                    }
+
                 })
             }
         }

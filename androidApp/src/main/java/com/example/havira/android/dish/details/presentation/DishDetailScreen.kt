@@ -7,62 +7,109 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.rounded.Cookie
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.example.havira.android.dish.details.presentation.components.DishPrepCard
 import com.example.havira.android.dish.details.presentation.components.DishPrepCreator
 import com.example.havira.android.dish.details.presentation.components.InfoChip
-import com.example.havira.android.dish.details.presentation.components.TitleCard
 import com.example.havira.core.domain.util.DateTimeUtil
 import com.example.havira.dish.presentation.detail.DishDetailEvent
 import com.example.havira.dish.presentation.detail.DishDetailState
 import kotlin.math.roundToInt
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DishDetailScreen(
     state : DishDetailState,
     onEvent : (DishDetailEvent) -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(4.dp)
-            .alpha(if (state.isDishPrepCreatorOpen) 0.7f else 1f),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
-        state.dish?.let {
-            with(it){
-                LazyColumn(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    item {
-                        TitleCard(title = title)
-                        Spacer(modifier = Modifier.padding(4.dp))
-                        DishDetailInfoCard(
-                            lastMade = lastMade?.let { lastMade -> DateTimeUtil.formatDate(lastMade) } ?: "Never",
-                            rating = "%.1f".format(rating),
-                            nofRatings = nofRatings.toString(),
-                            dishDescription = desc
+    //val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    //val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            LargeTopAppBar(
+                title = {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = state.dish?.title ?: "",
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                        //textAlign = TextAlign.Center
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = { onEvent(DishDetailEvent.BackButtonPressed) }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Localized description"
                         )
-                        Spacer(modifier = Modifier.padding(4.dp))
                     }
-                    items(dishPreps ?: emptyList()){ dishPrep ->
-                        DishPrepCard(rating = dishPrep.rating, date = DateTimeUtil.formatDate(dishPrep.date))
+                },
+                actions = {
+                    IconButton(onClick = { /* doSomething() */ }) {
+                        Icon(
+                            imageVector = Icons.Filled.Edit,
+                            contentDescription = "Localized description"
+                        )
+                    }
+                },
+                scrollBehavior = scrollBehavior
+           )
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(4.dp)
+                .alpha(if (state.isDishPrepCreatorOpen) 0.7f else 1f),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            state.dish?.let {
+                with(it){
+                    LazyColumn(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        item {
+                            //TitleCard(title = title)
+                            Spacer(modifier = Modifier.padding(4.dp))
+                            DishDetailInfoCard(
+                                lastMade = lastMade?.let { lastMade -> DateTimeUtil.formatDate(lastMade) } ?: "Never",
+                                rating = "%.1f".format(rating),
+                                nofRatings = nofRatings.toString(),
+                                dishDescription = desc
+                            )
+                            Spacer(modifier = Modifier.padding(4.dp))
+                        }
+                        items(dishPreps ?: emptyList()){ dishPrep ->
+                            DishPrepCard(rating = dishPrep.rating, date = DateTimeUtil.formatDate(dishPrep.date))
+                        }
+                        item {
+                            Spacer(modifier = Modifier.padding(50.dp))
+                        }
                     }
                 }
             }
         }
+        if(state.isDishPrepCreatorOpen) DishDetailDishPrepCreator(state = state, onEvent = onEvent)
+        else DishDetailFloatingActionButton(state = state, onEvent = onEvent)
     }
-    if(state.isDishPrepCreatorOpen) DishDetailDishPrepCreator(state = state, onEvent = onEvent)
-    else DishDetailFloatingActionButton(state = state, onEvent = onEvent)
+
+
 
 }
 

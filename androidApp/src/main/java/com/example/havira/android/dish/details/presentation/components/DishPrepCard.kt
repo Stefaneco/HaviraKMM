@@ -41,8 +41,10 @@ fun RatingStars(rating: Int) {
         for (i in 1..5) {
             val icon = if (i <= rating) {
                 Icons.Filled.Star
+                //Icons.Filled.Cookie
             } else {
                 Icons.Outlined.StarOutline
+                //Icons.Outlined.Cookie
             }
             val starSize = if (i <= rating) 46.dp else 46.dp
             Icon(imageVector = icon, modifier = Modifier.size(starSize), contentDescription = "")

@@ -28,7 +28,7 @@ fun DishPrepCreator(
         modifier = modifier.fillMaxWidth(0.8f),
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.elevatedCardElevation(
-            defaultElevation = 16.dp
+            defaultElevation = 12.dp
         )
     ) {
         Column(
@@ -71,7 +71,6 @@ fun DishPrepDatePicker(
             Icon(imageVector = Icons.Filled.DateRange, contentDescription = "")
         }
     }
-
 }
 
 @Composable
