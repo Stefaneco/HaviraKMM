@@ -1,17 +1,14 @@
 package com.example.havira.android.dish.list.presentation
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
@@ -26,31 +23,22 @@ fun DishListScreen(
     onEvent : (DishListEvent) -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopAppBar(
-                title = {
-                    //TextField(value = "", onValueChange = {}, label = { Text(text = "Search")})
-                    BasicTextField(value = "", onValueChange = {})
-            },
-                navigationIcon = {
-                    Icon(
-                        imageVector = Icons.Filled.Search,
-                        contentDescription = "Localized description"
-                    )
-                },
+                title = { Text(modifier = Modifier.fillMaxWidth(), text = "Dishes") },
                 actions = {
                     IconButton(onClick = {  }) {
                         Icon(
-                            imageVector = Icons.Filled.FilterAlt,
+                            imageVector = Icons.Filled.Search,
                             contentDescription = "Localized description"
                         )
                     }
-                    IconButton(onClick = {  }) {
+                    IconButton(onClick = { onEvent(DishListEvent.ChangeFilterBoxVisibility) }) {
                         Icon(
-                            imageVector = Icons.Filled.SwapVert,
+                            //imageVector = Icons.Filled.FilterList,
+                            imageVector = Icons.Filled.Tune,
                             contentDescription = "Localized description"
                         )
                     }
@@ -61,11 +49,12 @@ fun DishListScreen(
         Column(
             modifier = Modifier.padding(paddingValues)
         ) {
+            if(state.isFilterBoxVisible) DishFilterBox(state = state, onEvent = onEvent, scrollBehavior = scrollBehavior)
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(4.dp),
                 contentPadding = PaddingValues(vertical = 4.dp, horizontal = 4.dp)
             ){
-                items(state.dishes) { dish ->
+                items(state.sortedDishes) { dish ->
                     DishCard(
                         headline = dish.title,
                         supportingText =  dish.lastMade?.let { DateTimeUtil.formatDate(it) } ?: "New dish",
@@ -74,6 +63,12 @@ fun DishListScreen(
                         modifier = Modifier.clickable { onEvent(DishListEvent.SelectDish(dish.id!!)) })
                 }
             }
+        }
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Button(onClick = {onEvent(DishListEvent.CreateDish)} ) {
                 Text("New Dish")
             }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="rating">Rating</string>
+    <string name="title">Title</string>
+    <string name="nof_ratings">Nof. Ratings</string>
+    <string name="created_date">Date of Creation</string>
+    <string name="last_made_date">Last Cooking Date</string>
+
+</resources>

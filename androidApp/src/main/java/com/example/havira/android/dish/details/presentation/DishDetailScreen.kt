@@ -98,6 +98,9 @@ fun DishDetailScreen(
                         items(dishPreps ?: emptyList()){ dishPrep ->
                             DishPrepCard(rating = dishPrep.rating, date = DateTimeUtil.formatDate(dishPrep.date))
                         }
+                        items(20){
+                            DishPrepCard(rating = 2, date = "2121")
+                        }
                         item {
                             Spacer(modifier = Modifier.padding(50.dp))
                         }
