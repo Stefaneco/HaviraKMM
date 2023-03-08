@@ -6,4 +6,7 @@ sealed class DishEditEvent {
     class EditDish(val onEdit: () -> Unit = {}) : DishEditEvent()
     object BackButtonPressed : DishEditEvent()
     object OnErrorSeen : DishEditEvent()
+    class DeleteDish(val onDelete: () -> Unit = {}) : DishEditEvent()
+    object DismissDeleteDialog : DishEditEvent()
+    object OpenDeleteDialog : DishEditEvent()
 }

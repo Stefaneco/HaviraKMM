@@ -8,7 +8,7 @@ import com.example.havira.dish.domain.DishRepository
 import com.example.havira.dish.domain.IDishDataSource
 import com.example.havira.dish.domain.IDishRepository
 import com.example.havira.dish.domain.interactors.*
-import com.example.havira.dish.interactors.DishInteractors
+import com.example.havira.dish.domain.interactors.DishInteractors
 import com.squareup.sqldelight.db.SqlDriver
 import dagger.Module
 import dagger.Provides

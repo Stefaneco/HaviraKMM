@@ -2,7 +2,7 @@ package com.example.havira.dish.presentation.edit
 
 import com.example.havira.core.domain.util.Resource
 import com.example.havira.core.domain.util.toCommonStateFlow
-import com.example.havira.dish.interactors.DishInteractors
+import com.example.havira.dish.domain.interactors.DishInteractors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,6 +40,21 @@ class DishEditViewModel(
             DishEditEvent.OnErrorSeen -> {
                 _state.update { it.copy(
                     error = null
+                ) }
+            }
+            is DishEditEvent.DeleteDish -> {
+                _state.value.dishId?.let { dishId ->
+                    deleteDish(dishId, event.onDelete)
+                }
+            }
+            DishEditEvent.DismissDeleteDialog -> {
+                _state.update { it.copy(
+                    isDeleteDialogOpen = false
+                ) }
+            }
+            DishEditEvent.OpenDeleteDialog -> {
+                _state.update { it.copy(
+                    isDeleteDialogOpen = true
                 ) }
             }
         }
@@ -91,6 +106,23 @@ class DishEditViewModel(
                     isSaving = false
                 ) }
                 onEdit()
+            }
+        }
+    }
+
+    private fun deleteDish(dishId: Long, onDelete: () -> Unit){
+        viewModelScope.launch {
+
+            val result = dishInteractors.deleteDishById(dishId)
+
+            if(result.isFailure){
+                println(result.exceptionOrNull()?.message)
+                _state.update { it.copy(
+                    error = result.exceptionOrNull()?.message
+                ) }
+            }
+            else if(result.isSuccess){
+                onDelete()
             }
         }
     }

@@ -71,9 +71,14 @@ fun HaviraRoot(){
                             viewModel.onEvent(
                                 CreateDishEvent.CreateDish{
                                 navController.navigate(Routes.DISH_LIST) {
-                                    popUpTo(Routes.CREATE_DISH)
+                                    popUpTo(Routes.DISH_LIST) {
+                                        inclusive = true
+                                    }
                                 }
                             })
+                        }
+                        is CreateDishEvent.BackButtonPressed -> {
+                            navController.popBackStack()
                         }
                         else -> viewModel.onEvent(event)
                     }
@@ -132,6 +137,17 @@ fun HaviraRoot(){
                                 DishEditEvent.EditDish {
                                     navController.navigate(Routes.DISH_DETAILS_ARGS.format(dishId)) {
                                         popUpTo(Routes.DISH_LIST)
+                                    }
+                                }
+                            )
+                        }
+                        is DishEditEvent.DeleteDish -> {
+                            viewModel.onEvent(
+                                DishEditEvent.DeleteDish {
+                                    navController.navigate(Routes.DISH_LIST){
+                                        popUpTo(Routes.DISH_LIST) {
+                                            inclusive = true
+                                        }
                                     }
                                 }
                             )

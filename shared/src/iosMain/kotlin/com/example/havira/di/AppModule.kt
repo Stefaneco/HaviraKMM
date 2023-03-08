@@ -6,11 +6,7 @@ import com.example.havira.dish.data.local.SqlDelightDishDataSource
 import com.example.havira.dish.domain.DishRepository
 import com.example.havira.dish.domain.IDishDataSource
 import com.example.havira.dish.domain.IDishRepository
-import com.example.havira.dish.domain.interactors.AddDish
-import com.example.havira.dish.domain.interactors.DeleteDishById
-import com.example.havira.dish.domain.interactors.GetAllDishes
-import com.example.havira.dish.domain.interactors.GetDishById
-import com.example.havira.dish.interactors.DishInteractors
+import com.example.havira.dish.domain.interactors.*
 
 interface IAppModule{
     val dishInteractors : DishInteractors
@@ -23,7 +19,9 @@ class AppModule : IAppModule {
             AddDish(dishRepository),
             DeleteDishById(dishRepository),
             GetAllDishes(dishRepository),
-            GetDishById(dishRepository)
+            GetDishById(dishRepository),
+            AddDishPrep(dishRepository),
+            EditDish(dishRepository)
         )
     }
 

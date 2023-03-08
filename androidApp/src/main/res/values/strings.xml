@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Havira</string>
     <string name="rating">Rating</string>
     <string name="title">Title</string>
     <string name="nof_ratings">Nof. Ratings</string>

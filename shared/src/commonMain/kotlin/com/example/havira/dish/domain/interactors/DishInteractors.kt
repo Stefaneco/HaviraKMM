@@ -1,6 +1,4 @@
-package com.example.havira.dish.interactors
-
-import com.example.havira.dish.domain.interactors.*
+package com.example.havira.dish.domain.interactors
 
 data class DishInteractors(
     val addDish: AddDish,

@@ -6,6 +6,7 @@ data class DishEditState(
     val desc: String = "",
     val isValidDish: Boolean = false,
     val error : String? = null,
-    val isSaving: Boolean = false
+    val isSaving: Boolean = false,
+    val isDeleteDialogOpen: Boolean = false
 ) {
 }

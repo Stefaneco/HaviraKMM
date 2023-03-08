@@ -5,4 +5,5 @@ sealed class CreateDishEvent {
     data class EditDescription(val description: String) : CreateDishEvent()
     class CreateDish(val onCreate: () -> Unit = {}) : CreateDishEvent()
     object OnErrorSeen : CreateDishEvent()
+    object BackButtonPressed : CreateDishEvent()
 }

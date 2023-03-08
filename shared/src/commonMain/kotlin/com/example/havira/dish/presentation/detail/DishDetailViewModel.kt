@@ -4,7 +4,7 @@ import com.example.havira.core.domain.util.DateTimeUtil
 import com.example.havira.core.domain.util.Resource
 import com.example.havira.core.domain.util.toCommonStateFlow
 import com.example.havira.dish.domain.model.DishPrep
-import com.example.havira.dish.interactors.DishInteractors
+import com.example.havira.dish.domain.interactors.DishInteractors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*

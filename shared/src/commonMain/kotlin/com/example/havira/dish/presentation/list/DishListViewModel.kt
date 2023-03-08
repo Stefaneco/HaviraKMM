@@ -4,7 +4,7 @@ import com.example.havira.core.domain.util.SortDirection
 import com.example.havira.core.domain.util.SortType
 import com.example.havira.core.domain.util.toCommonStateFlow
 import com.example.havira.dish.domain.model.Dish
-import com.example.havira.dish.interactors.DishInteractors
+import com.example.havira.dish.domain.interactors.DishInteractors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*

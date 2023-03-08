@@ -3,12 +3,15 @@
 package com.example.havira.android.dish.presentation.create
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import com.example.havira.dish.presentation.create.CreateDishEvent
 import com.example.havira.dish.presentation.create.CreateDishState
@@ -19,24 +22,42 @@ fun CreateDishScreen(
     state : CreateDishState,
     onEvent : (CreateDishEvent) -> Unit
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(vertical = 16.dp, horizontal = 4.dp),
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            TopAppBar(
+                title = {  },
+                navigationIcon = {
+                    IconButton(onClick = { onEvent(CreateDishEvent.BackButtonPressed) }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Localized description"
+                        )
+                    }
+                },
+                scrollBehavior = scrollBehavior)
+        }
+    ) { paddingValues ->
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
 
-        FilledDishEditSection(
-            title = state.title,
-            desc = state.desc,
-            editDesc = { onEvent(CreateDishEvent.EditDescription(it))},
-            editTitle = { onEvent(CreateDishEvent.EditTitle(it))}
-        )
-        Button(
-            onClick =  { onEvent(CreateDishEvent.CreateDish()) },
-            enabled = state.isValidDish) {
-            Text(text = "Save")
+            FilledDishEditSection(
+                title = state.title,
+                desc = state.desc,
+                editDesc = { onEvent(CreateDishEvent.EditDescription(it))},
+                editTitle = { onEvent(CreateDishEvent.EditTitle(it))}
+            )
+            Button(
+                onClick =  { onEvent(CreateDishEvent.CreateDish()) },
+                enabled = state.isValidDish) {
+                Text(text = "Save")
+            }
         }
     }
 }

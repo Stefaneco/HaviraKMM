@@ -2,7 +2,7 @@ package com.example.havira.android.dish.presentation.details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.havira.dish.interactors.DishInteractors
+import com.example.havira.dish.domain.interactors.DishInteractors
 import com.example.havira.dish.presentation.detail.DishDetailEvent
 import com.example.havira.dish.presentation.detail.DishDetailViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

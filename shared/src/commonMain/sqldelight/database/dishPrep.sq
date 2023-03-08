@@ -22,6 +22,10 @@ rating,
 date
 ) VALUES (?,?,?,?);
 
+deleteDishPrepsByDishId:
+DELETE FROM dishPrepEntity
+WHERE dish_id = ?;
+
 getLastInsertedRowId:
 SELECT last_insert_rowid();
 
