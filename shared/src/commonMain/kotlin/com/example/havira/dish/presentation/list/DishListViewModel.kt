@@ -3,8 +3,8 @@ package com.example.havira.dish.presentation.list
 import com.example.havira.core.domain.util.SortDirection
 import com.example.havira.core.domain.util.SortType
 import com.example.havira.core.domain.util.toCommonStateFlow
-import com.example.havira.dish.domain.model.Dish
 import com.example.havira.dish.domain.interactors.DishInteractors
+import com.example.havira.dish.domain.model.Dish
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -30,6 +30,7 @@ class DishListViewModel(
             _state.copy(
                 dishes = dishes.data ?: emptyList(),
                 filteredDishes = dishes.data ?: emptyList(),
+                searchedDishes = search(dishes.data ?: emptyList(), _state.searchText),
                 sortedDishes = sort(dishes.data ?: emptyList(), _state.selectedSort, _state.selectedSortDirection)
             )
         } else _state
@@ -46,9 +47,8 @@ class DishListViewModel(
                 ) }
             }
             is DishListEvent.SearchDish -> {
-                val filteredDishes = _state.value.dishes.filter { it.title.startsWith(event.searchString) }
                 _state.update { it.copy(
-                    filteredDishes = filteredDishes
+                    searchText = event.searchString
                 ) }
             }
             DishListEvent.DismissSortDropdown -> {
@@ -65,18 +65,27 @@ class DishListViewModel(
                 _state.update { it.copy(
                     isSortingDropdownDisplayed = false,
                     selectedSort = event.sortType,
-                    sortedDishes = sort(it.filteredDishes, event.sortType, it.selectedSortDirection)
                 ) }
             }
             is DishListEvent.SelectSortDirection -> {
                 _state.update { it.copy(
                     selectedSortDirection = event.sortDirection,
-                    sortedDishes = sort(it.filteredDishes, it.selectedSort, event.sortDirection)
                 ) }
             }
             DishListEvent.ChangeFilterBoxVisibility -> {
                 _state.update { it.copy(
                     isFilterBoxVisible = !it.isFilterBoxVisible
+                ) }
+            }
+            DishListEvent.DismissSearchView -> {
+                _state.update { it.copy(
+                    isSearchViewOpen = false,
+                    searchText = ""
+                ) }
+            }
+            DishListEvent.OpenSearchView -> {
+                _state.update { it.copy(
+                    isSearchViewOpen = true
                 ) }
             }
         }
@@ -89,14 +98,21 @@ class DishListViewModel(
                 SortType.LAST_MADE -> items.sortedBy { it.lastMade }
                 SortType.CREATED -> items.sortedBy { it.created }
                 SortType.NOF_RATINGS -> items.sortedBy { it.nofRatings }
-                SortType.TITLE -> items.sortedBy { it.title }
+                SortType.TITLE -> items.sortedBy { it.title.lowercase() }
             }
         else when(sortType){
             SortType.RATING -> items.sortedByDescending { it.rating }
             SortType.LAST_MADE -> items.sortedByDescending { it.lastMade }
             SortType.CREATED -> items.sortedByDescending { it.created }
             SortType.NOF_RATINGS -> items.sortedByDescending { it.nofRatings }
-            SortType.TITLE -> items.sortedByDescending { it.title }
+            SortType.TITLE -> items.sortedByDescending { it.title.lowercase() }
+        }
+    }
+
+    private fun search(items: List<Dish>, query: String) : List<Dish>{
+        return items.filter {
+            it.title.contains(query, ignoreCase = true)
+            || it.desc.contains(query, ignoreCase = true)
         }
     }
 }

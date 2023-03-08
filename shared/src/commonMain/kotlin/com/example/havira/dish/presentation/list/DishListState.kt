@@ -7,6 +7,8 @@ import com.example.havira.dish.domain.model.Dish
 data class DishListState(
     val isLoading : Boolean = true,
     val dishes : List<Dish> = emptyList(),
+
+    //sort and filter
     val filteredDishes: List<Dish> = emptyList(),
     val sortedDishes: List<Dish> = emptyList(),
     val error : String? = null,
@@ -17,6 +19,11 @@ data class DishListState(
     val minNofRatings: Int? = null,
     val maxNofRatings: Int? = null,
     val isSortingDropdownDisplayed: Boolean = false,
-    val isFilterBoxVisible: Boolean = false
+    val isFilterBoxVisible: Boolean = false,
+
+    //search
+    val isSearchViewOpen: Boolean = false,
+    val searchText: String = "",
+    val searchedDishes: List<Dish> = emptyList()
 ) {
 }

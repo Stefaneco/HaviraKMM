@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.example.havira.android.dish.presentation.list
 
 import androidx.compose.foundation.clickable
@@ -16,12 +18,28 @@ import com.example.havira.core.domain.util.DateTimeUtil
 import com.example.havira.dish.presentation.list.DishListEvent
 import com.example.havira.dish.presentation.list.DishListState
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DishListScreen(
     state: DishListState,
     onEvent : (DishListEvent) -> Unit
 ) {
+    if(state.isSearchViewOpen)
+        DishSearchView(
+            searchText = state.searchText,
+            onSearchTextChange = { onEvent(DishListEvent.SearchDish(it)) },
+            onDismiss = { onEvent(DishListEvent.DismissSearchView) },
+            onItemSelected = { onEvent(DishListEvent.SelectDish(it)) },
+            items = state.searchedDishes
+        )
+    else
+        DishBaseView(state = state, onEvent = onEvent)
+}
+
+@Composable
+fun DishBaseView(
+    state: DishListState,
+    onEvent: (DishListEvent) -> Unit
+){
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -29,7 +47,7 @@ fun DishListScreen(
             TopAppBar(
                 title = { Text(modifier = Modifier.fillMaxWidth(), text = "Dishes") },
                 actions = {
-                    IconButton(onClick = {  }) {
+                    IconButton(onClick = { onEvent(DishListEvent.OpenSearchView) }) {
                         Icon(
                             imageVector = Icons.Filled.Search,
                             contentDescription = "Localized description"
@@ -42,8 +60,8 @@ fun DishListScreen(
                             contentDescription = "Localized description"
                         )
                     }
-            },
-            scrollBehavior = scrollBehavior)
+                },
+                scrollBehavior = scrollBehavior)
         }
     ) { paddingValues ->
         Column(
@@ -74,6 +92,4 @@ fun DishListScreen(
             }
         }
     }
-
-
 }
