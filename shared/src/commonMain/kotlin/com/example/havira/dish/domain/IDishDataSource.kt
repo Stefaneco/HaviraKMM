@@ -9,4 +9,5 @@ interface IDishDataSource {
     suspend fun deleteDishById(id: Long)
     suspend fun insertDish(dish: Dish)
     suspend fun insertDishPrep(dishPrep: DishPrep, dish: Dish) : Long
+    suspend fun updateDish(id: Long, title: String, description: String)
 }

@@ -8,7 +8,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 
 class SqlDelightDishDataSource(
-    db: HaviraDatabase
+    private val db: HaviraDatabase
 ) : IDishDataSource {
 
     private val dishQueries = db.dishQueries
@@ -61,6 +61,16 @@ class SqlDelightDishDataSource(
             dishPrepQueries.getLastInsertedRowId().executeAsOne()
         }
         return id
+    }
+
+    override suspend fun updateDish(id: Long, title: String, description: String) {
+        db.transaction {
+            dishQueries.updateDish(title, description, id)
+            val numberOfRowsAffected = dishQueries.selectChanges().executeAsOne()
+            if(numberOfRowsAffected != 1L){
+                throw IllegalStateException("Expected to update 1 dish, but updated $numberOfRowsAffected")
+            }
+        }
     }
 
 }

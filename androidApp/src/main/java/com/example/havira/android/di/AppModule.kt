@@ -28,7 +28,8 @@ class AppModule {
             DeleteDishById(dishRepository),
             GetAllDishes(dishRepository),
             GetDishById(dishRepository),
-            AddDishPrep(dishRepository)
+            AddDishPrep(dishRepository),
+            EditDish(dishRepository)
         )
     }
 

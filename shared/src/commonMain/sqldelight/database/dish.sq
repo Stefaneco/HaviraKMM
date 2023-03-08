@@ -30,3 +30,12 @@ created
 deleteDishById:
 DELETE FROM dishEntity
 WHERE id = ?;
+
+updateDish:
+UPDATE dishEntity
+SET title = ?,
+description = ?
+WHERE id = ?;
+
+selectChanges:
+SELECT changes();

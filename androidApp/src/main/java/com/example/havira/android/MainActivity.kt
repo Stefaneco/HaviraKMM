@@ -18,14 +18,17 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.havira.android.dish.create.presentation.AndroidCreateDishViewModel
-import com.example.havira.android.dish.create.presentation.CreateDishScreen
-import com.example.havira.android.dish.details.presentation.AndroidDishDetailViewModel
-import com.example.havira.android.dish.details.presentation.DishDetailScreen
-import com.example.havira.android.dish.list.presentation.AndroidDishListViewModel
-import com.example.havira.android.dish.list.presentation.DishListScreen
+import com.example.havira.android.dish.presentation.create.AndroidCreateDishViewModel
+import com.example.havira.android.dish.presentation.create.CreateDishScreen
+import com.example.havira.android.dish.presentation.details.AndroidDishDetailViewModel
+import com.example.havira.android.dish.presentation.details.DishDetailScreen
+import com.example.havira.android.dish.presentation.edit.AndroidDishEditViewModel
+import com.example.havira.android.dish.presentation.edit.EditDishScreen
+import com.example.havira.android.dish.presentation.list.AndroidDishListViewModel
+import com.example.havira.android.dish.presentation.list.DishListScreen
 import com.example.havira.dish.presentation.create.CreateDishEvent
 import com.example.havira.dish.presentation.detail.DishDetailEvent
+import com.example.havira.dish.presentation.edit.DishEditEvent
 import com.example.havira.dish.presentation.list.DishListEvent
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -105,9 +108,36 @@ fun HaviraRoot(){
                         is DishDetailEvent.BackButtonPressed -> {
                             navController.popBackStack()
                         }
+                        is DishDetailEvent.EditButtonPressed -> {
+                            navController.navigate(Routes.DISH_EDIT_ARGS.format(event.dishId))
+                        }
                         else -> { viewModel.onEvent(event) }
                     }
 
+                })
+            }
+
+            composable(Routes.DISH_EDIT) { backStackEntry ->
+                val viewModel = hiltViewModel<AndroidDishEditViewModel>()
+                val state by viewModel.state.collectAsState()
+                val dishId = backStackEntry.arguments?.getString("dishId")?.toLong() ?: -1
+                viewModel.loadDish(dishId)
+                EditDishScreen(state = state, onEvent = { event ->
+                    when(event){
+                        is DishEditEvent.BackButtonPressed -> {
+                            navController.popBackStack()
+                        }
+                        is DishEditEvent.EditDish -> {
+                            viewModel.onEvent(
+                                DishEditEvent.EditDish {
+                                    navController.navigate(Routes.DISH_DETAILS_ARGS.format(dishId)) {
+                                        popUpTo(Routes.DISH_LIST)
+                                    }
+                                }
+                            )
+                        }
+                        else -> { viewModel.onEvent(event)}
+                    }
                 })
             }
         }

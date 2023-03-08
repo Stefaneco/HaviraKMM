@@ -7,5 +7,6 @@ data class DishInteractors(
     val deleteDishById: DeleteDishById,
     val getAllDishes: GetAllDishes,
     val getDishById: GetDishById,
-    val addDishPrep: AddDishPrep
+    val addDishPrep: AddDishPrep,
+    val editDish: EditDish
 )
