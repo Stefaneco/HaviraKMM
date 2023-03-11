@@ -2,7 +2,9 @@ CREATE TABLE dishEntity (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
     description TEXT NOT NULL ,
-    rating INTEGER NOT NULL,
+    rating REAL NOT NULL,
+    nof_ratings INTEGER NOT NULL,
+    last_made INTEGER,
     created INTEGER NOT NULL
 );
 
@@ -20,9 +22,20 @@ id,
 title,
 description,
 rating,
+nof_ratings,
+last_made,
 created
-) VALUES(?,?,?,?,?);
+) VALUES(?,?,?,?,?, ?, ?);
 
 deleteDishById:
 DELETE FROM dishEntity
 WHERE id = ?;
+
+updateDish:
+UPDATE dishEntity
+SET title = ?,
+description = ?
+WHERE id = ?;
+
+selectChanges:
+SELECT changes();

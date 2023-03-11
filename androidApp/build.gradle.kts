@@ -7,14 +7,14 @@ plugins {
 }
 
 android {
-    namespace = "com.example.havira.android"
+    namespace = "com.piotrkalin.havira.android"
     compileSdk = 33
     defaultConfig {
-        applicationId = "com.example.havira.android"
+        applicationId = "com.piotrkalin.havira.android"
         minSdk = 24
         targetSdk = 33
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "0.1.1"
     }
     buildFeatures {
         compose = true
@@ -36,11 +36,15 @@ android {
 
 dependencies {
     implementation(project(":shared"))
+    implementation(Deps.material3)
+    implementation(Deps.material3WindowSize)
+
+    implementation(Deps.kotlinDateTime)
+
     implementation(Deps.composeUi)
     implementation(Deps.composeUiTooling)
     implementation(Deps.composeUiToolingPreview)
     implementation(Deps.composeFoundation)
-    implementation(Deps.composeMaterial)
     implementation(Deps.activityCompose)
     implementation(Deps.composeIconsExtended)
     implementation(Deps.composeNavigation)

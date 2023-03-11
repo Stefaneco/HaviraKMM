@@ -1,0 +1,31 @@
+CREATE TABLE dishPrepEntity (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    dish_id INTEGER NOT NULL,
+    rating INTEGER NOT NULL,
+    date INTEGER NOT NULL
+);
+
+getDishPrepsByDishId:
+SELECT * FROM dishPrepEntity
+WHERE dish_id = ?;
+
+getDishPrepById:
+SELECT * FROM dishPrepEntity
+WHERE id = ?;
+
+insertDishPrep:
+INSERT OR REPLACE
+INTO dishPrepEntity(
+id,
+dish_id,
+rating,
+date
+) VALUES (?,?,?,?);
+
+deleteDishPrepsByDishId:
+DELETE FROM dishPrepEntity
+WHERE dish_id = ?;
+
+getLastInsertedRowId:
+SELECT last_insert_rowid();
+

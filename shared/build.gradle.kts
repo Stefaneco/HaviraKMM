@@ -74,13 +74,13 @@ kotlin {
 
 sqldelight {
     database("HaviraDatabase") {
-        packageName = "com.example.havira.database"
+        packageName = "com.piotrkalin.havira.database"
         sourceFolders = listOf("sqldelight")
     }
 }
 
 android {
-    namespace = "com.example.havira"
+    namespace = "com.piotrkalin.havira"
     compileSdk = 33
     defaultConfig {
         minSdk = 24

@@ -2,15 +2,20 @@ import SwiftUI
 import shared
 
 struct ContentView: View {
-	let greet = Greeting().greet()
+	
+    let appModule : IAppModule
 
 	var body: some View {
-		Text(greet)
+        ZStack {
+            Color.background
+                .ignoresSafeArea()
+            CreateDishScreen(dishInteractors: appModule.dishInteractors)
+        }
 	}
 }
 
 struct ContentView_Previews: PreviewProvider {
 	static var previews: some View {
-		ContentView()
+		ContentView(appModule: AppModule())
 	}
 }
