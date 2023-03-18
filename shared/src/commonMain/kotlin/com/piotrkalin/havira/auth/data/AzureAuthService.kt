@@ -19,4 +19,8 @@ class AzureAuthService(
         }
         return response.body<AzureLoginResponse>().authenticationToken
     }
+
+    override suspend fun logout() {
+        httpClient.get("https://havira-api.azurewebsites.net/.auth/logout")
+    }
 }

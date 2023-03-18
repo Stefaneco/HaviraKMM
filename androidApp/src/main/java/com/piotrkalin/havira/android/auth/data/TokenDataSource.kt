@@ -23,4 +23,12 @@ class TokenDataSource(private val context: Context) : ITokenDataSource {
         }
         println("Auth TokenDataSource: Saved token - $token")
     }
+
+    override fun removeAllTokens() {
+        val sharedPref = context.getSharedPreferences("com.piotrkalin.havira.android.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
+        with(sharedPref.edit()){
+            remove("authToken")
+            commit()
+        }
+    }
 }

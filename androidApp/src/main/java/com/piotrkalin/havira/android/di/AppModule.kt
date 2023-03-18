@@ -8,6 +8,7 @@ import com.piotrkalin.havira.auth.domain.IAuthService
 import com.piotrkalin.havira.auth.domain.ITokenDataSource
 import com.piotrkalin.havira.auth.domain.interactors.AuthInteractors
 import com.piotrkalin.havira.auth.domain.interactors.LoginWithGoogle
+import com.piotrkalin.havira.auth.domain.interactors.Logout
 import com.piotrkalin.havira.core.data.local.DatabaseDriverFactory
 import com.piotrkalin.havira.core.data.remote.KtorClientFactory
 import com.piotrkalin.havira.database.HaviraDatabase
@@ -37,7 +38,8 @@ class AppModule {
     @Singleton
     fun provideAuthInteractors(authService: IAuthService, tokenDataSource: ITokenDataSource) : AuthInteractors {
         return AuthInteractors(
-            LoginWithGoogle(authService, tokenDataSource)
+            LoginWithGoogle(authService, tokenDataSource),
+            Logout(authService, tokenDataSource)
         )
     }
 
