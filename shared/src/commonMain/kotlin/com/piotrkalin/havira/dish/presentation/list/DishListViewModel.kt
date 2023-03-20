@@ -88,6 +88,10 @@ class DishListViewModel(
                     isSearchViewOpen = true
                 ) }
             }
+            DishListEvent.CreateGroup -> TODO()
+            DishListEvent.JoinGroup -> TODO()
+            is DishListEvent.NavigateToGroup -> TODO()
+            DishListEvent.NavigateToSettings -> TODO()
         }
     }
 

@@ -19,4 +19,10 @@ sealed class DishListEvent {
     object OpenSearchView : DishListEvent()
     object DismissSearchView : DishListEvent()
     data class SearchDish(val searchString: String) : DishListEvent()
+
+    //navDrawer
+    object NavigateToSettings : DishListEvent()
+    object JoinGroup : DishListEvent()
+    object CreateGroup : DishListEvent()
+    data class NavigateToGroup(val id: String) : DishListEvent()
 }
