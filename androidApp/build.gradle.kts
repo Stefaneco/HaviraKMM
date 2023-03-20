@@ -1,3 +1,6 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+val googleServerClientKey: String = gradleLocalProperties(rootDir).getProperty("GOOGLE_SERVER_CLIENT_KEY")
+
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -15,6 +18,8 @@ android {
         targetSdk = 33
         versionCode = 2
         versionName = "0.1.1"
+
+        //properties.load
     }
     buildFeatures {
         compose = true
@@ -31,11 +36,17 @@ android {
         getByName("release") {
             isMinifyEnabled = false
         }
+        getByName("debug") {
+            buildConfigField("String", "GOOGLE_SERVER_CLIENT_KEY", googleServerClientKey)
+        }
     }
 }
 
 dependencies {
     implementation(project(":shared"))
+
+    implementation ("com.google.android.gms:play-services-auth:20.4.1")
+
     implementation(Deps.material3)
     implementation(Deps.material3WindowSize)
 
