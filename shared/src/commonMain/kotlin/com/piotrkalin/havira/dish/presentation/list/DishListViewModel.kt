@@ -4,12 +4,13 @@ import com.piotrkalin.havira.core.domain.model.Dish
 import com.piotrkalin.havira.core.domain.util.SortDirection
 import com.piotrkalin.havira.core.domain.util.SortType
 import com.piotrkalin.havira.core.domain.util.toCommonStateFlow
+import com.piotrkalin.havira.dish.domain.interactors.DishInteractors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 
 class DishListViewModel(
-    private val dishInteractors: com.piotrkalin.havira.dish.domain.interactors.DishInteractors,
+    private val dishInteractors: DishInteractors,
     private val coroutineScope: CoroutineScope?
 ) {
 
@@ -87,10 +88,6 @@ class DishListViewModel(
                     isSearchViewOpen = true
                 ) }
             }
-            DishListEvent.CreateGroup -> TODO()
-            DishListEvent.JoinGroup -> TODO()
-            is DishListEvent.NavigateToGroup -> TODO()
-            DishListEvent.NavigateToSettings -> TODO()
         }
     }
 

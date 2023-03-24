@@ -8,4 +8,6 @@ interface IGroupService {
     suspend fun createGroup(request: CreateGroupRequest) : GroupResponse
 
     suspend fun getGroup(groupId : Long) : GroupResponse
+
+    suspend fun getAllGroups() : List<GroupResponse>
 }

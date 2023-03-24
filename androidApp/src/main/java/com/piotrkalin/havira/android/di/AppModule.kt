@@ -19,6 +19,7 @@ import com.piotrkalin.havira.dish.domain.interactors.*
 import com.piotrkalin.havira.group.data.AzureGroupService
 import com.piotrkalin.havira.group.domain.IGroupService
 import com.piotrkalin.havira.group.domain.interactors.CreateGroup
+import com.piotrkalin.havira.group.domain.interactors.GetAllGroups
 import com.piotrkalin.havira.group.domain.interactors.GroupInteractors
 import com.squareup.sqldelight.db.SqlDriver
 import dagger.Module
@@ -38,7 +39,8 @@ class AppModule {
     @Singleton
     fun provideGroupInteractors(groupService :IGroupService) : GroupInteractors {
         return GroupInteractors(
-            CreateGroup(groupService)
+            CreateGroup(groupService),
+            GetAllGroups(groupService)
         )
     }
 

@@ -18,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.piotrkalin.havira.android.auth.presentation.AndroidLoginViewModel
 import com.piotrkalin.havira.android.auth.presentation.LoginScreen
+import com.piotrkalin.havira.android.core.presentation.AndroidNavigationDrawerViewModel
 import com.piotrkalin.havira.android.dish.presentation.create.AndroidCreateDishViewModel
 import com.piotrkalin.havira.android.dish.presentation.create.CreateDishScreen
 import com.piotrkalin.havira.android.dish.presentation.details.AndroidDishDetailViewModel
@@ -29,6 +30,7 @@ import com.piotrkalin.havira.android.dish.presentation.list.DishListScreen
 import com.piotrkalin.havira.android.group.create.presentation.AndroidCreateGroupViewModel
 import com.piotrkalin.havira.android.group.create.presentation.CreateGroupScreen
 import com.piotrkalin.havira.auth.presentation.LoginEvent
+import com.piotrkalin.havira.core.presentation.NavigationDrawerEvent
 import com.piotrkalin.havira.dish.presentation.create.CreateDishEvent
 import com.piotrkalin.havira.dish.presentation.detail.DishDetailEvent
 import com.piotrkalin.havira.dish.presentation.edit.DishEditEvent
@@ -76,7 +78,7 @@ fun HaviraRoot(){
         NavHost(
             modifier = Modifier.padding(padding),
             navController = navController,
-            startDestination = Routes.DISH_LIST
+            startDestination = Routes.LOGIN
         ) {
             composable(route = Routes.CREATE_GROUP){
                 val viewModel = hiltViewModel<AndroidCreateGroupViewModel>()
@@ -144,6 +146,9 @@ fun HaviraRoot(){
                 })
             }
             composable(Routes.DISH_LIST){
+                val navDrawerViewModel = hiltViewModel<AndroidNavigationDrawerViewModel>()
+                val navDrawerState by navDrawerViewModel.state.collectAsState()
+
                 val viewModel = hiltViewModel<AndroidDishListViewModel>()
                 val state by viewModel.state.collectAsState()
 
@@ -155,14 +160,23 @@ fun HaviraRoot(){
                         is DishListEvent.SelectDish -> {
                             navController.navigate(Routes.DISH_DETAILS_ARGS.format(event.dishId))
                         }
-                        is DishListEvent.CreateGroup -> {
-                            navController.navigate(Routes.CREATE_GROUP)
-                        }
                         else -> {
                             viewModel.onEvent(event)
                         }
                     }
-                })
+                }, navDrawerState = navDrawerState, navDrawerOnEvent = { event ->
+                    when(event){
+                        NavigationDrawerEvent.CreateGroup -> {
+                            navController.navigate(Routes.CREATE_GROUP)
+                        }
+                        NavigationDrawerEvent.JoinGroup -> TODO()
+                        is NavigationDrawerEvent.NavigateToGroup -> TODO()
+                        NavigationDrawerEvent.NavigateToSettings -> TODO()
+                        NavigationDrawerEvent.NavigateToSolo -> {}
+                        else -> { navDrawerViewModel.onEvent(event)}
+                    }
+                }
+                )
             }
             composable(Routes.DISH_DETAILS){ backStackEntry ->
                 val viewModel = hiltViewModel<AndroidDishDetailViewModel>()

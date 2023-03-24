@@ -2,7 +2,6 @@ package com.piotrkalin.havira.group.presentation.create
 
 import com.piotrkalin.havira.core.domain.util.toCommonStateFlow
 import com.piotrkalin.havira.group.domain.interactors.GroupInteractors
-import com.piotrkalin.havira.group.domain.model.Group
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,7 +43,7 @@ class CreateGroupViewModel(
                     _state.update { it.copy(
                         isCreating = true
                     ) }
-                    groupInteractors.createGroup(Group(name = _state.value.groupName)).collect { result ->
+                    groupInteractors.createGroup(name = _state.value.groupName).collect { result ->
                         if(result.isSuccess){
                             _state.update { it.copy(
                                 isCreating = false,

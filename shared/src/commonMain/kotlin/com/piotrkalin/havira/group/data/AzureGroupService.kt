@@ -24,4 +24,9 @@ class AzureGroupService(
         TODO("Not yet implemented")
     }
 
+    override suspend fun getAllGroups(): List<GroupResponse> {
+        val response = httpClient.get("https://havira-api.azurewebsites.net/api/Group")
+        return response.body()
+    }
+
 }

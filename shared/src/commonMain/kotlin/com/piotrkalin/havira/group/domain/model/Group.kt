@@ -7,13 +7,23 @@ import com.piotrkalin.havira.group.data.model.CreateGroupRequest
 import com.piotrkalin.havira.group.data.model.GroupResponse
 import kotlinx.datetime.LocalDateTime
 
-data class Group(
+/*data class Group(
     val ownerId: String? = null,
     val id: Long? = null,
     val dishes : List<DishListItem> = emptyList(),
     val joinCode : String? = null,
     val name : String,
     val created: LocalDateTime? = null,
+    val members: List<UserProfile> = emptyList()
+)*/
+
+data class Group(
+    val ownerId: String,
+    val id: Long,
+    val dishes : List<DishListItem> = emptyList(),
+    val joinCode : String,
+    val name : String,
+    val created: LocalDateTime,
     val members: List<UserProfile> = emptyList()
 ){
     fun toCreateGroupRequest() : CreateGroupRequest =
