@@ -1,7 +1,7 @@
 package com.piotrkalin.havira.dish.domain
 
-import com.piotrkalin.havira.dish.domain.model.Dish
-import com.piotrkalin.havira.dish.domain.model.DishPrep
+import com.piotrkalin.havira.core.domain.model.Dish
+import com.piotrkalin.havira.core.domain.model.DishPrep
 
 class DishRepository(
     private val localDishDataSource: IDishDataSource

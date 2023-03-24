@@ -1,8 +1,8 @@
 package com.piotrkalin.havira.dish.presentation.list
 
+import com.piotrkalin.havira.core.domain.model.Dish
 import com.piotrkalin.havira.core.domain.util.SortDirection
 import com.piotrkalin.havira.core.domain.util.SortType
-import com.piotrkalin.havira.dish.domain.model.Dish
 
 data class DishListState(
     val isLoading : Boolean = true,

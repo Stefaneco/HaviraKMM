@@ -20,12 +20,13 @@ import com.piotrkalin.havira.dish.presentation.list.DishListEvent
 import com.piotrkalin.havira.dish.presentation.list.DishListState
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DishListScreen(
     state: DishListState,
     onEvent : (DishListEvent) -> Unit
 ) {
-    var drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
     if(state.isSearchViewOpen)
@@ -48,26 +49,26 @@ fun DishListScreen(
                         onClick = { scope.launch { drawerState.close() } },
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                     )
-                    /*NavigationDrawerItem(
-                        icon = { Icon(imageVector = Icons.Filled.Group, contentDescription = "")},
-                        label = { Text(text = "Home <3") },
-                        selected = false,
-                        onClick = { DishListEvent.CreateGroup },
-                        modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
-                    )*/
                     Divider(modifier = Modifier.padding(vertical = 4.dp))
                     NavigationDrawerItem(
                         icon = { Icon(imageVector = Icons.Filled.Add, contentDescription = "")},
                         label = { Text(text = "Create Group") },
                         selected = false,
-                        onClick = { DishListEvent.CreateGroup },
+                        onClick = {
+                            scope.launch {
+                                drawerState.close()
+                                onEvent(DishListEvent.CreateGroup)
+                            } },
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                     )
                     NavigationDrawerItem(
                         icon = { Icon(imageVector = Icons.Filled.Add, contentDescription = "")},
                         label = { Text(text = "Join Group") },
                         selected = false,
-                        onClick = { onEvent(DishListEvent.JoinGroup) },
+                        onClick = { scope.launch {
+                            drawerState.close()
+                            onEvent(DishListEvent.JoinGroup)
+                        } },
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                     )
                     Divider(modifier = Modifier.padding(vertical = 4.dp))
@@ -75,7 +76,10 @@ fun DishListScreen(
                         icon = { Icon(imageVector = Icons.Filled.Settings, contentDescription = "")},
                         label = { Text(text = "Settings") },
                         selected = false,
-                        onClick = { onEvent(DishListEvent.NavigateToSettings) },
+                        onClick = { scope.launch {
+                            drawerState.close()
+                            onEvent(DishListEvent.NavigateToSettings)
+                        } },
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                     )
                 }

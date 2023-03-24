@@ -1,16 +1,15 @@
 package com.piotrkalin.havira.dish.presentation.list
 
+import com.piotrkalin.havira.core.domain.model.Dish
 import com.piotrkalin.havira.core.domain.util.SortDirection
 import com.piotrkalin.havira.core.domain.util.SortType
 import com.piotrkalin.havira.core.domain.util.toCommonStateFlow
-import com.piotrkalin.havira.dish.domain.interactors.DishInteractors
-import com.piotrkalin.havira.dish.domain.model.Dish
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 
 class DishListViewModel(
-    private val dishInteractors: DishInteractors,
+    private val dishInteractors: com.piotrkalin.havira.dish.domain.interactors.DishInteractors,
     private val coroutineScope: CoroutineScope?
 ) {
 

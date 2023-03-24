@@ -1,6 +1,6 @@
 package com.piotrkalin.havira.dish.presentation.detail
 
-import com.piotrkalin.havira.dish.domain.model.Dish
+import com.piotrkalin.havira.core.domain.model.Dish
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone

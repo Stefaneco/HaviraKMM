@@ -2,7 +2,6 @@ package com.piotrkalin.havira.dish.presentation.edit
 
 import com.piotrkalin.havira.core.domain.util.Resource
 import com.piotrkalin.havira.core.domain.util.toCommonStateFlow
-import com.piotrkalin.havira.dish.domain.interactors.DishInteractors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,7 +10,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class DishEditViewModel(
-    private val dishInteractors: DishInteractors,
+    private val dishInteractors: com.piotrkalin.havira.dish.domain.interactors.DishInteractors,
     private val coroutineScope: CoroutineScope?
 ) {
 

@@ -11,11 +11,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import com.piotrkalin.havira.android.core.presentation.FilledTitleTextField
 import com.piotrkalin.havira.dish.presentation.create.CreateDishEvent
 import com.piotrkalin.havira.dish.presentation.create.CreateDishState
 
@@ -77,32 +76,8 @@ fun FilledDishEditSection(
 ){
     var isTitleFocused by remember { mutableStateOf(false) }
 
-    Column() {
-        TextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .onFocusChanged { focusState ->
-                    isTitleFocused = when {
-                        focusState.isFocused -> true
-                        else -> false
-                    }
-                },
-            value = title,
-            shape = MaterialTheme.shapes.large,
-            label = {
-                if(title.isNotBlank() || isTitleFocused) Text(text = "Title")
-                else Text(text = "Title", style = MaterialTheme.typography.headlineMedium)
-            },
-            onValueChange = {
-                editTitle(it)
-            },
-            colors = TextFieldDefaults.textFieldColors(
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent
-            ),
-            textStyle = MaterialTheme.typography.headlineMedium
-        )
+    Column {
+        FilledTitleTextField(fieldName = "Title", title = title, editTitle = editTitle)
         Spacer(modifier = Modifier.padding(4.dp))
         TextField(
             modifier = Modifier

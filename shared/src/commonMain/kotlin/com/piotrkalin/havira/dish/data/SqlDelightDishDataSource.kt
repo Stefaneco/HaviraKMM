@@ -1,15 +1,14 @@
-package com.piotrkalin.havira.dish.data.local
+package com.piotrkalin.havira.dish.data
 
 import com.piotrkalin.havira.database.HaviraDatabase
-import com.piotrkalin.havira.dish.domain.IDishDataSource
-import com.piotrkalin.havira.dish.domain.model.Dish
-import com.piotrkalin.havira.dish.domain.model.DishPrep
+import com.piotrkalin.havira.core.domain.model.Dish
+import com.piotrkalin.havira.core.domain.model.DishPrep
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 
 class SqlDelightDishDataSource(
     private val db: HaviraDatabase
-) : IDishDataSource {
+) : com.piotrkalin.havira.dish.domain.IDishDataSource {
 
     private val dishQueries = db.dishQueries
     private val dishPrepQueries = db.dishPrepQueries

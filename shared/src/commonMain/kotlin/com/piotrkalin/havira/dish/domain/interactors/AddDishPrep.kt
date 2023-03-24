@@ -1,12 +1,11 @@
 package com.piotrkalin.havira.dish.domain.interactors
 
+import com.piotrkalin.havira.core.domain.model.Dish
 import com.piotrkalin.havira.core.domain.util.Resource
-import com.piotrkalin.havira.dish.domain.IDishRepository
-import com.piotrkalin.havira.dish.domain.model.Dish
-import com.piotrkalin.havira.dish.domain.model.DishPrep
+import com.piotrkalin.havira.core.domain.model.DishPrep
 
 class AddDishPrep(
-    private val dishRepository: IDishRepository
+    private val dishRepository: com.piotrkalin.havira.dish.domain.IDishRepository
 ) {
     /*
     Inserts into database new dishPrep and updates rating, nofRatings, lastMade of Dish

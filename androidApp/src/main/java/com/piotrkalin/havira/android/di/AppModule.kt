@@ -12,14 +12,14 @@ import com.piotrkalin.havira.auth.domain.interactors.Logout
 import com.piotrkalin.havira.core.data.local.DatabaseDriverFactory
 import com.piotrkalin.havira.core.data.remote.KtorClientFactory
 import com.piotrkalin.havira.database.HaviraDatabase
-import com.piotrkalin.havira.dish.data.local.SqlDelightDishDataSource
-import com.piotrkalin.havira.dish.data.remote.DishService
-import com.piotrkalin.havira.dish.domain.DishRepository
+import com.piotrkalin.havira.dish.data.SqlDelightDishDataSource
 import com.piotrkalin.havira.dish.domain.IDishDataSource
 import com.piotrkalin.havira.dish.domain.IDishRepository
-import com.piotrkalin.havira.dish.domain.IDishService
 import com.piotrkalin.havira.dish.domain.interactors.*
-import com.piotrkalin.havira.dish.domain.interactors.DishInteractors
+import com.piotrkalin.havira.group.data.AzureGroupService
+import com.piotrkalin.havira.group.domain.IGroupService
+import com.piotrkalin.havira.group.domain.interactors.CreateGroup
+import com.piotrkalin.havira.group.domain.interactors.GroupInteractors
 import com.squareup.sqldelight.db.SqlDriver
 import dagger.Module
 import dagger.Provides
@@ -33,6 +33,20 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class AppModule {
+
+    @Provides
+    @Singleton
+    fun provideGroupInteractors(groupService :IGroupService) : GroupInteractors {
+        return GroupInteractors(
+            CreateGroup(groupService)
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideGroupService(httpClient: HttpClient) : IGroupService {
+        return AzureGroupService(httpClient)
+    }
 
     @Provides
     @Singleton
@@ -59,7 +73,7 @@ class AppModule {
     @Provides
     @Singleton
     fun provideDishRepository(localDishDataSource: IDishDataSource) : IDishRepository {
-        return DishRepository(localDishDataSource)
+        return com.piotrkalin.havira.dish.domain.DishRepository(localDishDataSource)
     }
 
     @Provides
@@ -90,12 +104,6 @@ class AppModule {
     @Singleton
     fun provideTokenDataSource(@ApplicationContext context: Context) : ITokenDataSource {
         return TokenDataSource(context)
-    }
-
-    @Provides
-    @Singleton
-    fun provideDishService(httpClient: HttpClient) : IDishService {
-        return DishService(httpClient)
     }
 
 }

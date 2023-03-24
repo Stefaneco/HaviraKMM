@@ -26,11 +26,14 @@ import com.piotrkalin.havira.android.dish.presentation.edit.AndroidDishEditViewM
 import com.piotrkalin.havira.android.dish.presentation.edit.EditDishScreen
 import com.piotrkalin.havira.android.dish.presentation.list.AndroidDishListViewModel
 import com.piotrkalin.havira.android.dish.presentation.list.DishListScreen
+import com.piotrkalin.havira.android.group.create.presentation.AndroidCreateGroupViewModel
+import com.piotrkalin.havira.android.group.create.presentation.CreateGroupScreen
 import com.piotrkalin.havira.auth.presentation.LoginEvent
 import com.piotrkalin.havira.dish.presentation.create.CreateDishEvent
 import com.piotrkalin.havira.dish.presentation.detail.DishDetailEvent
 import com.piotrkalin.havira.dish.presentation.edit.DishEditEvent
 import com.piotrkalin.havira.dish.presentation.list.DishListEvent
+import com.piotrkalin.havira.group.presentation.create.CreateGroupEvent
 import dagger.hilt.android.AndroidEntryPoint
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -75,6 +78,22 @@ fun HaviraRoot(){
             navController = navController,
             startDestination = Routes.DISH_LIST
         ) {
+            composable(route = Routes.CREATE_GROUP){
+                val viewModel = hiltViewModel<AndroidCreateGroupViewModel>()
+                val state by viewModel.state.collectAsState()
+
+                CreateGroupScreen(state = state, onEvent = { event ->
+                    when(event){
+                        CreateGroupEvent.BackButtonPressed -> {
+                            navController.popBackStack()
+                        }
+                        CreateGroupEvent.NavigateToCreatedGroup -> {
+                            navController.navigate(Routes.GROUP_ARGS.format(state.groupId))
+                        }
+                        else -> {viewModel.onEvent(event)}
+                    }
+                })
+            }
 
             composable(route = Routes.LOGIN) {
                 val viewModel = hiltViewModel<AndroidLoginViewModel>()
@@ -135,6 +154,9 @@ fun HaviraRoot(){
                         }
                         is DishListEvent.SelectDish -> {
                             navController.navigate(Routes.DISH_DETAILS_ARGS.format(event.dishId))
+                        }
+                        is DishListEvent.CreateGroup -> {
+                            navController.navigate(Routes.CREATE_GROUP)
                         }
                         else -> {
                             viewModel.onEvent(event)

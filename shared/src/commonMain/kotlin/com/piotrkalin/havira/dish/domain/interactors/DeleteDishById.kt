@@ -1,9 +1,7 @@
 package com.piotrkalin.havira.dish.domain.interactors
 
-import com.piotrkalin.havira.dish.domain.IDishRepository
-
 class DeleteDishById(
-    private val dishRepository: IDishRepository
+    private val dishRepository: com.piotrkalin.havira.dish.domain.IDishRepository
 ) {
     suspend operator fun invoke(id: Long) : Result<Unit?>{
         return try {

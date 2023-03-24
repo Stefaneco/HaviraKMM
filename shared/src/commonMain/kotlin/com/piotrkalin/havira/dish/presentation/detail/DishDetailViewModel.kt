@@ -3,15 +3,14 @@ package com.piotrkalin.havira.dish.presentation.detail
 import com.piotrkalin.havira.core.domain.util.DateTimeUtil
 import com.piotrkalin.havira.core.domain.util.Resource
 import com.piotrkalin.havira.core.domain.util.toCommonStateFlow
-import com.piotrkalin.havira.dish.domain.model.DishPrep
-import com.piotrkalin.havira.dish.domain.interactors.DishInteractors
+import com.piotrkalin.havira.core.domain.model.DishPrep
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class DishDetailViewModel(
-    private val dishInteractors: DishInteractors,
+    private val dishInteractors: com.piotrkalin.havira.dish.domain.interactors.DishInteractors,
     private val coroutineScope: CoroutineScope?
 ) {
 

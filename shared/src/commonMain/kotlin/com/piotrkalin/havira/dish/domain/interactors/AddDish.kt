@@ -1,10 +1,9 @@
 package com.piotrkalin.havira.dish.domain.interactors
 
-import com.piotrkalin.havira.dish.domain.IDishRepository
-import com.piotrkalin.havira.dish.domain.model.Dish
+import com.piotrkalin.havira.core.domain.model.Dish
 
 class AddDish(
-    private val dishRepository: IDishRepository
+    private val dishRepository: com.piotrkalin.havira.dish.domain.IDishRepository
 ) {
     suspend operator fun invoke(dish: Dish) : Result<Unit?>{
         return try {

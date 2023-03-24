@@ -1,10 +1,12 @@
-package com.piotrkalin.havira.dish.domain.model
+package com.piotrkalin.havira.core.domain.model
 
 import com.piotrkalin.havira.core.domain.util.DateTimeUtil
 import kotlinx.datetime.LocalDateTime
 
 data class Dish(
     val id: Long? = null,
+    val ownerId: String? = null,
+    val groupId: Int? = null,
     val title: String,
     val desc: String,
     var rating : Float = 0f,
@@ -13,12 +15,23 @@ data class Dish(
     val created : LocalDateTime,
     var dishPreps : List<DishPrep>? = null
 ) {
-    operator fun plus(dishPrep: DishPrep) : Dish{
+    operator fun plus(dishPrep: DishPrep) : Dish {
         val newDishPreps = listOf(dishPrep) + (dishPreps?: emptyList())
         val newLastMade = DateTimeUtil.fromEpochMillis(dishPrep.date)
         val newRating = ((rating * nofRatings) + dishPrep.rating)/(nofRatings + 1)
         val newNofRatings = nofRatings + 1
-        return Dish(id,title, desc, newRating, newNofRatings, newLastMade, created, newDishPreps)
+        return Dish(
+            id,
+            ownerId,
+            groupId,
+            title,
+            desc,
+            newRating,
+            newNofRatings,
+            newLastMade,
+            created,
+            newDishPreps
+        )
     }
 
     operator fun plusAssign(dishPrep: DishPrep){

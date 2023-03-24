@@ -1,8 +1,7 @@
 package com.piotrkalin.havira.dish.presentation.create
 
+import com.piotrkalin.havira.core.domain.model.Dish
 import com.piotrkalin.havira.core.domain.util.toCommonStateFlow
-import com.piotrkalin.havira.dish.domain.model.Dish
-import com.piotrkalin.havira.dish.domain.interactors.DishInteractors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +13,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 class CreateDishViewModel(
-    private val dishInteractors: DishInteractors,
+    private val dishInteractors: com.piotrkalin.havira.dish.domain.interactors.DishInteractors,
     private val coroutineScope: CoroutineScope?
 ) {
 
@@ -53,10 +52,13 @@ class CreateDishViewModel(
         viewModelScope.launch {
            _state.update { it.copy( isCreating = true ) }
 
-            val result = dishInteractors.addDish(Dish(
-                title = state.title,
-                desc = state.desc,
-                created = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())))
+            val result = dishInteractors.addDish(
+                Dish(
+                    title = state.title,
+                    desc = state.desc,
+                    created = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+                )
+            )
 
             if (result.isFailure) {
                 println(result.exceptionOrNull()?.message)
