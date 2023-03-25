@@ -29,6 +29,8 @@ import com.piotrkalin.havira.android.dish.presentation.list.AndroidDishListViewM
 import com.piotrkalin.havira.android.dish.presentation.list.DishListScreen
 import com.piotrkalin.havira.android.group.create.presentation.AndroidCreateGroupViewModel
 import com.piotrkalin.havira.android.group.create.presentation.CreateGroupScreen
+import com.piotrkalin.havira.android.groupDish.presentation.list.AndroidGroupDishListViewModel
+import com.piotrkalin.havira.android.groupDish.presentation.list.GroupDishListScreen
 import com.piotrkalin.havira.auth.presentation.LoginEvent
 import com.piotrkalin.havira.core.presentation.NavigationDrawerEvent
 import com.piotrkalin.havira.dish.presentation.create.CreateDishEvent
@@ -80,6 +82,21 @@ fun HaviraRoot(){
             navController = navController,
             startDestination = Routes.LOGIN
         ) {
+            composable(route = Routes.GROUP){
+                val navDrawerViewModel = hiltViewModel<AndroidNavigationDrawerViewModel>()
+                val navDrawerState by navDrawerViewModel.state.collectAsState()
+
+                val viewModel = hiltViewModel<AndroidGroupDishListViewModel>()
+                val state by viewModel.state.collectAsState()
+
+                GroupDishListScreen(
+                    state = state,
+                    onEvent = {},
+                    navDrawerState = navDrawerState,
+                    navDrawerOnEvent = {}
+                )
+            }
+
             composable(route = Routes.CREATE_GROUP){
                 val viewModel = hiltViewModel<AndroidCreateGroupViewModel>()
                 val state by viewModel.state.collectAsState()
@@ -170,7 +187,9 @@ fun HaviraRoot(){
                             navController.navigate(Routes.CREATE_GROUP)
                         }
                         NavigationDrawerEvent.JoinGroup -> TODO()
-                        is NavigationDrawerEvent.NavigateToGroup -> TODO()
+                        is NavigationDrawerEvent.NavigateToGroup -> {
+                            navController.navigate(Routes.GROUP_ARGS.format(event.id))
+                        }
                         NavigationDrawerEvent.NavigateToSettings -> TODO()
                         NavigationDrawerEvent.NavigateToSolo -> {}
                         else -> { navDrawerViewModel.onEvent(event)}
