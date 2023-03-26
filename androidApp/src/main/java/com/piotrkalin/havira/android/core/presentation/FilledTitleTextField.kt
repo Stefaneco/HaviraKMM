@@ -42,6 +42,6 @@ fun FilledTitleTextField(
             disabledIndicatorColor = Color.Transparent
         ),
         textStyle = MaterialTheme.typography.headlineMedium,
-        enabled = enabled
+        enabled = enabled,
     )
 }

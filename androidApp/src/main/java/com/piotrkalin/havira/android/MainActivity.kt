@@ -29,6 +29,8 @@ import com.piotrkalin.havira.android.dish.presentation.list.AndroidDishListViewM
 import com.piotrkalin.havira.android.dish.presentation.list.DishListScreen
 import com.piotrkalin.havira.android.group.create.presentation.AndroidCreateGroupViewModel
 import com.piotrkalin.havira.android.group.create.presentation.CreateGroupScreen
+import com.piotrkalin.havira.android.group.join.AndroidJoinGroupViewModel
+import com.piotrkalin.havira.android.group.join.JoinGroupScreen
 import com.piotrkalin.havira.android.groupDish.presentation.list.AndroidGroupDishListViewModel
 import com.piotrkalin.havira.android.groupDish.presentation.list.GroupDishListScreen
 import com.piotrkalin.havira.auth.presentation.LoginEvent
@@ -38,6 +40,7 @@ import com.piotrkalin.havira.dish.presentation.detail.DishDetailEvent
 import com.piotrkalin.havira.dish.presentation.edit.DishEditEvent
 import com.piotrkalin.havira.dish.presentation.list.DishListEvent
 import com.piotrkalin.havira.group.presentation.create.CreateGroupEvent
+import com.piotrkalin.havira.group.presentation.join.JoinGroupEvent
 import dagger.hilt.android.AndroidEntryPoint
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -82,6 +85,21 @@ fun HaviraRoot(){
             navController = navController,
             startDestination = Routes.LOGIN
         ) {
+            composable(route = Routes.JOIN_GROUP){
+                val viewModel = hiltViewModel<AndroidJoinGroupViewModel>()
+                val state by viewModel.state.collectAsState()
+
+                JoinGroupScreen(state = state, onEvent = { event ->
+                    when(event){
+                        JoinGroupEvent.BackButtonPressed -> {
+                            navController.popBackStack()
+                        }
+                        JoinGroupEvent.NavigateToJoinedGroup -> TODO()
+                        else -> {viewModel.onEvent(event)}
+                    }
+                })
+            }
+
             composable(route = Routes.GROUP){
                 val navDrawerViewModel = hiltViewModel<AndroidNavigationDrawerViewModel>()
                 val navDrawerState by navDrawerViewModel.state.collectAsState()
@@ -91,9 +109,32 @@ fun HaviraRoot(){
 
                 GroupDishListScreen(
                     state = state,
-                    onEvent = {},
+                    onEvent = {  event ->
+                        when(event) {
+                            DishListEvent.CreateDish -> {
+
+                            }
+                            else -> {viewModel.onEvent(event)}
+                        } },
                     navDrawerState = navDrawerState,
-                    navDrawerOnEvent = {}
+                    navDrawerOnEvent = { event ->
+                        when(event){
+                            NavigationDrawerEvent.CreateGroup -> {
+                                navController.navigate(Routes.CREATE_GROUP)
+                            }
+                            NavigationDrawerEvent.JoinGroup -> {
+                                navController.navigate(Routes.JOIN_GROUP)
+                            }
+                            is NavigationDrawerEvent.NavigateToGroup -> {
+                                navController.navigate(Routes.GROUP_ARGS.format(event.id))
+                            }
+                            NavigationDrawerEvent.NavigateToSettings -> TODO()
+                            NavigationDrawerEvent.NavigateToSolo -> {
+                                navController.navigate(Routes.DISH_LIST)
+                            }
+                            else -> { navDrawerViewModel.onEvent(event)}
+                        }
+                    }
                 )
             }
 
@@ -186,7 +227,9 @@ fun HaviraRoot(){
                         NavigationDrawerEvent.CreateGroup -> {
                             navController.navigate(Routes.CREATE_GROUP)
                         }
-                        NavigationDrawerEvent.JoinGroup -> TODO()
+                        NavigationDrawerEvent.JoinGroup -> {
+                            navController.navigate(Routes.JOIN_GROUP)
+                        }
                         is NavigationDrawerEvent.NavigateToGroup -> {
                             navController.navigate(Routes.GROUP_ARGS.format(event.id))
                         }

@@ -46,15 +46,27 @@ class NavigationDrawerViewModel(
 
     fun onEvent(event: NavigationDrawerEvent){
         when(event){
-            NavigationDrawerEvent.CreateGroup -> TODO()
-            NavigationDrawerEvent.JoinGroup -> TODO()
+            NavigationDrawerEvent.CreateGroup -> {
+                _state.update { it.copy(
+                    isDrawerOpen = false
+                ) }
+            }
+            NavigationDrawerEvent.JoinGroup -> {
+                _state.update { it.copy(
+                    isDrawerOpen = false
+                ) }
+            }
             is NavigationDrawerEvent.NavigateToGroup -> {
                 _state.update { it.copy(
                     isSoloSelected = false,
                     selectedGroup = event.id
                 ) }
             }
-            NavigationDrawerEvent.NavigateToSettings -> TODO()
+            NavigationDrawerEvent.NavigateToSettings -> {
+                _state.update { it.copy(
+                    isDrawerOpen = false
+                ) }
+            }
             NavigationDrawerEvent.NavigateToSolo -> {
                 _state.update { it.copy(
                     selectedGroup = null,

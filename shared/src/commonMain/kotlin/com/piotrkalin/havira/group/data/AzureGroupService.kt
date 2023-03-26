@@ -32,4 +32,9 @@ class AzureGroupService(
         return response.body()
     }
 
+    override suspend fun joinGroup(joinCode: String): GroupResponse {
+        val response = httpClient.get("https://havira-api.azurewebsites.net/api/Group/join/${joinCode}")
+        return response.body()
+    }
+
 }

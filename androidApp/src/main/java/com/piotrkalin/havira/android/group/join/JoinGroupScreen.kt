@@ -1,4 +1,4 @@
-package com.piotrkalin.havira.android.group.create.presentation
+package com.piotrkalin.havira.android.group.join
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -11,17 +11,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.piotrkalin.havira.android.core.presentation.FilledTitleTextField
-import com.piotrkalin.havira.group.presentation.create.CreateGroupEvent
-import com.piotrkalin.havira.group.presentation.create.CreateGroupState
+import com.piotrkalin.havira.group.presentation.join.JoinGroupEvent
+import com.piotrkalin.havira.group.presentation.join.JoinGroupState
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateGroupScreen(
-    state: CreateGroupState,
-    onEvent: (CreateGroupEvent) -> Unit
+fun JoinGroupScreen(
+    state: JoinGroupState,
+    onEvent: (JoinGroupEvent) -> Unit
 ) {
-
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
@@ -29,9 +28,9 @@ fun CreateGroupScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
-                title = { Text(text = "Create Group") },
+                title = { Text(text = "Join Group") },
                 navigationIcon = {
-                    IconButton(onClick = { onEvent(CreateGroupEvent.BackButtonPressed) }) {
+                    IconButton(onClick = { onEvent(JoinGroupEvent.BackButtonPressed) }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = "Localized description"
@@ -40,30 +39,31 @@ fun CreateGroupScreen(
                 }
             )
         }
-    ) { paddingValues ->
-        if (state.isCreated) {
-            CreatedGroupScreen(state = state, onEvent = onEvent, paddingValues = paddingValues)
+    ){ paddingValues ->
+        if(state.isJoined){
+            JoinedGroupScreen(state = state, onEvent = onEvent, paddingValues = paddingValues)
         }
-        else if (state.isCreating) {
-            CreatingGroupScreen(state = state, onEvent = onEvent, paddingValues = paddingValues)
+        else if(state.isJoining){
+            JoiningGroupScreen(state = state, onEvent = onEvent, paddingValues = paddingValues)
         }
         else {
-            BaseCreateGroupScreen(state = state, onEvent = onEvent, paddingValues = paddingValues)
+            BaseJoinGroupScreen(state = state, onEvent = onEvent, paddingValues = paddingValues)
         }
+    }
 
-        state.error?.let {
-            scope.launch {
-                snackbarHostState.showSnackbar(it)
-                onEvent(CreateGroupEvent.OnErrorSeen)
-            }
+
+    state.error?.let {
+        scope.launch {
+            snackbarHostState.showSnackbar(it)
+            onEvent(JoinGroupEvent.OnErrorSeen)
         }
     }
 }
 
 @Composable
-fun BaseCreateGroupScreen(
-    state: CreateGroupState,
-    onEvent: (CreateGroupEvent) -> Unit,
+fun BaseJoinGroupScreen(
+    state: JoinGroupState,
+    onEvent: (JoinGroupEvent) -> Unit,
     paddingValues: PaddingValues
 ){
     Column(
@@ -75,22 +75,24 @@ fun BaseCreateGroupScreen(
     ) {
         FilledTitleTextField(
             modifier = Modifier.padding(vertical = 16.dp),
-            fieldName = "Group Name",
-            title = state.groupName,
-            editTitle = { onEvent(CreateGroupEvent.EditGroupName(it)) }
+            fieldName = "Join Code",
+            title = state.joinCode,
+            editTitle = { onEvent(JoinGroupEvent.EditJoinCode(it)) }
         )
         Button(
-            onClick =  { onEvent(CreateGroupEvent.CreateGroup) },
-            enabled = state.isValidGroup) {
-            Text(text = "Create")
+            onClick =  { onEvent(JoinGroupEvent.JoinGroup) },
+            enabled = state.isValidCode) {
+            Text(text = "Join")
         }
     }
 }
 
+
+
 @Composable
-fun CreatedGroupScreen(
-    state: CreateGroupState,
-    onEvent: (CreateGroupEvent) -> Unit,
+fun JoinedGroupScreen(
+    state: JoinGroupState,
+    onEvent: (JoinGroupEvent) -> Unit,
     paddingValues: PaddingValues
 ){
     Column(
@@ -99,13 +101,13 @@ fun CreatedGroupScreen(
             .fillMaxSize()
             .padding(paddingValues),
         verticalArrangement = Arrangement.SpaceBetween
-    ) {
+    ){
         Column {
             FilledTitleTextField(
                 modifier = Modifier.padding(vertical = 16.dp),
-                fieldName = "Group Name",
-                title = state.groupName,
-                editTitle = { onEvent(CreateGroupEvent.EditGroupName(it)) },
+                fieldName = "Join Code",
+                title = state.joinCode,
+                editTitle = {  },
                 enabled = false
             )
             Text(
@@ -114,18 +116,16 @@ fun CreatedGroupScreen(
             )
         }
         Button(
-            onClick =  { onEvent(CreateGroupEvent.NavigateToCreatedGroup) }) {
+            onClick =  { onEvent(JoinGroupEvent.NavigateToJoinedGroup) }) {
             Text(text = "Cool!")
         }
     }
 }
 
-
-
 @Composable
-fun CreatingGroupScreen(
-    state: CreateGroupState,
-    onEvent: (CreateGroupEvent) -> Unit,
+fun JoiningGroupScreen(
+    state: JoinGroupState,
+    onEvent: (JoinGroupEvent) -> Unit,
     paddingValues: PaddingValues
 ){
     Column(

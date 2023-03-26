@@ -10,4 +10,6 @@ interface IGroupService {
     suspend fun getGroup(groupId : Long) : GroupResponse
 
     suspend fun getAllGroups() : List<GroupResponse>
+
+    suspend fun joinGroup(joinCode: String) : GroupResponse
 }

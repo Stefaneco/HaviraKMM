@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.piotrkalin.havira.core.presentation.NavigationDrawerEvent
 import com.piotrkalin.havira.core.presentation.NavigationDrawerState
-import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -29,6 +28,7 @@ fun NavigationDrawer(
     val drawerState = rememberDrawerState(
         initialValue = DrawerValue.Closed,
         confirmStateChange = {
+            println("NavigationDrawer: confirmStateChange with value ${it}")
             if(it == DrawerValue.Open) onEvent(NavigationDrawerEvent.OpenDrawer)
             else onEvent(NavigationDrawerEvent.CloseDrawer)
             true
@@ -50,8 +50,8 @@ fun NavigationDrawer(
                     label = { Text(text = "My Meals") },
                     selected = true,
                     onClick = {
+                        onEvent(NavigationDrawerEvent.CloseDrawer)
                         onEvent(NavigationDrawerEvent.NavigateToSolo)
-                        scope.launch { drawerState.close() }
                               },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
@@ -61,10 +61,9 @@ fun NavigationDrawer(
                         label = { Text(text = group.name) },
                         selected = false,
                         onClick = {
-                            scope.launch {
-                                //drawerState.close()
+                                onEvent(NavigationDrawerEvent.CloseDrawer)
                                 onEvent(NavigationDrawerEvent.NavigateToGroup(group.id))
-                            } },
+                             },
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                     )
                 }
@@ -74,20 +73,19 @@ fun NavigationDrawer(
                     label = { Text(text = "Create Group") },
                     selected = false,
                     onClick = {
-                        scope.launch {
-                            //drawerState.close()
+                            onEvent(NavigationDrawerEvent.CloseDrawer)
                             onEvent(NavigationDrawerEvent.CreateGroup)
-                        } },
+                         },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
                 NavigationDrawerItem(
                     icon = { Icon(imageVector = Icons.Filled.Add, contentDescription = "") },
                     label = { Text(text = "Join Group") },
                     selected = false,
-                    onClick = { scope.launch {
-                        drawerState.close()
+                    onClick = {
+                        onEvent(NavigationDrawerEvent.CloseDrawer)
                         onEvent(NavigationDrawerEvent.JoinGroup)
-                    } },
+                     },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
                 Divider(modifier = Modifier.padding(vertical = 4.dp))
@@ -95,10 +93,10 @@ fun NavigationDrawer(
                     icon = { Icon(imageVector = Icons.Filled.Settings, contentDescription = "") },
                     label = { Text(text = "Settings") },
                     selected = false,
-                    onClick = { scope.launch {
-                        drawerState.close()
+                    onClick = {
+                        onEvent(NavigationDrawerEvent.CloseDrawer)
                         onEvent(NavigationDrawerEvent.NavigateToSettings)
-                    } },
+                     },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
             }
