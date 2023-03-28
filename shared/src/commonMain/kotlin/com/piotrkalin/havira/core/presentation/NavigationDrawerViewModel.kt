@@ -30,6 +30,7 @@ class NavigationDrawerViewModel(
         .toCommonStateFlow()*/
 
     init {
+        println("NavigationDrawerViewModel: init")
         viewModelScope.launch {
             groupInteractors.getAllGroups().collect { result ->
                 if (result.isSuccess){

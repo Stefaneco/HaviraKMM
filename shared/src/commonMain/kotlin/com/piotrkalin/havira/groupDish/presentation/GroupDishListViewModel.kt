@@ -41,7 +41,7 @@ class GroupDishListViewModel(
             )
        }
         else {
-           println("GroupDishListViewModel: Success")
+           println("GroupDishListViewModel: Loading")
             _state.copy(
                 isLoading = true,
                 groupId = groupId

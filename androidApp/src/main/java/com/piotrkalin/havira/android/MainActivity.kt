@@ -78,6 +78,9 @@ fun Context.findActivity(): Activity {
 @Composable
 fun HaviraRoot(){
     val navController = rememberNavController()
+    val navDrawerViewModel = hiltViewModel<AndroidNavigationDrawerViewModel>()
+    val navDrawerState by navDrawerViewModel.state.collectAsState()
+
     Scaffold(
         modifier = Modifier.padding(4.dp)
     ) { padding ->
@@ -127,8 +130,8 @@ fun HaviraRoot(){
             }
 
             composable(route = Routes.GROUP){
-                val navDrawerViewModel = hiltViewModel<AndroidNavigationDrawerViewModel>()
-                val navDrawerState by navDrawerViewModel.state.collectAsState()
+                /*val navDrawerViewModel = hiltViewModel<AndroidNavigationDrawerViewModel>()
+                val navDrawerState by navDrawerViewModel.state.collectAsState()*/
 
                 val viewModel = hiltViewModel<AndroidGroupDishListViewModel>()
                 val state by viewModel.state.collectAsState()
@@ -152,10 +155,12 @@ fun HaviraRoot(){
                                 navController.navigate(Routes.JOIN_GROUP)
                             }
                             is NavigationDrawerEvent.NavigateToGroup -> {
+                                navDrawerViewModel.onEvent(event)
                                 navController.navigate(Routes.GROUP_ARGS.format(event.id))
                             }
                             NavigationDrawerEvent.NavigateToSettings -> TODO()
                             NavigationDrawerEvent.NavigateToSolo -> {
+                                navDrawerViewModel.onEvent(event)
                                 navController.navigate(Routes.DISH_LIST)
                             }
                             else -> { navDrawerViewModel.onEvent(event)}
@@ -230,8 +235,8 @@ fun HaviraRoot(){
                 })
             }
             composable(Routes.DISH_LIST){
-                val navDrawerViewModel = hiltViewModel<AndroidNavigationDrawerViewModel>()
-                val navDrawerState by navDrawerViewModel.state.collectAsState()
+                /*val navDrawerViewModel = hiltViewModel<AndroidNavigationDrawerViewModel>()
+                val navDrawerState by navDrawerViewModel.state.collectAsState()*/
 
                 val viewModel = hiltViewModel<AndroidDishListViewModel>()
                 val state by viewModel.state.collectAsState()
@@ -257,6 +262,7 @@ fun HaviraRoot(){
                             navController.navigate(Routes.JOIN_GROUP)
                         }
                         is NavigationDrawerEvent.NavigateToGroup -> {
+                            navDrawerViewModel.onEvent(event)
                             navController.navigate(Routes.GROUP_ARGS.format(event.id)) {
                                 popUpTo(Routes.GROUP_ARGS.format(event.id)) {
                                     inclusive = true
