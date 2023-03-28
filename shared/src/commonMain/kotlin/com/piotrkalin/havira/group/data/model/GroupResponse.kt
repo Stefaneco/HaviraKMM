@@ -1,13 +1,16 @@
 package com.piotrkalin.havira.group.data.model
 
+import kotlinx.serialization.SerialName
+
 @kotlinx.serialization.Serializable
 data class GroupResponse(
     val ownerId: String,
     val id: Long,
+    @SerialName("dishListItemDtos")
     val dishes : List<DishListItemDto> = emptyList(),
     val joinCode : String,
     val name : String,
-    val createdTimestamp: Long
+    val createdTimestamp: Long,
 )
 
 @kotlinx.serialization.Serializable
@@ -19,6 +22,6 @@ data class DishListItemDto(
     val desc: String,
     var rating : Float = 0f,
     var nofRatings : Int = 0,
-    var lastMade : Long? = null,
-    val created : Long
+    var lastMadeTimestamp : Long? = null,
+    val createdTimestamp : Long
 )

@@ -2,6 +2,7 @@ package com.piotrkalin.havira.core.domain.model
 
 import com.piotrkalin.havira.core.domain.util.DateTimeUtil
 import com.piotrkalin.havira.group.data.model.DishListItemDto
+import com.piotrkalin.havira.groupDish.data.model.DishResponse
 import kotlinx.datetime.LocalDateTime
 
 data class Dish(
@@ -52,8 +53,23 @@ data class Dish(
                 desc = dto.desc,
                 rating = dto.rating,
                 nofRatings = dto.nofRatings,
+                lastMade = dto.lastMadeTimestamp?.let { DateTimeUtil.fromEpochMillis(it) },
+                created = DateTimeUtil.fromEpochMillis(dto.createdTimestamp)
+            )
+        }
+
+        fun fromDishResponse(dto : DishResponse) : Dish {
+            return Dish(
+                id = dto.id,
+                ownerId = dto.ownerId,
+                groupId = dto.groupId,
+                title = dto.title,
+                desc = dto.desc,
+                rating = dto.rating,
+                nofRatings = dto.nofRatings,
                 lastMade = dto.lastMade?.let { DateTimeUtil.fromEpochMillis(it) },
-                created = DateTimeUtil.fromEpochMillis(dto.created)
+                created = DateTimeUtil.fromEpochMillis(dto.created),
+                dishPreps = dto.dishPreps.map { DishPrep.fromDishPrepResponse(it) }
             )
         }
     }

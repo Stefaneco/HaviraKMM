@@ -12,4 +12,6 @@ object Routes {
     const val GROUP = "group/{groupId}"
     const val GROUP_ARGS = "group/%s"
     const val JOIN_GROUP = "join_group"
+    const val CREATE_GROUP_DISH = "create_group_dish/{groupId}"
+    const val CREATE_GROUP_DISH_ARGS = "create_group_dish/%s"
 }

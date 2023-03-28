@@ -48,7 +48,7 @@ fun NavigationDrawer(
                 NavigationDrawerItem(
                     icon = { Icon(imageVector = Icons.Filled.Person, contentDescription = "") },
                     label = { Text(text = "My Meals") },
-                    selected = true,
+                    selected = state.isSoloSelected,
                     onClick = {
                         onEvent(NavigationDrawerEvent.CloseDrawer)
                         onEvent(NavigationDrawerEvent.NavigateToSolo)
@@ -59,7 +59,7 @@ fun NavigationDrawer(
                     NavigationDrawerItem(
                         icon = { Icon(imageVector = Icons.Filled.People, contentDescription = "") },
                         label = { Text(text = group.name) },
-                        selected = false,
+                        selected = state.selectedGroup == group.id,
                         onClick = {
                                 onEvent(NavigationDrawerEvent.CloseDrawer)
                                 onEvent(NavigationDrawerEvent.NavigateToGroup(group.id))

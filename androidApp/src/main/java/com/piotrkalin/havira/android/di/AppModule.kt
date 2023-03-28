@@ -22,6 +22,9 @@ import com.piotrkalin.havira.group.domain.interactors.CreateGroup
 import com.piotrkalin.havira.group.domain.interactors.GetAllGroups
 import com.piotrkalin.havira.group.domain.interactors.GroupInteractors
 import com.piotrkalin.havira.group.domain.interactors.JoinGroup
+import com.piotrkalin.havira.groupDish.data.AzureDishService
+import com.piotrkalin.havira.groupDish.domain.IDishService
+import com.piotrkalin.havira.groupDish.domain.interactors.CreateGroupDish
 import com.piotrkalin.havira.groupDish.domain.interactors.GetGroup
 import com.squareup.sqldelight.db.SqlDriver
 import dagger.Module
@@ -50,6 +53,12 @@ class AppModule {
 
     @Provides
     @Singleton
+    fun provideDishService(httpClient: HttpClient) : IDishService {
+        return AzureDishService(httpClient)
+    }
+
+    @Provides
+    @Singleton
     fun provideGroupService(httpClient: HttpClient) : IGroupService {
         return AzureGroupService(httpClient)
     }
@@ -65,14 +74,15 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideDishInteractors(dishRepository: IDishRepository) : DishInteractors {
+    fun provideDishInteractors(dishRepository: IDishRepository, dishService: IDishService) : DishInteractors {
         return DishInteractors(
             AddDish(dishRepository),
             DeleteDishById(dishRepository),
             GetAllDishes(dishRepository),
             GetDishById(dishRepository),
             AddDishPrep(dishRepository),
-            EditDish(dishRepository)
+            EditDish(dishRepository),
+            CreateGroupDish(dishService)
         )
     }
 

@@ -25,8 +25,8 @@ data class DishListItem(
                 desc = dto.desc,
                 rating = dto.rating,
                 nofRatings = dto.nofRatings,
-                lastMade = dto.lastMade?.let { DateTimeUtil.fromEpochMillis(it) },
-                created = DateTimeUtil.fromEpochMillis(dto.created)
+                lastMade = dto.lastMadeTimestamp?.let { DateTimeUtil.fromEpochMillis(it) },
+                created = DateTimeUtil.fromEpochMillis(dto.createdTimestamp)
             )
         }
     }

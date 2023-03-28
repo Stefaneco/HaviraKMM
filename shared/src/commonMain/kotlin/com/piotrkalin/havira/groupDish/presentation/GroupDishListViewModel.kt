@@ -28,20 +28,23 @@ class GroupDishListViewModel(
                filteredDishes = result.getOrNull()?.dishes ?: emptyList(),
                searchedDishes = search(result.getOrNull()?.dishes ?: emptyList(), _state.searchText),
                sortedDishes = sort(result.getOrNull()?.dishes ?: emptyList(), _state.selectedSort, _state.selectedSortDirection),
-               isLoading = false
+               isLoading = false,
+               groupId = groupId
            )
        }
         else if (result.isFailure){
            println("GroupDishListViewModel: ${result.exceptionOrNull()?.message}")
             _state.copy(
                 error = result.exceptionOrNull()?.message,
-                isLoading = false
+                isLoading = false,
+                groupId = groupId
             )
        }
         else {
            println("GroupDishListViewModel: Success")
             _state.copy(
-                isLoading = true
+                isLoading = true,
+                groupId = groupId
             )
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), DishListState())
