@@ -87,7 +87,7 @@ fun HaviraRoot(){
         NavHost(
             modifier = Modifier.padding(padding),
             navController = navController,
-            startDestination = Routes.DISH_LIST
+            startDestination = Routes.LOGIN
         ) {
             composable(route = Routes.CREATE_GROUP_DISH){
                 val viewModel = hiltViewModel<AndroidCreateGroupDishViewModel>()
@@ -206,6 +206,20 @@ fun HaviraRoot(){
                                 )
                             )
                         }
+                        is LoginEvent.SaveProfile -> {
+                            viewModel.onEvent(
+                                LoginEvent.SaveProfile(
+                                    onSuccess = {
+                                        navController.navigate(Routes.DISH_LIST){
+                                            popUpTo(Routes.DISH_LIST){
+                                                inclusive = true
+                                            }
+                                        }
+                                    }
+                                )
+                            )
+                        }
+                        else -> {viewModel.onEvent(event)}
                     }
                 })
             }

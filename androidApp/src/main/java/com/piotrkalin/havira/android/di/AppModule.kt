@@ -4,11 +4,11 @@ import android.app.Application
 import android.content.Context
 import com.piotrkalin.havira.android.auth.data.TokenDataSource
 import com.piotrkalin.havira.auth.data.AzureAuthService
+import com.piotrkalin.havira.auth.data.AzureProfileService
 import com.piotrkalin.havira.auth.domain.IAuthService
+import com.piotrkalin.havira.auth.domain.IProfileService
 import com.piotrkalin.havira.auth.domain.ITokenDataSource
-import com.piotrkalin.havira.auth.domain.interactors.AuthInteractors
-import com.piotrkalin.havira.auth.domain.interactors.LoginWithGoogle
-import com.piotrkalin.havira.auth.domain.interactors.Logout
+import com.piotrkalin.havira.auth.domain.interactors.*
 import com.piotrkalin.havira.core.data.local.DatabaseDriverFactory
 import com.piotrkalin.havira.core.data.remote.KtorClientFactory
 import com.piotrkalin.havira.database.HaviraDatabase
@@ -53,6 +53,12 @@ class AppModule {
 
     @Provides
     @Singleton
+    fun provideProfileService(httpClient: HttpClient) : IProfileService {
+        return AzureProfileService(httpClient)
+    }
+
+    @Provides
+    @Singleton
     fun provideDishService(httpClient: HttpClient) : IDishService {
         return AzureDishService(httpClient)
     }
@@ -65,10 +71,13 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideAuthInteractors(authService: IAuthService, tokenDataSource: ITokenDataSource) : AuthInteractors {
+    fun provideAuthInteractors(authService: IAuthService, tokenDataSource: ITokenDataSource, profileService: IProfileService) : AuthInteractors {
         return AuthInteractors(
             LoginWithGoogle(authService, tokenDataSource),
-            Logout(authService, tokenDataSource)
+            Logout(authService, tokenDataSource),
+            GetUserProfile(profileService),
+            IsUserProfileCreated(profileService, tokenDataSource),
+            CreateUserProfile(profileService, tokenDataSource)
         )
     }
 

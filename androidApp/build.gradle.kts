@@ -47,6 +47,8 @@ dependencies {
 
     implementation ("com.google.android.gms:play-services-auth:20.4.1")
 
+    implementation("io.coil-kt:coil-compose:2.3.0")
+
     implementation(Deps.material3)
     implementation(Deps.material3WindowSize)
 
