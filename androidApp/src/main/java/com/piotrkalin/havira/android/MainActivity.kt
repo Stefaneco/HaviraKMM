@@ -271,8 +271,6 @@ fun HaviraRoot(){
             }
 
             composable(Routes.DISH_LIST){
-                /*val navDrawerViewModel = hiltViewModel<AndroidNavigationDrawerViewModel>()
-                val navDrawerState by navDrawerViewModel.state.collectAsState()*/
 
                 val viewModel = hiltViewModel<AndroidDishListViewModel>()
                 val state by viewModel.state.collectAsState()
@@ -292,10 +290,12 @@ fun HaviraRoot(){
                 }, navDrawerState = navDrawerState, navDrawerOnEvent = { event ->
                     when(event){
                         NavigationDrawerEvent.CreateGroup -> {
-                            navController.navigate(Routes.CREATE_GROUP)
+                            if(navDrawerState.isUserLoggedIn) navController.navigate(Routes.CREATE_GROUP)
+                            else navController.navigate(Routes.LOGIN)
                         }
                         NavigationDrawerEvent.JoinGroup -> {
-                            navController.navigate(Routes.JOIN_GROUP)
+                            if(navDrawerState.isUserLoggedIn) navController.navigate(Routes.JOIN_GROUP)
+                            else navController.navigate(Routes.LOGIN)
                         }
                         is NavigationDrawerEvent.NavigateToGroup -> {
                             navDrawerViewModel.onEvent(event)

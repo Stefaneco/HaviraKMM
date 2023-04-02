@@ -12,7 +12,10 @@ class IsUserProfileCreated(
             val onDeviceProfile = tokenDataSource.getProfileId()
             if (onDeviceProfile != null) return Result.success(true)
             val remoteProfile = profileService.getUserProfileOrNull()
-            if (remoteProfile != null) return Result.success(true)
+            if (remoteProfile != null) {
+                tokenDataSource.updateProfileId(remoteProfile.id)
+                return Result.success(true)
+            }
             return Result.success(false)
 
         } catch (e: Exception){

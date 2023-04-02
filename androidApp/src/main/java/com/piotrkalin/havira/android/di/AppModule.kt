@@ -79,7 +79,8 @@ class AppModule {
             Logout(authService, tokenDataSource),
             GetUserProfile(profileService),
             IsUserProfileCreated(profileService, tokenDataSource),
-            CreateUserProfile(profileService, tokenDataSource)
+            CreateUserProfile(profileService, tokenDataSource),
+            IsUserLoggedIn(tokenDataSource)
         )
     }
 

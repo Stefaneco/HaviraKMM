@@ -5,5 +5,6 @@ data class AuthInteractors(
     val logout: Logout,
     val getUserProfile: GetUserProfile,
     val isUserProfileCreated: IsUserProfileCreated,
-    val createUserProfile: CreateUserProfile
+    val createUserProfile: CreateUserProfile,
+    val isUserLoggedIn: IsUserLoggedIn
 )

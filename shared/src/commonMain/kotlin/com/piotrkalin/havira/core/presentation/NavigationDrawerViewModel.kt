@@ -1,5 +1,6 @@
 package com.piotrkalin.havira.core.presentation
 
+import com.piotrkalin.havira.auth.domain.interactors.AuthInteractors
 import com.piotrkalin.havira.core.domain.util.toCommonStateFlow
 import com.piotrkalin.havira.group.domain.interactors.GroupInteractors
 import kotlinx.coroutines.CoroutineScope
@@ -9,6 +10,7 @@ import kotlinx.coroutines.launch
 
 class NavigationDrawerViewModel(
     private val groupInteractors: GroupInteractors,
+    private val authInteractors: AuthInteractors,
     private val coroutineScope: CoroutineScope?
 ) {
 
@@ -17,21 +19,15 @@ class NavigationDrawerViewModel(
     private val _state = MutableStateFlow(NavigationDrawerState())
     val state = _state.asStateFlow().toCommonStateFlow()
 
-    /*val state = combine(
-        _state,
-        groupInteractors.getAllGroups()
-    ){ _state, groups ->
-        if (groups.isSuccess) {
-            _state.copy(
-                groups = groups.getOrElse { emptyList() }
-            )
-        }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), NavigationDrawerState())
-        .toCommonStateFlow()*/
-
     init {
         println("NavigationDrawerViewModel: init")
         viewModelScope.launch {
+            val isUserLoggedIn = authInteractors.isUserLoggedIn()
+            println("NavigationDrawerViewModel isUserLoggedIn: $isUserLoggedIn")
+            _state.update { it.copy(
+                isUserLoggedIn = isUserLoggedIn
+            ) }
+            if (!isUserLoggedIn) return@launch
             groupInteractors.getAllGroups().collect { result ->
                 if (result.isSuccess){
                     _state.update { it.copy(

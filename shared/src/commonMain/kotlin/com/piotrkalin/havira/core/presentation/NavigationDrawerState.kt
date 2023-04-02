@@ -6,5 +6,6 @@ data class NavigationDrawerState (
     val groups: List<Group> = emptyList(),
     val selectedGroup : Long? = null,
     val isSoloSelected : Boolean = true,
-    val isDrawerOpen : Boolean = false
+    val isDrawerOpen : Boolean = false,
+    val isUserLoggedIn : Boolean = false
     )
