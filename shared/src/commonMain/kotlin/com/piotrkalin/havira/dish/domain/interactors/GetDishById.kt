@@ -1,23 +1,18 @@
 package com.piotrkalin.havira.dish.domain.interactors
 
 import com.piotrkalin.havira.core.domain.model.Dish
-import com.piotrkalin.havira.core.domain.util.CommonFlow
-import com.piotrkalin.havira.core.domain.util.Resource
-import com.piotrkalin.havira.core.domain.util.toCommonFlow
-import kotlinx.coroutines.flow.flow
+import com.piotrkalin.havira.dish.domain.IDishRepository
+import com.piotrkalin.havira.dish.domain.errors.DishNotFoundException
 
 class GetDishById(
-  private val dishRepository: com.piotrkalin.havira.dish.domain.IDishRepository
+  private val dishRepository: IDishRepository
 ) {
-    operator fun invoke(id: Long) : CommonFlow<Resource<Dish>> = flow {
-
+    suspend operator fun invoke(id: Long) : Result<Dish> {
         try {
-            val dish = dishRepository.getDishById(id)
-            if(dish == null) emit(Resource.Error(throwable = com.piotrkalin.havira.dish.domain.errors.DishNotFoundException()))
-            else emit(Resource.Success(dish))
+            val dish = dishRepository.getDishById(id) ?: return Result.failure(DishNotFoundException())
+            return Result.success(dish)
         } catch (e: Exception){
-            emit(Resource.Error(e))
+            return Result.failure(e)
         }
-
-    }.toCommonFlow()
+    }
 }

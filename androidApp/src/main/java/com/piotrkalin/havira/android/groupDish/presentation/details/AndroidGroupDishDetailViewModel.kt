@@ -1,32 +1,28 @@
-package com.piotrkalin.havira.android.dish.presentation.edit
+package com.piotrkalin.havira.android.groupDish.presentation.details
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.piotrkalin.havira.dish.domain.interactors.DishInteractors
-import com.piotrkalin.havira.dish.presentation.edit.DishEditEvent
-import com.piotrkalin.havira.dish.presentation.edit.DishEditViewModel
+import com.piotrkalin.havira.dish.presentation.detail.DishDetailEvent
+import com.piotrkalin.havira.groupDish.presentation.GroupDishDetailViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class AndroidDishEditViewModel @Inject constructor(
+class AndroidGroupDishDetailViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val dishInteractors: DishInteractors
-): ViewModel() {
+    private val dishInteractors: DishInteractors,
+) : ViewModel() {
 
     private val dishId = savedStateHandle.get<String>("dishId")?.toLong() ?: -1L
     private val viewModel by lazy {
-        DishEditViewModel(
-            dishId,
-            dishInteractors,
-            viewModelScope
+        GroupDishDetailViewModel(
+            dishId, dishInteractors, viewModelScope
         )
     }
 
     val state = viewModel.state
 
-    fun onEvent(event: DishEditEvent){
-        viewModel.onEvent(event)
-    }
+    fun onEvent(event: DishDetailEvent) = viewModel.onEvent(event)
 }

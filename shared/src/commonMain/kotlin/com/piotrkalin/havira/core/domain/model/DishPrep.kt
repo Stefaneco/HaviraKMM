@@ -1,5 +1,6 @@
 package com.piotrkalin.havira.core.domain.model
 
+import com.piotrkalin.havira.groupDish.data.model.AddDishPrepRequest
 import com.piotrkalin.havira.groupDish.data.model.DishPrepDto
 
 data class DishPrep(
@@ -13,5 +14,9 @@ data class DishPrep(
         fun fromDishPrepResponse(response: DishPrepDto) : DishPrep {
             return DishPrep(response.id, response.userId, response.dishId, response.rating, response.dateTimestamp)
         }
+    }
+
+    fun toAddDishPrepRequest() : AddDishPrepRequest {
+        return AddDishPrepRequest(rating)
     }
 }

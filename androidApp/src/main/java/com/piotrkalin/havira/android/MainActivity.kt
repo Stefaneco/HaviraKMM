@@ -32,6 +32,7 @@ import com.piotrkalin.havira.android.group.create.presentation.CreateGroupScreen
 import com.piotrkalin.havira.android.group.join.AndroidJoinGroupViewModel
 import com.piotrkalin.havira.android.group.join.JoinGroupScreen
 import com.piotrkalin.havira.android.groupDish.presentation.create.AndroidCreateGroupDishViewModel
+import com.piotrkalin.havira.android.groupDish.presentation.details.AndroidGroupDishDetailViewModel
 import com.piotrkalin.havira.android.groupDish.presentation.list.AndroidGroupDishListViewModel
 import com.piotrkalin.havira.android.groupDish.presentation.list.GroupDishListScreen
 import com.piotrkalin.havira.auth.presentation.LoginEvent
@@ -87,8 +88,25 @@ fun HaviraRoot(){
         NavHost(
             modifier = Modifier.padding(padding),
             navController = navController,
-            startDestination = Routes.LOGIN
+            startDestination = Routes.DISH_LIST
         ) {
+            composable(route = Routes.GROUP_DISH_DETAILS){
+                val viewModel = hiltViewModel<AndroidGroupDishDetailViewModel>()
+                val state by viewModel.state.collectAsState()
+
+                DishDetailScreen(state = state, onEvent = { event ->
+                    when(event){
+                        is DishDetailEvent.BackButtonPressed -> {
+                            navController.popBackStack()
+                        }
+                        is DishDetailEvent.EditButtonPressed -> {
+                            //navController.navigate(Routes.DISH_EDIT_ARGS.format(event.dishId))
+                        }
+                        else -> {viewModel.onEvent(event)}
+                    }
+                })
+            }
+
             composable(route = Routes.CREATE_GROUP_DISH){
                 val viewModel = hiltViewModel<AndroidCreateGroupDishViewModel>()
                 val state by viewModel.state.collectAsState()
@@ -140,6 +158,9 @@ fun HaviraRoot(){
                     state = state,
                     onEvent = {  event ->
                         when(event) {
+                            is DishListEvent.SelectDish -> {
+                                navController.navigate(Routes.GROUP_DISH_DETAILS_ARGS.format(event.dishId))
+                            }
                             DishListEvent.CreateDish -> {
                                 navController.navigate(Routes.CREATE_GROUP_DISH_ARGS.format(state.groupId))
                             }
@@ -248,6 +269,7 @@ fun HaviraRoot(){
 
                 })
             }
+
             composable(Routes.DISH_LIST){
                 /*val navDrawerViewModel = hiltViewModel<AndroidNavigationDrawerViewModel>()
                 val navDrawerState by navDrawerViewModel.state.collectAsState()*/
@@ -290,11 +312,11 @@ fun HaviraRoot(){
                 }
                 )
             }
-            composable(Routes.DISH_DETAILS){ backStackEntry ->
+
+            composable(Routes.DISH_DETAILS){
                 val viewModel = hiltViewModel<AndroidDishDetailViewModel>()
                 val state by viewModel.state.collectAsState()
-                val dishId = backStackEntry.arguments?.getString("dishId")?.toLong() ?: -1
-                viewModel.loadDish(dishId)
+
                 DishDetailScreen(state = state, onEvent = {event ->
                     when(event){
                         is DishDetailEvent.BackButtonPressed -> {
@@ -313,7 +335,7 @@ fun HaviraRoot(){
                 val viewModel = hiltViewModel<AndroidDishEditViewModel>()
                 val state by viewModel.state.collectAsState()
                 val dishId = backStackEntry.arguments?.getString("dishId")?.toLong() ?: -1
-                viewModel.loadDish(dishId)
+
                 EditDishScreen(state = state, onEvent = { event ->
                     when(event){
                         is DishEditEvent.BackButtonPressed -> {

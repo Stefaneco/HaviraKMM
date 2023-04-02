@@ -1,23 +1,49 @@
 package com.piotrkalin.havira.dish.presentation.detail
 
+import com.piotrkalin.havira.core.domain.model.Dish
 import com.piotrkalin.havira.core.domain.util.DateTimeUtil
-import com.piotrkalin.havira.core.domain.util.Resource
 import com.piotrkalin.havira.core.domain.util.toCommonStateFlow
 import com.piotrkalin.havira.core.domain.model.DishPrep
+import com.piotrkalin.havira.dish.domain.interactors.DishInteractors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class DishDetailViewModel(
-    private val dishInteractors: com.piotrkalin.havira.dish.domain.interactors.DishInteractors,
-    private val coroutineScope: CoroutineScope?
+open class DishDetailViewModel(
+    private val dishId : Long,
+    private val dishInteractors: DishInteractors,
+    private val coroutineScope: CoroutineScope?,
+    private val loadDish : suspend (Long) -> Result<Dish> = {
+        dishInteractors.getDishById.invoke(dishId)
+    },
 ) {
 
     private val viewModelScope = coroutineScope ?: CoroutineScope(Dispatchers.Main)
 
     private val _state = MutableStateFlow(DishDetailState())
     val state = _state.asStateFlow().toCommonStateFlow()
+
+    init {
+        viewModelScope.launch {
+            val result = loadDish(dishId)
+            println("DishDetailViewModel result: ${result.getOrNull()}")
+            result.onSuccess { dish ->
+                val rating = (dish.rating).toInt()
+                _state.update { it.copy(
+                    dish = dish,
+                    isLoading = false,
+                    newDishPrepRating = if(rating != 0) rating else 4
+                ) }
+            }
+            result.onFailure { t ->
+                _state.update { it.copy(
+                    error = t.message ?: "Unknown error",
+                    isLoading = false
+                ) }
+            }
+        }
+    }
 
     fun onEvent(event: DishDetailEvent){
         when(event){
@@ -36,27 +62,24 @@ class DishDetailViewModel(
                     isDishPrepCreatorOpen = false
                 )  }
                 viewModelScope.launch {
-                    val dish = _state.value.dish ?: return@launch // ?: throw error
-                    val dishId = dish.id ?: return@launch // ?: throw error
-                    val newDishResource = dishInteractors.addDishPrep(DishPrep
-                        (
+                    val dish = _state.value.dish ?: return@launch
+                    val result = addDishPrep(
+                        DishPrep(
                             rating = _state.value.newDishPrepRating,
                             date = DateTimeUtil.toEpochMillis(_state.value.newDishPrepDate),
-                            dishId = dishId
-                        ),
+                            dishId = dishId),
                         dish
                     )
-                    when(newDishResource){
-                        is Resource.Success -> {
-                            _state.update { it.copy(
-                                dish = newDishResource.data
-                            ) }
-                        }
-                        is Resource.Error -> {
-                            _state.update { it.copy(
-                                error = newDishResource.throwable?.message
-                            ) }
-                        }
+                    result.onSuccess { updatedDish ->
+                        _state.update { it.copy(
+                            dish = updatedDish
+                        ) }
+                    }
+                    result.onFailure { t ->
+                        println("DishDetailViewModel error: ${t.message}")
+                        _state.update { it.copy(
+                            error = t.message
+                        ) }
                     }
                 }
             }
@@ -70,31 +93,15 @@ class DishDetailViewModel(
             }
             is DishDetailEvent.BackButtonPressed -> {}
             is DishDetailEvent.EditButtonPressed -> {}
+            DishDetailEvent.OnErrorSeen -> {
+                _state.update { it.copy(
+                    error = null
+                ) }
+            }
         }
     }
 
-    fun loadDish(dishId: Long){
-        if (_state.value.dish != null) return
-        viewModelScope.launch {
-            dishInteractors.getDishById(dishId).collect { dishResource ->
-                when(dishResource) {
-                    is Resource.Success -> {
-                        val rating = (dishResource.data?.rating ?: 5).toInt()
-                        _state.update { it.copy(
-                            dish = dishResource.data,
-                            isLoading = false,
-                            newDishPrepRating = if(rating != 0) rating else 4
-                        ) }
-                    }
-                    is Resource.Error -> {
-                        _state.update { it.copy(
-                            error = dishResource.throwable?.message ?: "Unknown error",
-                            isLoading = false
-                        ) }
-                    }
-                }
-            }
-        }
-
+    protected open suspend fun addDishPrep(dishPrep : DishPrep, dish: Dish): Result<Dish> {
+        return dishInteractors.addDishPrep(dishPrep, dish)
     }
 }

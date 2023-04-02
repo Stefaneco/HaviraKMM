@@ -1,7 +1,8 @@
 package com.piotrkalin.havira.dish.presentation.edit
 
-import com.piotrkalin.havira.core.domain.util.Resource
+import com.piotrkalin.havira.core.domain.model.Dish
 import com.piotrkalin.havira.core.domain.util.toCommonStateFlow
+import com.piotrkalin.havira.dish.domain.interactors.DishInteractors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,7 +11,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class DishEditViewModel(
-    private val dishInteractors: com.piotrkalin.havira.dish.domain.interactors.DishInteractors,
+    private val dishId: Long,
+    private val dishInteractors: DishInteractors,
     private val coroutineScope: CoroutineScope?
 ) {
 
@@ -18,6 +20,25 @@ class DishEditViewModel(
 
     private val _state = MutableStateFlow(DishEditState())
     val state = _state.asStateFlow().toCommonStateFlow()
+
+    init {
+        viewModelScope.launch {
+            val result = loadDish()
+            result.onSuccess { dish ->
+                _state.update { it.copy(
+                    dishId = dishId,
+                    title = dish.title,
+                    desc = dish.desc,
+                    isValidDish = isValidDish(dish.id, dish.title)
+                ) }
+            }
+            result.onFailure { t ->
+                _state.update { it.copy(
+                    error = t.message ?: "Unknown error",
+                ) }
+            }
+        }
+    }
 
     fun onEvent(event: DishEditEvent){
         when(event){
@@ -59,27 +80,8 @@ class DishEditViewModel(
         }
     }
 
-    fun loadDish(dishId: Long){
-        if (_state.value.dishId != null) return
-        viewModelScope.launch {
-            dishInteractors.getDishById(dishId).collect { dishResource ->
-                when(dishResource){
-                    is Resource.Success -> {
-                        _state.update { it.copy(
-                            dishId = dishResource.data?.id,
-                            title = dishResource.data?.title ?: "",
-                            desc = dishResource.data?.desc ?: "",
-                            isValidDish = isValidDish(dishResource.data?.id,dishResource.data?.title ?: "")
-                        ) }
-                    }
-                    is Resource.Error -> {
-                        _state.update { it.copy(
-                            error = dishResource.throwable?.message ?: "Unknown error"
-                        ) }
-                    }
-                }
-            }
-        }
+    protected suspend fun loadDish() : Result<Dish> {
+        return dishInteractors.getDishById(dishId)
     }
 
     private fun editDish(state: DishEditState, onEdit: () -> Unit){
