@@ -1,9 +1,7 @@
 package com.piotrkalin.havira.dish.domain.interactors
 
-import com.piotrkalin.havira.dish.domain.IDishRepository
-
 class EditDish(
-    private val dishRepository: IDishRepository
+    private val dishRepository: com.piotrkalin.havira.dish.domain.IDishRepository
 ) {
     suspend operator fun invoke(id: Long, title: String, description: String) : Result<Unit?>{
         return try {

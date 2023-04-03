@@ -6,5 +6,9 @@ interface ITokenDataSource {
 
     fun updateAuthToken(token: String)
 
+    fun getProfileId() : String?
+
+    fun updateProfileId(userId: String)
+
     fun removeAllTokens()
 }

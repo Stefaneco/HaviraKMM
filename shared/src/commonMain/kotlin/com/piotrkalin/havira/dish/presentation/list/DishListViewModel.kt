@@ -1,23 +1,23 @@
 package com.piotrkalin.havira.dish.presentation.list
 
+import com.piotrkalin.havira.core.domain.model.Dish
 import com.piotrkalin.havira.core.domain.util.SortDirection
 import com.piotrkalin.havira.core.domain.util.SortType
 import com.piotrkalin.havira.core.domain.util.toCommonStateFlow
 import com.piotrkalin.havira.dish.domain.interactors.DishInteractors
-import com.piotrkalin.havira.dish.domain.model.Dish
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 
-class DishListViewModel(
+open class DishListViewModel(
     private val dishInteractors: DishInteractors,
     private val coroutineScope: CoroutineScope?
 ) {
 
-    private val viewModelScope = coroutineScope ?: CoroutineScope(Dispatchers.Main)
+    protected val viewModelScope = coroutineScope ?: CoroutineScope(Dispatchers.Main)
 
-    private val _state = MutableStateFlow(DishListState())
-    val state = combine(
+    protected val _state = MutableStateFlow(DishListState())
+    open val state = combine(
         _state,
         dishInteractors.getAllDishes()
     ) { _state, dishes ->
@@ -91,7 +91,7 @@ class DishListViewModel(
         }
     }
 
-    private fun sort(items: List<Dish>, sortType: SortType, sortDirection: SortDirection) : List<Dish>{
+    protected fun sort(items: List<Dish>, sortType: SortType, sortDirection: SortDirection) : List<Dish>{
         return if(sortDirection == SortDirection.ASC)
             when(sortType){
                 SortType.RATING -> items.sortedBy { it.rating }
@@ -109,7 +109,7 @@ class DishListViewModel(
         }
     }
 
-    private fun search(items: List<Dish>, query: String) : List<Dish>{
+    protected fun search(items: List<Dish>, query: String) : List<Dish>{
         return items.filter {
             it.title.contains(query, ignoreCase = true)
             || it.desc.contains(query, ignoreCase = true)

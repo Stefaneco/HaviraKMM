@@ -14,14 +14,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
+import com.piotrkalin.havira.android.core.presentation.NavigationDrawer
 import com.piotrkalin.havira.core.domain.util.DateTimeUtil
+import com.piotrkalin.havira.core.presentation.NavigationDrawerEvent
+import com.piotrkalin.havira.core.presentation.NavigationDrawerState
 import com.piotrkalin.havira.dish.presentation.list.DishListEvent
 import com.piotrkalin.havira.dish.presentation.list.DishListState
 
 @Composable
 fun DishListScreen(
     state: DishListState,
-    onEvent : (DishListEvent) -> Unit
+    onEvent : (DishListEvent) -> Unit,
+    navDrawerState : NavigationDrawerState,
+    navDrawerOnEvent : (NavigationDrawerEvent) -> Unit
 ) {
     if(state.isSearchViewOpen)
         DishSearchView(
@@ -31,14 +36,20 @@ fun DishListScreen(
             onItemSelected = { onEvent(DishListEvent.SelectDish(it)) },
             items = state.searchedDishes
         )
-    else
-        DishBaseView(state = state, onEvent = onEvent)
+    else {
+        NavigationDrawer(state = navDrawerState, onEvent = navDrawerOnEvent) {
+            DishBaseView(state = state, onEvent = onEvent, onMenuPressed = {
+                navDrawerOnEvent(NavigationDrawerEvent.OpenDrawer)
+            })
+        }
+    }
 }
 
 @Composable
 fun DishBaseView(
     state: DishListState,
-    onEvent: (DishListEvent) -> Unit
+    onEvent: (DishListEvent) -> Unit,
+    onMenuPressed : () -> Unit
 ){
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
@@ -46,6 +57,14 @@ fun DishBaseView(
         topBar = {
             TopAppBar(
                 title = { Text(modifier = Modifier.fillMaxWidth(), text = "Dishes") },
+                navigationIcon = {
+                    IconButton(onClick = { onMenuPressed() }) {
+                        Icon(
+                            imageVector = Icons.Filled.Menu,
+                            contentDescription = "Localized description"
+                        )
+                    }
+                },
                 actions = {
                     IconButton(onClick = { onEvent(DishListEvent.OpenSearchView) }) {
                         Icon(

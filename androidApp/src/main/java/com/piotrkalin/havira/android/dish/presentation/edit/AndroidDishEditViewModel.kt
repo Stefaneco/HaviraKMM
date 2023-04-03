@@ -1,5 +1,6 @@
 package com.piotrkalin.havira.android.dish.presentation.edit
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.piotrkalin.havira.dish.domain.interactors.DishInteractors
@@ -10,11 +11,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AndroidDishEditViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val dishInteractors: DishInteractors
 ): ViewModel() {
 
+    private val dishId = savedStateHandle.get<String>("dishId")?.toLong() ?: -1L
     private val viewModel by lazy {
         DishEditViewModel(
+            dishId,
             dishInteractors,
             viewModelScope
         )
@@ -24,9 +28,5 @@ class AndroidDishEditViewModel @Inject constructor(
 
     fun onEvent(event: DishEditEvent){
         viewModel.onEvent(event)
-    }
-
-    fun loadDish(dishId: Long){
-        viewModel.loadDish(dishId)
     }
 }

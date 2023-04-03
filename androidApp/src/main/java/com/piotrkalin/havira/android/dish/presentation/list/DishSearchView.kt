@@ -13,8 +13,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.piotrkalin.havira.core.domain.model.Dish
 import com.piotrkalin.havira.core.domain.util.DateTimeUtil
-import com.piotrkalin.havira.dish.domain.model.Dish
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

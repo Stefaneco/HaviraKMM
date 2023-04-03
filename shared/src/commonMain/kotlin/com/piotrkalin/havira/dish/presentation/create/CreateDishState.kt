@@ -5,5 +5,6 @@ data class CreateDishState(
     val desc: String = "",
     val isValidDish: Boolean = false,
     val error : String? = null,
-    val isCreating: Boolean = false
+    val isCreating: Boolean = false,
+    val groupId : Long? = null
 )

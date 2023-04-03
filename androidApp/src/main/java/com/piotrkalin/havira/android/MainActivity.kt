@@ -18,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.piotrkalin.havira.android.auth.presentation.AndroidLoginViewModel
 import com.piotrkalin.havira.android.auth.presentation.LoginScreen
+import com.piotrkalin.havira.android.core.presentation.AndroidNavigationDrawerViewModel
 import com.piotrkalin.havira.android.dish.presentation.create.AndroidCreateDishViewModel
 import com.piotrkalin.havira.android.dish.presentation.create.CreateDishScreen
 import com.piotrkalin.havira.android.dish.presentation.details.AndroidDishDetailViewModel
@@ -26,11 +27,22 @@ import com.piotrkalin.havira.android.dish.presentation.edit.AndroidDishEditViewM
 import com.piotrkalin.havira.android.dish.presentation.edit.EditDishScreen
 import com.piotrkalin.havira.android.dish.presentation.list.AndroidDishListViewModel
 import com.piotrkalin.havira.android.dish.presentation.list.DishListScreen
+import com.piotrkalin.havira.android.group.create.presentation.AndroidCreateGroupViewModel
+import com.piotrkalin.havira.android.group.create.presentation.CreateGroupScreen
+import com.piotrkalin.havira.android.group.join.AndroidJoinGroupViewModel
+import com.piotrkalin.havira.android.group.join.JoinGroupScreen
+import com.piotrkalin.havira.android.groupDish.presentation.create.AndroidCreateGroupDishViewModel
+import com.piotrkalin.havira.android.groupDish.presentation.details.AndroidGroupDishDetailViewModel
+import com.piotrkalin.havira.android.groupDish.presentation.list.AndroidGroupDishListViewModel
+import com.piotrkalin.havira.android.groupDish.presentation.list.GroupDishListScreen
 import com.piotrkalin.havira.auth.presentation.LoginEvent
+import com.piotrkalin.havira.core.presentation.NavigationDrawerEvent
 import com.piotrkalin.havira.dish.presentation.create.CreateDishEvent
 import com.piotrkalin.havira.dish.presentation.detail.DishDetailEvent
 import com.piotrkalin.havira.dish.presentation.edit.DishEditEvent
 import com.piotrkalin.havira.dish.presentation.list.DishListEvent
+import com.piotrkalin.havira.group.presentation.create.CreateGroupEvent
+import com.piotrkalin.havira.group.presentation.join.JoinGroupEvent
 import dagger.hilt.android.AndroidEntryPoint
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -67,6 +79,9 @@ fun Context.findActivity(): Activity {
 @Composable
 fun HaviraRoot(){
     val navController = rememberNavController()
+    val navDrawerViewModel = hiltViewModel<AndroidNavigationDrawerViewModel>()
+    val navDrawerState by navDrawerViewModel.state.collectAsState()
+
     Scaffold(
         modifier = Modifier.padding(4.dp)
     ) { padding ->
@@ -75,6 +90,122 @@ fun HaviraRoot(){
             navController = navController,
             startDestination = Routes.DISH_LIST
         ) {
+            composable(route = Routes.GROUP_DISH_DETAILS){
+                val viewModel = hiltViewModel<AndroidGroupDishDetailViewModel>()
+                val state by viewModel.state.collectAsState()
+
+                DishDetailScreen(state = state, onEvent = { event ->
+                    when(event){
+                        is DishDetailEvent.BackButtonPressed -> {
+                            navController.popBackStack()
+                        }
+                        is DishDetailEvent.EditButtonPressed -> {
+                            //navController.navigate(Routes.DISH_EDIT_ARGS.format(event.dishId))
+                        }
+                        else -> {viewModel.onEvent(event)}
+                    }
+                })
+            }
+
+            composable(route = Routes.CREATE_GROUP_DISH){
+                val viewModel = hiltViewModel<AndroidCreateGroupDishViewModel>()
+                val state by viewModel.state.collectAsState()
+
+                CreateDishScreen(state = state, onEvent = { event ->
+                    when(event){
+                        is CreateDishEvent.CreateDish -> {
+                            viewModel.onEvent(
+                                CreateDishEvent.CreateDish{
+                                    println("MainActivity CreateGroupDish: onCreated")
+                                    navController.navigate(Routes.GROUP_ARGS.format(state.groupId)) {
+                                        popUpTo(Routes.GROUP_ARGS.format(state.groupId)) {
+                                            inclusive = true
+                                        }
+                                    }
+                                })
+                        }
+                        is CreateDishEvent.BackButtonPressed -> {
+                            navController.popBackStack()
+                        }
+                        else -> viewModel.onEvent(event)
+                    }
+                })
+            }
+
+            composable(route = Routes.JOIN_GROUP){
+                val viewModel = hiltViewModel<AndroidJoinGroupViewModel>()
+                val state by viewModel.state.collectAsState()
+
+                JoinGroupScreen(state = state, onEvent = { event ->
+                    when(event){
+                        JoinGroupEvent.BackButtonPressed -> {
+                            navController.popBackStack()
+                        }
+                        JoinGroupEvent.NavigateToJoinedGroup -> TODO()
+                        else -> {viewModel.onEvent(event)}
+                    }
+                })
+            }
+
+            composable(route = Routes.GROUP){
+                /*val navDrawerViewModel = hiltViewModel<AndroidNavigationDrawerViewModel>()
+                val navDrawerState by navDrawerViewModel.state.collectAsState()*/
+
+                val viewModel = hiltViewModel<AndroidGroupDishListViewModel>()
+                val state by viewModel.state.collectAsState()
+
+                GroupDishListScreen(
+                    state = state,
+                    onEvent = {  event ->
+                        when(event) {
+                            is DishListEvent.SelectDish -> {
+                                navController.navigate(Routes.GROUP_DISH_DETAILS_ARGS.format(event.dishId))
+                            }
+                            DishListEvent.CreateDish -> {
+                                navController.navigate(Routes.CREATE_GROUP_DISH_ARGS.format(state.groupId))
+                            }
+                            else -> {viewModel.onEvent(event)}
+                        } },
+                    navDrawerState = navDrawerState,
+                    navDrawerOnEvent = { event ->
+                        when(event){
+                            NavigationDrawerEvent.CreateGroup -> {
+                                navController.navigate(Routes.CREATE_GROUP)
+                            }
+                            NavigationDrawerEvent.JoinGroup -> {
+                                navController.navigate(Routes.JOIN_GROUP)
+                            }
+                            is NavigationDrawerEvent.NavigateToGroup -> {
+                                navDrawerViewModel.onEvent(event)
+                                navController.navigate(Routes.GROUP_ARGS.format(event.id))
+                            }
+                            NavigationDrawerEvent.NavigateToSettings -> TODO()
+                            NavigationDrawerEvent.NavigateToSolo -> {
+                                navDrawerViewModel.onEvent(event)
+                                navController.navigate(Routes.DISH_LIST)
+                            }
+                            else -> { navDrawerViewModel.onEvent(event)}
+                        }
+                    }
+                )
+            }
+
+            composable(route = Routes.CREATE_GROUP){
+                val viewModel = hiltViewModel<AndroidCreateGroupViewModel>()
+                val state by viewModel.state.collectAsState()
+
+                CreateGroupScreen(state = state, onEvent = { event ->
+                    when(event){
+                        CreateGroupEvent.BackButtonPressed -> {
+                            navController.popBackStack()
+                        }
+                        CreateGroupEvent.NavigateToCreatedGroup -> {
+                            navController.navigate(Routes.GROUP_ARGS.format(state.groupId))
+                        }
+                        else -> {viewModel.onEvent(event)}
+                    }
+                })
+            }
 
             composable(route = Routes.LOGIN) {
                 val viewModel = hiltViewModel<AndroidLoginViewModel>()
@@ -96,6 +227,20 @@ fun HaviraRoot(){
                                 )
                             )
                         }
+                        is LoginEvent.SaveProfile -> {
+                            viewModel.onEvent(
+                                LoginEvent.SaveProfile(
+                                    onSuccess = {
+                                        navController.navigate(Routes.DISH_LIST){
+                                            popUpTo(Routes.DISH_LIST){
+                                                inclusive = true
+                                            }
+                                        }
+                                    }
+                                )
+                            )
+                        }
+                        else -> {viewModel.onEvent(event)}
                     }
                 })
             }
@@ -124,7 +269,9 @@ fun HaviraRoot(){
 
                 })
             }
+
             composable(Routes.DISH_LIST){
+
                 val viewModel = hiltViewModel<AndroidDishListViewModel>()
                 val state by viewModel.state.collectAsState()
 
@@ -140,13 +287,36 @@ fun HaviraRoot(){
                             viewModel.onEvent(event)
                         }
                     }
-                })
+                }, navDrawerState = navDrawerState, navDrawerOnEvent = { event ->
+                    when(event){
+                        NavigationDrawerEvent.CreateGroup -> {
+                            if(navDrawerState.isUserLoggedIn) navController.navigate(Routes.CREATE_GROUP)
+                            else navController.navigate(Routes.LOGIN)
+                        }
+                        NavigationDrawerEvent.JoinGroup -> {
+                            if(navDrawerState.isUserLoggedIn) navController.navigate(Routes.JOIN_GROUP)
+                            else navController.navigate(Routes.LOGIN)
+                        }
+                        is NavigationDrawerEvent.NavigateToGroup -> {
+                            navDrawerViewModel.onEvent(event)
+                            navController.navigate(Routes.GROUP_ARGS.format(event.id)) {
+                                popUpTo(Routes.GROUP_ARGS.format(event.id)) {
+                                    inclusive = true
+                                }
+                            }
+                        }
+                        NavigationDrawerEvent.NavigateToSettings -> TODO()
+                        NavigationDrawerEvent.NavigateToSolo -> {}
+                        else -> { navDrawerViewModel.onEvent(event)}
+                    }
+                }
+                )
             }
-            composable(Routes.DISH_DETAILS){ backStackEntry ->
+
+            composable(Routes.DISH_DETAILS){
                 val viewModel = hiltViewModel<AndroidDishDetailViewModel>()
                 val state by viewModel.state.collectAsState()
-                val dishId = backStackEntry.arguments?.getString("dishId")?.toLong() ?: -1
-                viewModel.loadDish(dishId)
+
                 DishDetailScreen(state = state, onEvent = {event ->
                     when(event){
                         is DishDetailEvent.BackButtonPressed -> {
@@ -165,7 +335,7 @@ fun HaviraRoot(){
                 val viewModel = hiltViewModel<AndroidDishEditViewModel>()
                 val state by viewModel.state.collectAsState()
                 val dishId = backStackEntry.arguments?.getString("dishId")?.toLong() ?: -1
-                viewModel.loadDish(dishId)
+
                 EditDishScreen(state = state, onEvent = { event ->
                     when(event){
                         is DishEditEvent.BackButtonPressed -> {

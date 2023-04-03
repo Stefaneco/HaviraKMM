@@ -1,7 +1,7 @@
 package com.piotrkalin.havira.dish.presentation.create
 
+import com.piotrkalin.havira.core.domain.model.Dish
 import com.piotrkalin.havira.core.domain.util.toCommonStateFlow
-import com.piotrkalin.havira.dish.domain.model.Dish
 import com.piotrkalin.havira.dish.domain.interactors.DishInteractors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -13,14 +13,14 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
-class CreateDishViewModel(
+open class CreateDishViewModel(
     private val dishInteractors: DishInteractors,
     private val coroutineScope: CoroutineScope?
 ) {
 
-    private val viewModelScope = coroutineScope ?: CoroutineScope(Dispatchers.Main)
+    protected val viewModelScope = coroutineScope ?: CoroutineScope(Dispatchers.Main)
 
-    private val _state = MutableStateFlow(CreateDishState())
+    protected val _state = MutableStateFlow(CreateDishState())
     val state = _state.asStateFlow().toCommonStateFlow()
 
     fun onEvent(event : CreateDishEvent){
@@ -48,15 +48,18 @@ class CreateDishViewModel(
         }
     }
 
-    private fun createDish(state: CreateDishState, onCreate: () -> Unit){
+    protected open fun createDish(state: CreateDishState, onCreate: () -> Unit){
         if (!state.isValidDish) return
         viewModelScope.launch {
            _state.update { it.copy( isCreating = true ) }
 
-            val result = dishInteractors.addDish(Dish(
-                title = state.title,
-                desc = state.desc,
-                created = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())))
+            val result = dishInteractors.addDish(
+                Dish(
+                    title = state.title,
+                    desc = state.desc,
+                    created = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+                )
+            )
 
             if (result.isFailure) {
                 println(result.exceptionOrNull()?.message)

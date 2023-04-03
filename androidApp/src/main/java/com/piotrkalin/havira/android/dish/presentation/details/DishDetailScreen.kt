@@ -25,6 +25,7 @@ import com.piotrkalin.havira.android.dish.presentation.details.components.InfoCh
 import com.piotrkalin.havira.core.domain.util.DateTimeUtil
 import com.piotrkalin.havira.dish.presentation.detail.DishDetailEvent
 import com.piotrkalin.havira.dish.presentation.detail.DishDetailState
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,9 +34,10 @@ fun DishDetailScreen(
     state : DishDetailState,
     onEvent : (DishDetailEvent) -> Unit
 ) {
-    //val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-    //val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -46,7 +48,6 @@ fun DishDetailScreen(
                         text = state.dish?.title ?: "",
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
-                        //textAlign = TextAlign.Center
                     )
                 },
                 navigationIcon = {
@@ -99,13 +100,23 @@ fun DishDetailScreen(
                             Spacer(modifier = Modifier.padding(4.dp))
                         }
                         items(dishPreps ?: emptyList()){ dishPrep ->
-                            DishPrepCard(rating = dishPrep.rating, date = DateTimeUtil.formatDate(dishPrep.date))
+                            DishPrepCard(
+                                rating = dishPrep.rating,
+                                date = DateTimeUtil.formatDate(dishPrep.date),
+                                uid = dishPrep.userId
+                            )
                         }
                         item {
                             Spacer(modifier = Modifier.padding(50.dp))
                         }
                     }
                 }
+            }
+        }
+        state.error?.let {
+            scope.launch {
+                snackbarHostState.showSnackbar(it)
+                onEvent(DishDetailEvent.OnErrorSeen)
             }
         }
         if(state.isDishPrepCreatorOpen) DishDetailDishPrepCreator(state = state, onEvent = onEvent)

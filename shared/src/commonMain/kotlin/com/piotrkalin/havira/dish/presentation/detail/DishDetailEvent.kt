@@ -8,4 +8,5 @@ sealed class DishDetailEvent {
     data class SetDishPrepCreatorRating(val rating: Int) : DishDetailEvent()
     object BackButtonPressed : DishDetailEvent()
     data class EditButtonPressed(val dishId: Long) : DishDetailEvent()
+    object OnErrorSeen : DishDetailEvent()
 }

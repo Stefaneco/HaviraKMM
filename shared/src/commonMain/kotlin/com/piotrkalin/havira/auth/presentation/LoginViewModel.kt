@@ -21,27 +21,86 @@ class LoginViewModel(
     fun onEvent(event: LoginEvent){
         when(event){
             is LoginEvent.GoogleLogin -> {
+                _state.update { it.copy(
+                    stage = LoginStage.CONNECTING_TO_AZURE
+                ) }
                 viewModelScope.launch {
-                    authInteractors.loginWithGoogle(event.idToken).collect { result ->
-                        if(result.isSuccess) {
-                            println("Auth LoginViewModel: Navigating to app")
-                            event.onSuccess()
+                    authInteractors.loginWithGoogle(event.idToken).collect { loginResult ->
+                        if(loginResult.isSuccess) {
+                            onLoginSuccess(event.onSuccess)
                         }
-                        else if(result.isFailure){
+                        else if(loginResult.isFailure){
                             _state.update { it.copy(
-                                error = result.exceptionOrNull()?.message
-                            ) }
-                        }
-                        else {
-                            _state.update { it.copy(
-                                loginLoading = true
+                                error = loginResult.exceptionOrNull()?.message
                             ) }
                         }
                     }
-
-
+                }
+            }
+            LoginEvent.OnErrorSeen -> {
+                _state.update { it.copy(
+                    error = null
+                ) }
+            }
+            is LoginEvent.OnImageSelected -> {
+                _state.update { it.copy(
+                    image = event.image
+                ) }
+            }
+            is LoginEvent.EditName -> {
+                _state.update { it.copy(
+                    name = event.name,
+                    isValidProfile = isValidProfile(event.name)
+                ) }
+            }
+            is LoginEvent.SaveProfile -> {
+                _state.update { it.copy(
+                    stage = LoginStage.CREATING_PROFILE
+                ) }
+                viewModelScope.launch {
+                    val result = authInteractors.createUserProfile(
+                        name = _state.value.name.trim(),
+                        image = _state.value.image
+                    )
+                    result.onSuccess { _ ->
+                        event.onSuccess()
+                    }
+                    result.onFailure { t ->
+                        _state.update { it.copy(
+                            error = t.message,
+                            stage = LoginStage.WAITING_FOR_PROFILE_CREATION
+                        ) }
+                    }
                 }
             }
         }
+    }
+
+    private suspend fun onLoginSuccess(onProfileCreated : () -> Unit){
+        println("Auth LoginViewModel onLoginSuccess: Started")
+        _state.update { it.copy(
+            stage = LoginStage.LOADING_PROFILE_INFO
+        ) }
+
+        val isUserProfileCreatedResult = authInteractors.isUserProfileCreated()
+
+        isUserProfileCreatedResult.onSuccess { isUserProfileCreated ->
+            println("Auth LoginViewModel onLoginSuccess: onSuccess - $isUserProfileCreated")
+            if(isUserProfileCreated) onProfileCreated()
+            else _state.update { it.copy(
+                stage = LoginStage.WAITING_FOR_PROFILE_CREATION
+            ) }
+        }
+        isUserProfileCreatedResult.onFailure { throwable ->
+            println("Auth LoginViewModel onLoginSuccess error: ${throwable.message}")
+            _state.update { it.copy(
+                error = throwable.message,
+                stage = LoginStage.WAITING_FOR_PROVIDER_SELECTION
+            ) }
+        }
+    }
+
+    private fun isValidProfile(name : String) : Boolean{
+        return name.trim().length > 1
     }
 }

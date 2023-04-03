@@ -1,14 +1,13 @@
 package com.piotrkalin.havira.dish.domain.interactors
 
+import com.piotrkalin.havira.core.domain.model.Dish
 import com.piotrkalin.havira.core.domain.util.CommonFlow
 import com.piotrkalin.havira.core.domain.util.Resource
 import com.piotrkalin.havira.core.domain.util.toCommonFlow
-import com.piotrkalin.havira.dish.domain.IDishRepository
-import com.piotrkalin.havira.dish.domain.model.Dish
 import kotlinx.coroutines.flow.flow
 
 class GetAllDishes(
-    private val dishRepository: IDishRepository
+    private val dishRepository: com.piotrkalin.havira.dish.domain.IDishRepository
 ) {
     operator fun invoke() : CommonFlow<Resource<List<Dish>>> = flow {
         try{
