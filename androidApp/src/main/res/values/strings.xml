@@ -1,10 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Havira</string>
+    <string name="app_name" translatable="false">Havira</string>
+
     <string name="rating">Rating</string>
     <string name="title">Title</string>
     <string name="nof_ratings">Nof. Ratings</string>
     <string name="created_date">Date of Creation</string>
     <string name="last_made_date">Last Cooking Date</string>
+    <string name="name_hint">Name</string>
 
+    <string name="sign_in_with_google_button_label">Sign In with Google</string>
+    <string name="title_list_of_dishes">Dishes</string>
+    <string name="title_create_dish">Create Dish</string>
+    <string name="title_dish_title">Title</string>
+    <string name="title_dish_description">Description</string>
+    <string name="title_join_group">Join Group</string>
+    <string name="title_create_group">Create Group</string>
+    <string name="last_made_date_never">Never</string>
+    <string name="x_ratings" formatted="false">%1$s ratings</string>
+    <string name="successfully_joined_the_group_text">You\'ve joined the group!</string>
+    <string name="join_code_x_text" formatted="false">Code to join: %1$s</string>
+
+    <!-- Textfield hints and labels -->
+    <string name="search_dishes_hint">Search dishes…</string>
+    <string name="join_code_hint">Join Code</string>
+    <string name="group_name_hint">Group Name</string>
+    
+    <!-- Info chips -->
+    <string name="last_made_new_dish">New dish</string>
+    <string name="last_made_x_info_chip" formatted="false">Last made: %1$s</string>
+    <string name="made_x_times_info_chip" formatted="false">Made: %1$s times</string>
+    <string name="score_x_info_chip" formatted="false">Score: %1$s</string>
+
+    <!-- Dialog messages -->
+    <string name="delete_dialog_title" formatted="false">Delete %1$s</string>
+    <string name="delete_dish_dialog_message" formatted="false">Are you sure you want to delete this dish? This action can\'t be reversed!</string>
+
+    <!-- Button labels -->
+    <string name="cool_acknowledge_button_label">Cool!</string>
+    <string name="join_button_label">Join</string>
+    <string name="settings_button_label">Settings</string>
+    <string name="join_group_button_label">Join Group</string>
+    <string name="create_group_button_label">Create Group</string>
+    <string name="navigate_to_my_meals_button_label">My Meals</string>
+    <string name="ascending_sort_button_label_short">ASC</string>
+    <string name="descending_sort_button_label_short">DESC</string>
+    <string name="save_button_label">Save</string>
+    <string name="delete_button_label">Delete</string>
+    <string name="cancel_button_label">Cancel</string>
+    <string name="create_button_label">Create</string>
+    <string name="add_new_dish_button_label">New Dish</string>
+
+    <!-- Content Descriptions -->
+    <string name="settings_button_description">Navigate to settings</string>
+    <string name="join_group_button_description">Join Group</string>
+    <string name="create_group_button_description">Create Group</string>
+    <string name="navigate_to_my_meals_button_description">Navigate to my meals</string>
+    <string name="show_sorting_options_button_description">Show sorting options</string>
+    <string name="ascending_sort_button_description">Sort ascending</string>
+    <string name="descending_sort_button_description">Sort descending</string>
+    <string name="close_search_view_button_description">Close search view</string>
+    <string name="menu_button_description">Open navigation drawer</string>
+    <string name="search_dishes_button_description">Search dishes</string>
+    <string name="tune_dishes_button_description">Sort and filter dishes</string>
+    <string name="back_button_description">Go back</string>
+    <string name="edit_dish_button_description">Edit dish</string>
+    <string name="delete_dish_button_description">Delete dish</string>
 </resources>

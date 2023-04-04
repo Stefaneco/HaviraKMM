@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
+import com.piotrkalin.havira.android.R
 import com.piotrkalin.havira.android.dish.presentation.create.FilledDishEditSection
 import com.piotrkalin.havira.dish.presentation.edit.DishEditEvent
 import com.piotrkalin.havira.dish.presentation.edit.DishEditState
@@ -33,7 +35,7 @@ fun EditDishScreen(
                     IconButton(onClick = { onEvent(DishEditEvent.BackButtonPressed) }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = "Localized description"
+                            contentDescription = stringResource(id = R.string.back_button_description)
                         )
                     }
                 },
@@ -41,7 +43,7 @@ fun EditDishScreen(
                     IconButton(onClick = { onEvent(DishEditEvent.OpenDeleteDialog) }) {
                         Icon(
                             imageVector = Icons.Filled.Delete,
-                            contentDescription = "Localized description"
+                            contentDescription = stringResource(id = R.string.delete_dish_button_description)
                         )
                     }
                 },
@@ -67,7 +69,7 @@ fun EditDishScreen(
             Button(
                 onClick =  { onEvent(DishEditEvent.EditDish()) },
                 enabled = state.isValidDish) {
-                Text(text = "Save")
+                Text(text = stringResource(id = R.string.save_button_label))
             }
         }
 
@@ -90,12 +92,12 @@ fun DeleteDialog(
     AlertDialog(
         onDismissRequest = { onDismiss() },
         dismissButton = { TextButton(onClick = { onDismiss() }) {
-            Text(text = "Cancel")
+            Text(text = stringResource(id = R.string.cancel_button_label))
         }},
         confirmButton = {TextButton(onClick = { onConfirm() }) {
-            Text(text = "Delete")
+            Text(text = stringResource(id = R.string.delete_button_label))
         }},
-        title = { Text(text = "Delete $dishTitle")},
-        text = { Text(text = "Are you sure you want to delete this dish? This action can't be reversed!")}
+        title = { Text(text = stringResource(id = R.string.delete_dialog_title, dishTitle))},
+        text = { Text(text = stringResource(id = R.string.delete_dish_dialog_message))}
     )
 }

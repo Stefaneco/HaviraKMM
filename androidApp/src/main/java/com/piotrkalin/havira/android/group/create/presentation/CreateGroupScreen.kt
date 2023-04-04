@@ -9,7 +9,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.piotrkalin.havira.android.R
 import com.piotrkalin.havira.android.core.presentation.FilledTitleTextField
 import com.piotrkalin.havira.group.presentation.create.CreateGroupEvent
 import com.piotrkalin.havira.group.presentation.create.CreateGroupState
@@ -29,12 +31,12 @@ fun CreateGroupScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
-                title = { Text(text = "Create Group") },
+                title = { Text(text = stringResource(id = R.string.title_create_group)) },
                 navigationIcon = {
                     IconButton(onClick = { onEvent(CreateGroupEvent.BackButtonPressed) }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = "Localized description"
+                            contentDescription = stringResource(id = R.string.back_button_description)
                         )
                     }
                 }
@@ -75,14 +77,14 @@ fun BaseCreateGroupScreen(
     ) {
         FilledTitleTextField(
             modifier = Modifier.padding(vertical = 16.dp),
-            fieldName = "Group Name",
+            fieldName = stringResource(id = R.string.group_name_hint),
             title = state.groupName,
             editTitle = { onEvent(CreateGroupEvent.EditGroupName(it)) }
         )
         Button(
             onClick =  { onEvent(CreateGroupEvent.CreateGroup) },
             enabled = state.isValidGroup) {
-            Text(text = "Create")
+            Text(text = stringResource(id = R.string.create_button_label))
         }
     }
 }
@@ -103,19 +105,19 @@ fun CreatedGroupScreen(
         Column {
             FilledTitleTextField(
                 modifier = Modifier.padding(vertical = 16.dp),
-                fieldName = "Group Name",
+                fieldName = stringResource(id = R.string.group_name_hint),
                 title = state.groupName,
                 editTitle = { onEvent(CreateGroupEvent.EditGroupName(it)) },
                 enabled = false
             )
             Text(
                 modifier = Modifier.padding(16.dp),
-                text = "Code to join: ${state.joinCode}"
+                text = stringResource(id = R.string.join_code_x_text, state.joinCode ?: "")
             )
         }
         Button(
             onClick =  { onEvent(CreateGroupEvent.NavigateToCreatedGroup) }) {
-            Text(text = "Cool!")
+            Text(text = stringResource(id = R.string.cool_acknowledge_button_label))
         }
     }
 }

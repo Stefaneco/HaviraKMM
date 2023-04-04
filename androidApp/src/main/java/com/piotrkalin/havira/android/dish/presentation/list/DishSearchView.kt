@@ -12,7 +12,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.piotrkalin.havira.android.R
 import com.piotrkalin.havira.core.domain.model.Dish
 import com.piotrkalin.havira.core.domain.util.DateTimeUtil
 
@@ -38,20 +40,24 @@ fun DishSearchView(
                     .fillMaxWidth(),
                 value = searchText,
                 onValueChange = onSearchTextChange,
-                //textStyle = MaterialTheme.typography.bodyLarge,
                 leadingIcon = {
                     IconButton(onClick = onDismiss) {
-                        Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "")
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = stringResource(id = R.string.back_button_description)
+                        )
                     }
                 },
                 trailingIcon = {
                     IconButton(onClick = onDismiss) {
-                        Icon(imageVector = Icons.Filled.Close, contentDescription = "")
+                        Icon(
+                            imageVector = Icons.Filled.Close,
+                            contentDescription = stringResource(id = R.string.close_search_view_button_description)
+                        )
                     }
                 },
                 placeholder = { Text(
-                    text = "Search dishes...",
-                    //style = MaterialTheme.typography.bodyLarge
+                    text = stringResource(id = R.string.search_dishes_hint),
                 )},
                 colors = TextFieldDefaults.textFieldColors(
                     focusedIndicatorColor = Color.Transparent,
@@ -67,8 +73,9 @@ fun DishSearchView(
                 Spacer(modifier = Modifier.padding(vertical = 4.dp))
                 DishCard(
                     headline = dish.title,
-                    supportingText =  dish.lastMade?.let { DateTimeUtil.formatDate(it) } ?: "New dish",
-                    supportingText2 = "${dish.nofRatings} ratings",
+                    supportingText =  dish.lastMade?.let { DateTimeUtil.formatDate(it) }
+                        ?: stringResource(id = R.string.last_made_new_dish),
+                    supportingText2 = stringResource(id = R.string.x_ratings, dish.nofRatings),
                     trailingSupportingText = "%.1f".format(dish.rating),
                     modifier = Modifier.clickable { onItemSelected(dish.id!!) })
             }

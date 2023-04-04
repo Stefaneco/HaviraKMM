@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.AsyncImage
@@ -26,6 +27,7 @@ import coil.transform.CircleCropTransformation
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.piotrkalin.havira.android.BuildConfig
+import com.piotrkalin.havira.android.R
 import com.piotrkalin.havira.android.core.presentation.LoadingScreen
 import com.piotrkalin.havira.android.findActivity
 import com.piotrkalin.havira.auth.presentation.LoginEvent
@@ -85,7 +87,9 @@ fun LoginProfileCreation(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         val defaultPictureUri = Uri.parse("android.resource://com.piotrkalin.havira.android/drawable/default_picture")
-        Spacer(modifier = Modifier.heightIn(100.dp).background(Color.Magenta))
+        Spacer(modifier = Modifier
+            .heightIn(100.dp)
+            .background(Color.Magenta))
         AsyncImage(
             model = ImageRequest.Builder(context)
                 .data(state.image?.uri ?: defaultPictureUri)
@@ -106,7 +110,7 @@ fun LoginProfileCreation(
         TextField(
             value = state.name,
             onValueChange = { onEvent(LoginEvent.EditName(it)) },
-            placeholder = { Text(text = "Name")}
+            placeholder = { Text(text = stringResource(id = R.string.name_hint))}
         )
     }
     Column(
@@ -118,7 +122,7 @@ fun LoginProfileCreation(
             onClick = { onEvent(LoginEvent.SaveProfile()) },
             enabled = state.isValidProfile
         ) {
-            Text(text = "Save")
+            Text(text = stringResource(id = R.string.save_button_label))
         }
 
     }
@@ -161,6 +165,6 @@ fun GoogleSignIn(
     }
 
     Button(onClick = { launcher.launch(intent) }) {
-        Text(text = "Sign In with Google")
+        Text(text = stringResource(id = R.string.sign_in_with_google_button_label))
     }
 }

@@ -13,7 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.piotrkalin.havira.android.R
 import com.piotrkalin.havira.android.core.presentation.NavigationDrawer
 import com.piotrkalin.havira.core.domain.util.DateTimeUtil
 import com.piotrkalin.havira.core.presentation.NavigationDrawerEvent
@@ -56,12 +58,12 @@ fun DishBaseView(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopAppBar(
-                title = { Text(modifier = Modifier.fillMaxWidth(), text = "Dishes") },
+                title = { Text(modifier = Modifier.fillMaxWidth(), text = stringResource(id = R.string.title_list_of_dishes)) },
                 navigationIcon = {
                     IconButton(onClick = { onMenuPressed() }) {
                         Icon(
                             imageVector = Icons.Filled.Menu,
-                            contentDescription = "Localized description"
+                            contentDescription = stringResource(id = R.string.menu_button_description)
                         )
                     }
                 },
@@ -69,14 +71,13 @@ fun DishBaseView(
                     IconButton(onClick = { onEvent(DishListEvent.OpenSearchView) }) {
                         Icon(
                             imageVector = Icons.Filled.Search,
-                            contentDescription = "Localized description"
+                            contentDescription = stringResource(id = R.string.search_dishes_button_description)
                         )
                     }
                     IconButton(onClick = { onEvent(DishListEvent.ChangeFilterBoxVisibility) }) {
                         Icon(
-                            //imageVector = Icons.Filled.FilterList,
                             imageVector = Icons.Filled.Tune,
-                            contentDescription = "Localized description"
+                            contentDescription = stringResource(id = R.string.tune_dishes_button_description)
                         )
                     }
                 },
@@ -94,8 +95,9 @@ fun DishBaseView(
                 items(state.sortedDishes) { dish ->
                     DishCard(
                         headline = dish.title,
-                        supportingText =  dish.lastMade?.let { DateTimeUtil.formatDate(it) } ?: "New dish",
-                        supportingText2 = "${dish.nofRatings} ratings",
+                        supportingText =  dish.lastMade?.let { DateTimeUtil.formatDate(it) }
+                            ?: stringResource(id = R.string.last_made_new_dish),
+                        supportingText2 = stringResource(id = R.string.x_ratings, dish.nofRatings),
                         trailingSupportingText = "%.1f".format(dish.rating),
                         modifier = Modifier.clickable { onEvent(DishListEvent.SelectDish(dish.id!!)) })
                 }
@@ -107,7 +109,7 @@ fun DishBaseView(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Button(onClick = {onEvent(DishListEvent.CreateDish)} ) {
-                Text("New Dish")
+                Text(stringResource(id = R.string.add_new_dish_button_label))
             }
         }
     }

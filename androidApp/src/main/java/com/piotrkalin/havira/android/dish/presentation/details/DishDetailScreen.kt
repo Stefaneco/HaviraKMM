@@ -16,9 +16,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import com.piotrkalin.havira.android.R
 import com.piotrkalin.havira.android.dish.presentation.details.components.DishPrepCard
 import com.piotrkalin.havira.android.dish.presentation.details.components.DishPrepCreator
 import com.piotrkalin.havira.android.dish.presentation.details.components.InfoChip
@@ -54,7 +56,7 @@ fun DishDetailScreen(
                     IconButton(onClick = { onEvent(DishDetailEvent.BackButtonPressed) }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = "Localized description"
+                            contentDescription = stringResource(id = R.string.back_button_description)
                         )
                     }
                 },
@@ -65,7 +67,7 @@ fun DishDetailScreen(
                     }) {
                         Icon(
                             imageVector = Icons.Filled.Edit,
-                            contentDescription = "Localized description"
+                            contentDescription = stringResource(id = R.string.edit_dish_button_description)
                         )
                     }
                 },
@@ -92,7 +94,8 @@ fun DishDetailScreen(
                             //TitleCard(title = title)
                             Spacer(modifier = Modifier.padding(4.dp))
                             DishDetailInfoCard(
-                                lastMade = lastMade?.let { lastMade -> DateTimeUtil.formatDate(lastMade) } ?: "Never",
+                                lastMade = lastMade?.let { lastMade -> DateTimeUtil.formatDate(lastMade) }
+                                    ?: stringResource(id = R.string.last_made_date_never),
                                 rating = "%.1f".format(rating),
                                 nofRatings = nofRatings.toString(),
                                 dishDescription = desc
@@ -206,9 +209,9 @@ fun DishDetailInfoCard(
                 horizontalArrangement = Arrangement.SpaceAround,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                InfoChip(text = "Last made: $lastMade")
-                InfoChip(text = "Made: $nofRatings times")
-                InfoChip(text = "Score: $rating")
+                InfoChip(text = stringResource(R.string.last_made_x_info_chip, lastMade))
+                InfoChip(text = stringResource(R.string.made_x_times_info_chip, nofRatings))
+                InfoChip(text = stringResource(R.string.score_x_info_chip, rating))
             }
             Divider(
                 modifier = Modifier.padding(bottom = 16.dp, top = 8.dp),
@@ -218,20 +221,3 @@ fun DishDetailInfoCard(
         }
     }
 }
-
-/*
-Szczegóły dania:
-Tytuł - text, textCard?
-Chips:
-    Ocena - icon, pill?
-    Kiedy ostatnio zrobione - text, ???
-    Ile razy zrobione - text, ???
-Opis - text, textCard?
-
-Kiedy dodane - text, ???
-Lista dat i ocen:
-    Data - text
-    Ocena - icon
-
-Danie zrobione - button, Floating centered button?
-*/

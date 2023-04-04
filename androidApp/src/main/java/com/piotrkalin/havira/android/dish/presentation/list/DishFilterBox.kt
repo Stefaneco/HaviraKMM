@@ -29,11 +29,6 @@ import com.piotrkalin.havira.dish.presentation.list.DishListState
 fun DishFilterBox(
     state: DishListState,
     onEvent: (DishListEvent) -> Unit,
-    /*containerColor: Color = TopAppBarSmallTokens.ContainerColor.toColor(),
-    scrolledContainerColor: Color = MaterialTheme.colorScheme.applyTonalElevation(
-        backgroundColor = containerColor,
-        elevation = TopAppBarSmallTokens.OnScrollContainerElevation
-    )*/
     containerColor: Color = MaterialTheme.colorScheme.surface,
     scrolledContainerColor: Color = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
     scrollBehavior: TopAppBarScrollBehavior?
@@ -64,7 +59,10 @@ fun DishFilterBox(
                     SortType.TITLE -> Text(text = stringResource(id = R.string.title))
                 }},
                 leadingIcon = {
-                    Icon(imageVector = Icons.Filled.KeyboardArrowDown, contentDescription = "")
+                    Icon(
+                        imageVector = Icons.Filled.KeyboardArrowDown,
+                        contentDescription = stringResource(id = R.string.show_sorting_options_button_description)
+                    )
                 }
             )
             DropdownMenu(
@@ -97,16 +95,21 @@ fun DishFilterBox(
         FilterChip(
             selected = state.selectedSortDirection == SortDirection.DESC,
             onClick = { onEvent(DishListEvent.SelectSortDirection(SortDirection.DESC)) },
-            label = { Text(text = "ASC")},
-            leadingIcon = { Icon(imageVector = Icons.Filled.North, contentDescription = "")}
+            label = { Text(text = stringResource(id = R.string.descending_sort_button_label_short))},
+            leadingIcon = { Icon(
+                imageVector = Icons.Filled.North,
+                contentDescription = stringResource(id = R.string.descending_sort_button_description)
+            )}
         )
         Spacer(modifier = Modifier.padding(horizontal = 4.dp))
 
         FilterChip(
             selected = state.selectedSortDirection == SortDirection.ASC,
             onClick = { onEvent(DishListEvent.SelectSortDirection(SortDirection.ASC)) },
-            label = { Text(text = "DESC")},
-            leadingIcon = { Icon(imageVector = Icons.Filled.South, contentDescription = "")}
+            label = { Text(text = stringResource(id = R.string.ascending_sort_button_label_short))},
+            leadingIcon = { Icon(
+                imageVector = Icons.Filled.South,
+                contentDescription = stringResource(id = R.string.ascending_sort_button_description))}
         )
     }
 }

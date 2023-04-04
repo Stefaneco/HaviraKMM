@@ -13,9 +13,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.piotrkalin.havira.core.presentation.NavigationDrawerEvent
 import com.piotrkalin.havira.core.presentation.NavigationDrawerState
+import com.piotrkalin.havira.android.R
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,8 +48,11 @@ fun NavigationDrawer(
             ModalDrawerSheet {
                 Spacer(Modifier.height(12.dp))
                 NavigationDrawerItem(
-                    icon = { Icon(imageVector = Icons.Filled.Person, contentDescription = "") },
-                    label = { Text(text = "My Meals") },
+                    icon = { Icon(
+                        imageVector = Icons.Filled.Person,
+                        contentDescription = stringResource(id = R.string.navigate_to_my_meals_button_description)
+                    ) },
+                    label = { Text(text = stringResource(id = R.string.navigate_to_my_meals_button_label)) },
                     selected = state.isSoloSelected,
                     onClick = {
                         onEvent(NavigationDrawerEvent.CloseDrawer)
@@ -70,8 +75,11 @@ fun NavigationDrawer(
                 }
                 Divider(modifier = Modifier.padding(vertical = 4.dp))
                 NavigationDrawerItem(
-                    icon = { Icon(imageVector = Icons.Filled.Add, contentDescription = "") },
-                    label = { Text(text = "Create Group") },
+                    icon = { Icon(
+                        imageVector = Icons.Filled.Add,
+                        contentDescription = stringResource(id = R.string.create_group_button_description)
+                    ) },
+                    label = { Text(text = stringResource(id = R.string.create_group_button_label)) },
                     selected = false,
                     onClick = {
                             onEvent(NavigationDrawerEvent.CloseDrawer)
@@ -80,8 +88,11 @@ fun NavigationDrawer(
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
                 NavigationDrawerItem(
-                    icon = { Icon(imageVector = Icons.Filled.Add, contentDescription = "") },
-                    label = { Text(text = "Join Group") },
+                    icon = { Icon(
+                        imageVector = Icons.Filled.Add,
+                        contentDescription = stringResource(id = R.string.join_group_button_description)
+                    ) },
+                    label = { Text(text = stringResource(id = R.string.join_group_button_label)) },
                     selected = false,
                     onClick = {
                         onEvent(NavigationDrawerEvent.CloseDrawer)
@@ -91,8 +102,11 @@ fun NavigationDrawer(
                 )
                 Divider(modifier = Modifier.padding(vertical = 4.dp))
                 NavigationDrawerItem(
-                    icon = { Icon(imageVector = Icons.Filled.Settings, contentDescription = "") },
-                    label = { Text(text = "Settings") },
+                    icon = { Icon(
+                        imageVector = Icons.Filled.Settings,
+                        contentDescription = stringResource(id = R.string.settings_button_description)
+                    ) },
+                    label = { Text(text = stringResource(id = R.string.settings_button_label)) },
                     selected = false,
                     onClick = {
                         onEvent(NavigationDrawerEvent.CloseDrawer)

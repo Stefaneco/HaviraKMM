@@ -13,7 +13,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.piotrkalin.havira.android.R
 import com.piotrkalin.havira.android.core.presentation.FilledTitleTextField
 import com.piotrkalin.havira.android.core.presentation.LoadingScreen
 import com.piotrkalin.havira.dish.presentation.create.CreateDishEvent
@@ -39,7 +41,7 @@ fun CreateDishScreen(
                     IconButton(onClick = { onEvent(CreateDishEvent.BackButtonPressed) }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = "Localized description"
+                            contentDescription = stringResource(id = R.string.back_button_description)
                         )
                     }
                 },
@@ -84,7 +86,7 @@ fun BaseCreateDishScreen(
         Button(
             onClick =  { onEvent(CreateDishEvent.CreateDish()) },
             enabled = state.isValidDish) {
-            Text(text = "Save")
+            Text(text = stringResource(id = R.string.save_button_label))
         }
     }
 }
@@ -99,7 +101,7 @@ fun FilledDishEditSection(
     var isTitleFocused by remember { mutableStateOf(false) }
 
     Column {
-        FilledTitleTextField(fieldName = "Title", title = title, editTitle = editTitle)
+        FilledTitleTextField(fieldName = stringResource(id = R.string.title_dish_title), title = title, editTitle = editTitle)
         Spacer(modifier = Modifier.padding(4.dp))
         TextField(
             modifier = Modifier
@@ -108,7 +110,7 @@ fun FilledDishEditSection(
                 .heightIn(200.dp, 350.dp),
             value = desc,
             shape = MaterialTheme.shapes.large,
-            label = { Text(text = "Description")},
+            label = { Text(text = stringResource(id = R.string.title_dish_description))},
             onValueChange = {
                 editDesc(it)
             },
@@ -120,38 +122,4 @@ fun FilledDishEditSection(
             )
         )
     }
-}
-
-@Composable
-fun OutlinedCreateDishScreen(
-    state : CreateDishState,
-    onEvent : (CreateDishEvent) -> Unit
-){
-    OutlinedTextField(
-        modifier = Modifier.fillMaxWidth(),
-        value = state.title,
-        shape = MaterialTheme.shapes.large,
-        label = {
-            //if(state.title.isNotBlank()) Text(text = "Title")
-            //else
-                Text(text = "Title", style = MaterialTheme.typography.headlineMedium)
-        },
-        onValueChange = {
-            onEvent(CreateDishEvent.EditTitle(it))
-        },
-        textStyle = MaterialTheme.typography.headlineMedium
-    )
-    Spacer(modifier = Modifier.padding(4.dp))
-    OutlinedTextField(
-        modifier = Modifier
-            .fillMaxWidth()
-            .defaultMinSize(minHeight = 200.dp)
-            .heightIn(200.dp, 300.dp),
-        value = state.desc,
-        shape = MaterialTheme.shapes.large,
-        label = { Text(text = "Description")},
-        onValueChange = {
-            onEvent(CreateDishEvent.EditDescription(it))
-        },
-        singleLine = false)
 }

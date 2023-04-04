@@ -9,7 +9,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.piotrkalin.havira.android.R
 import com.piotrkalin.havira.android.core.presentation.FilledTitleTextField
 import com.piotrkalin.havira.group.presentation.join.JoinGroupEvent
 import com.piotrkalin.havira.group.presentation.join.JoinGroupState
@@ -28,12 +30,12 @@ fun JoinGroupScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
-                title = { Text(text = "Join Group") },
+                title = { Text(text = stringResource(id = R.string.title_join_group)) },
                 navigationIcon = {
                     IconButton(onClick = { onEvent(JoinGroupEvent.BackButtonPressed) }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = "Localized description"
+                            contentDescription = stringResource(id = R.string.back_button_description)
                         )
                     }
                 }
@@ -75,14 +77,14 @@ fun BaseJoinGroupScreen(
     ) {
         FilledTitleTextField(
             modifier = Modifier.padding(vertical = 16.dp),
-            fieldName = "Join Code",
+            fieldName = stringResource(id = R.string.join_code_hint),
             title = state.joinCode,
             editTitle = { onEvent(JoinGroupEvent.EditJoinCode(it)) }
         )
         Button(
             onClick =  { onEvent(JoinGroupEvent.JoinGroup) },
             enabled = state.isValidCode) {
-            Text(text = "Join")
+            Text(text = stringResource(id = R.string.join_button_label))
         }
     }
 }
@@ -105,19 +107,19 @@ fun JoinedGroupScreen(
         Column {
             FilledTitleTextField(
                 modifier = Modifier.padding(vertical = 16.dp),
-                fieldName = "Join Code",
+                fieldName = stringResource(id = R.string.join_code_hint),
                 title = state.joinCode,
                 editTitle = {  },
                 enabled = false
             )
             Text(
                 modifier = Modifier.padding(16.dp),
-                text = "Code to join: ${state.joinCode}"
+                text = stringResource(id = R.string.successfully_joined_the_group_text)
             )
         }
         Button(
             onClick =  { onEvent(JoinGroupEvent.NavigateToJoinedGroup) }) {
-            Text(text = "Cool!")
+            Text(text = stringResource(id = R.string.cool_acknowledge_button_label))
         }
     }
 }

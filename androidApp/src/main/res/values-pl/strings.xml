@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="rating">Ocena</string>
+    <string name="title">Tytuł</string>
+    <string name="nof_ratings">Liczba ocen</string>
+    <string name="created_date">Data utworzenia</string>
+    <string name="last_made_date">Ostatnio przygotowane</string>
+    <string name="name_hint">Nazwa</string>
+
+    <string name="sign_in_with_google_button_label">Zaloguj się przez Google</string>
+    <string name="title_list_of_dishes">Dania</string>
+    <string name="title_create_dish">Dodaj danie</string>
+    <string name="title_dish_title">Tytuł</string>
+    <string name="title_dish_description">Opis</string>
+    <string name="title_join_group">Dołącz do grupy</string>
+    <string name="title_create_group">Utwórz grupę</string>
+    <string name="last_made_date_never">Nigdy</string>
+    <string name="x_ratings" formatted="false">%1$s ocen</string>
+    <string name="successfully_joined_the_group_text">Dołączyłeś do grupy!</string>
+    <string name="join_code_x_text" formatted="false">Kod dołączenia: %1$s</string>
+
+    <!-- Textfield hints and labels -->
+    <string name="search_dishes_hint">Szukaj dań…</string>
+    <string name="join_code_hint">Kod dołączenia</string>
+    <string name="group_name_hint">Nazwa grupy</string>
+
+    <!-- Info chips -->
+    <string name="last_made_new_dish">Nowe danie</string>
+    <string name="last_made_x_info_chip" formatted="false">Ostatnio: %1$s</string>
+    <string name="made_x_times_info_chip" formatted="false">Ocenione %1$s razy</string>
+    <string name="score_x_info_chip" formatted="false">Ocena: %1$s</string>
+
+    <!-- Dialog messages -->
+    <string name="delete_dialog_title" formatted="false">Usuń %1$s</string>
+    <string name="delete_dish_dialog_message" formatted="false">Czy na pewno chcesz usunąć to danie? Tej akcji nie można cofnąć!</string>
+
+    <!-- Button labels -->
+    <string name="cool_acknowledge_button_label">Super!</string>
+    <string name="join_button_label">Dołącz</string>
+    <string name="settings_button_label">Ustawienia</string>
+    <string name="join_group_button_label">Dołącz do grupy</string>
+    <string name="create_group_button_label">Utwórz grupę</string>
+    <string name="navigate_to_my_meals_button_label">Moje posiłki</string>
+    <string name="ascending_sort_button_label_short">ROS</string>
+    <string name="descending_sort_button_label_short">MAL</string>
+    <string name="save_button_label">Zapisz</string>
+    <string name="delete_button_label">Usuń</string>
+    <string name="cancel_button_label">Anuluj</string>
+    <string name="create_button_label">Utwórz</string>
+    <string name="add_new_dish_button_label">Nowe danie</string>
+
+    <!-- Content Descriptions -->
+    <string name="settings_button_description">Przejdź do ustawień</string>
+    <string name="join_group_button_description">Dołącz do grupy</string>
+    <string name="create_group_button_description">Utwórz grupę</string>
+    <string name="navigate_to_my_meals_button_description">Przejdź do moich posiłków</string>
+    <string name="show_sorting_options_button_description">Pokaż opcje sortowania</string>
+    <string name="ascending_sort_button_description">Sortuj rosnąco</string>
+    <string name="descending_sort_button_description">Sortuj malejąco</string>
+    <string name="close_search_view_button_description">Zamknij wyszukiwanie</string>
+    <string name="menu_button_description">Otwórz szufladę nawigacji</string>
+    <string name="search_dishes_button_description">Szukaj dań</string>
+    <string name="tune_dishes_button_description">Sortuj i filtruj dania</string>
+    <string name="back_button_description">Wróć</string>
+    <string name="edit_dish_button_description">Edytuj danie</string>
+    <string name="delete_dish_button_description">Usuń danie</string>
+
+</resources>
