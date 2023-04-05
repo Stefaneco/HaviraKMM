@@ -61,9 +61,11 @@ dependencies {
     implementation(Deps.activityCompose)
     implementation(Deps.composeIconsExtended)
     implementation(Deps.composeNavigation)
-    implementation(Deps.coilCompose)
 
     implementation(Deps.hiltAndroid)
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
+    testImplementation("org.mockito:mockito-inline:2.13.0")
     kapt(Deps.hiltAndroidCompiler)
     kapt(Deps.hiltCompiler)
     implementation(Deps.hiltNavigationCompose)
@@ -71,7 +73,6 @@ dependencies {
     implementation(Deps.ktorAndroid)
 
     androidTestImplementation(Deps.testRunner)
-    androidTestImplementation(Deps.jUnit)
     androidTestImplementation(Deps.composeTesting)
     debugImplementation(Deps.composeTestManifest)
 

@@ -5,8 +5,11 @@ import com.piotrkalin.havira.auth.domain.ITokenDataSource
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.*
+import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 
@@ -31,6 +34,24 @@ class KtorClientFactory(
         val client = buildAnonymousClient()
 
         val authClient = HttpClient(engine) {
+            expectSuccess = true
+            HttpResponseValidator {
+                handleResponseExceptionWithRequest { exception, request ->
+                    val clientException = exception as? ClientRequestException ?: return@handleResponseExceptionWithRequest
+                    val exceptionResponse = clientException.response
+                    val exceptionResponseText = exceptionResponse.bodyAsText()
+                    when (exceptionResponse.status) {
+                        HttpStatusCode.NotFound -> {
+                            throw NotFoundException(exceptionResponse, exceptionResponseText)
+                        }
+                        HttpStatusCode.RequestTimeout -> {
+                            throw TimeoutException(exceptionResponse, exceptionResponseText)
+                        }
+                        else -> return@handleResponseExceptionWithRequest
+                    }
+                }
+            }
+
             install(ContentNegotiation) {
                 json(Json {
                     prettyPrint = true

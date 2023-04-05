@@ -31,20 +31,19 @@ class CreateGroupDishViewModel(
         }
         _state.update { it.copy( isCreating = true ) }
         viewModelScope.launch {
-            dishInteractors.createGroupDish(
+            val result = dishInteractors.createGroupDish(
                 CreateDishRequest(state.groupId, state.title, state.desc)
-            ).collect { result ->
-                if(result.isSuccess){
-                    println("CreateGroupDishViewModel: create dish success")
-                    onCreate()
-                }
-                else if(result.isFailure){
-                    println("CreateGroupDishViewModel error: create dish error ${result.exceptionOrNull()?.message}")
-                    _state.update { it.copy(
-                        error = result.exceptionOrNull()?.message,
-                        isCreating = false
-                    ) }
-                }
+            )
+            result.onSuccess {
+                println("CreateGroupDishViewModel: create dish success")
+                onCreate()
+            }
+            result.onFailure { t ->
+                println("CreateGroupDishViewModel error: create dish error ${t.message}")
+                _state.update { it.copy(
+                    error = t.message,
+                    isCreating = false
+                ) }
             }
         }
     }

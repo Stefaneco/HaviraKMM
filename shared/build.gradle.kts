@@ -35,11 +35,7 @@ kotlin {
                 api("io.ktor:ktor-client-mock:$ktorVersion")
                 implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
                 implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
-
-                
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-                //for await() calls
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
 
                 implementation(Deps.sqlDelightRuntime)
                 implementation(Deps.sqlDelightCoroutinesExtensions)
@@ -56,6 +52,7 @@ kotlin {
                 //KTOR
                 api("io.ktor:ktor-client-cio:$ktorVersion")
                 api("io.ktor:ktor-client-android:$ktorVersion")
+
                 implementation(Deps.sqlDelightAndroidDriver)
             }
         }
@@ -100,4 +97,7 @@ android {
         minSdk = 24
         targetSdk = 33
     }
+}
+dependencies {
+    androidTestImplementation("junit:junit:4.12")
 }

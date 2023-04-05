@@ -14,6 +14,9 @@ class AddDishPrep(
      */
     suspend operator fun invoke(dishPrep: DishPrep, dish: Dish) : Result<Dish>{
         return try {
+            if (dishPrep.rating !in 1..5) {
+                throw IllegalArgumentException("Rating must be between 1 and 5")
+            }
             val newDishPrepId = dishRepository.insertDishPrep(dishPrep, dish + dishPrep)
             val newDishPrep = dishPrep.copy(
                 id = newDishPrepId
