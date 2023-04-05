@@ -8,24 +8,26 @@ import kotlinx.coroutines.delay
 class FakeProfileService : IProfileService {
 
     private val fakeUserProfiles = mutableMapOf<String, UserProfile>()
-    private var fakeUserId = "fake_user_id"
+    var fakeUserId = "fake_user_id"
+    var throwsError = false
+    var errorMessage = "Profile service error"
 
-    public fun setFakeUserId(id: String) {
-        fakeUserId = id
-    }
 
     override suspend fun getUserProfile(): UserProfile {
         delay(500) // Simulate network delay
+        if(throwsError) throw RuntimeException(errorMessage)
         return fakeUserProfiles[fakeUserId] ?: throw NotFoundException()
     }
 
     override suspend fun getUserProfileOrNull(): UserProfile? {
         delay(500) // Simulate network delay
+        if(throwsError) throw RuntimeException(errorMessage)
         return fakeUserProfiles[fakeUserId]
     }
 
     override suspend fun createUserProfile(name: String, image: ByteArray?): UserProfile {
         delay(500) // Simulate network delay
+        if(throwsError) throw RuntimeException(errorMessage)
         val userProfile = UserProfile(fakeUserId, name)
         fakeUserProfiles[fakeUserId] = userProfile
         return userProfile
@@ -33,6 +35,7 @@ class FakeProfileService : IProfileService {
 
     override suspend fun uploadPhoto(image: ByteArray): String {
         delay(500) // Simulate network delay
+        if(throwsError) throw RuntimeException(errorMessage)
         return "fake_image_url"
     }
 }

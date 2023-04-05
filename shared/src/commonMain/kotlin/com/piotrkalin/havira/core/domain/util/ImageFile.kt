@@ -1,11 +1,11 @@
 package com.piotrkalin.havira.core.domain.util
 
+//modified version of this medium post
 //https://nrobir.medium.com/uploading-images-in-kotlin-multiplatform-ecf87e866505
 
-expect class ImageFile
+interface IImageFile {
+    fun toResizedByteArray(sizeX: Int, sizeY: Int): ByteArray
+    fun toByteArray() : ByteArray
+}
 
-expect fun ImageFile.toByteArray() : ByteArray
-
-//----
-
-expect fun ImageFile.toResizedByteArray(sizeX: Int, sizeY : Int) : ByteArray
+expect class ImageFile : IImageFile

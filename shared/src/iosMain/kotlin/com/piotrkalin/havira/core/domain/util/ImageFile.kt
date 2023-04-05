@@ -7,16 +7,24 @@ import platform.UIKit.UIImage
 import platform.UIKit.UIImagePNGRepresentation
 import platform.posix.memcpy
 
+//modified version of this medium post
 //https://nrobir.medium.com/uploading-images-in-kotlin-multiplatform-ecf87e866505
 
-actual typealias ImageFile = UIImage
-
-actual fun ImageFile.toByteArray() = UIImagePNGRepresentation(this)?.toByteArray() ?: emptyArray<Byte>().toByteArray()
-
-actual fun ImageFile.toResizedByteArray(sizeX: Int, sizeY: Int) : ByteArray = UIImagePNGRepresentation(this)?.toByteArray() ?: emptyArray<Byte>().toByteArray()
+//actual typealias ImageFile = UIImage
+actual typealias ImageFile = UIImageWrapper
 
 private fun NSData.toByteArray(): ByteArray = ByteArray(length.toInt()).apply {
     usePinned {
         memcpy(it.addressOf(0), bytes, length)
     }
+}
+
+class UIImageWrapper(val uiImage: UIImage) : IImageFile {
+
+    override fun toResizedByteArray(sizeX: Int, sizeY: Int): ByteArray {
+        TODO("Not yet implemented")
+    }
+
+    override fun toByteArray(): ByteArray = UIImagePNGRepresentation(uiImage)?.toByteArray() ?: emptyArray<Byte>().toByteArray()
+
 }

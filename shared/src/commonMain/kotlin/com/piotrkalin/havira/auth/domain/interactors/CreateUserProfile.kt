@@ -2,14 +2,13 @@ package com.piotrkalin.havira.auth.domain.interactors
 
 import com.piotrkalin.havira.auth.domain.IProfileService
 import com.piotrkalin.havira.auth.domain.ITokenDataSource
-import com.piotrkalin.havira.core.domain.util.ImageFile
-import com.piotrkalin.havira.core.domain.util.toResizedByteArray
+import com.piotrkalin.havira.core.domain.util.IImageFile
 
 class CreateUserProfile(
     private val profileService: IProfileService,
     private val tokenDataSource: ITokenDataSource
 ) {
-    suspend operator fun invoke(name: String, image : ImageFile?) : Result<Unit?> {
+    suspend operator fun invoke(name: String, image : IImageFile?) : Result<Unit?> {
         return try {
             println("Auth CreateUserProfile: Started")
             val byteArray = image?.toResizedByteArray(300, 300)
