@@ -65,5 +65,8 @@
     <string name="back_button_description">Wróć</string>
     <string name="edit_dish_button_description">Edytuj danie</string>
     <string name="delete_dish_button_description">Usuń danie</string>
+    <string name="default_image_description">Domyślne zdjęcie</string>
+    <string name="selected_image_description">Wybrane zdjęcie</string>
+    <string name="could_not_sign_in_with_this_provider_error">Logowanie z wybranym dostawcą tożsamości niepowiodło się</string>
 
 </resources>

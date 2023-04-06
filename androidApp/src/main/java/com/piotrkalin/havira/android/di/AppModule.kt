@@ -75,7 +75,7 @@ class AppModule {
     @Singleton
     fun provideAuthInteractors(authService: IAuthService, tokenDataSource: ITokenDataSource, profileService: IProfileService) : AuthInteractors {
         return AuthInteractors(
-            LoginWithGoogle(authService, tokenDataSource),
+            LoginWithGoogle(authService, profileService, tokenDataSource),
             Logout(authService, tokenDataSource),
             GetUserProfile(profileService),
             IsUserProfileCreated(profileService, tokenDataSource),

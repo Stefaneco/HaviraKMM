@@ -36,6 +36,9 @@
     <string name="delete_dialog_title" formatted="false">Delete %1$s</string>
     <string name="delete_dish_dialog_message" formatted="false">Are you sure you want to delete this dish? This action can\'t be reversed!</string>
 
+    <!-- Dialog messages -->
+    <string name="could_not_sign_in_with_this_provider_error">Sign In with this identity provider was unsuccessful</string>
+
     <!-- Button labels -->
     <string name="cool_acknowledge_button_label">Cool!</string>
     <string name="join_button_label">Join</string>
@@ -66,4 +69,6 @@
     <string name="back_button_description">Go back</string>
     <string name="edit_dish_button_description">Edit dish</string>
     <string name="delete_dish_button_description">Delete dish</string>
+    <string name="default_image_description">Default Image</string>
+    <string name="selected_image_description">Selected Image</string>
 </resources>

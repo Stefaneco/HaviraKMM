@@ -19,6 +19,7 @@ android {
         versionCode = 2
         versionName = "0.1.1"
 
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         //properties.load
     }
     buildFeatures {
@@ -49,6 +50,13 @@ dependencies {
 
     implementation("io.coil-kt:coil-compose:2.3.0")
 
+    //TESTING
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
+    testImplementation("org.mockito:mockito-inline:2.13.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.0-Beta")
+    testImplementation("app.cash.turbine:turbine:0.12.3")
+
     implementation(Deps.material3)
     implementation(Deps.material3WindowSize)
 
@@ -63,9 +71,7 @@ dependencies {
     implementation(Deps.composeNavigation)
 
     implementation(Deps.hiltAndroid)
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
-    testImplementation("org.mockito:mockito-inline:2.13.0")
+
     kapt(Deps.hiltAndroidCompiler)
     kapt(Deps.hiltCompiler)
     implementation(Deps.hiltNavigationCompose)

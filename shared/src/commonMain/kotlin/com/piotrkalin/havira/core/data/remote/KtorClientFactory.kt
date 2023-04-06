@@ -19,6 +19,10 @@ class KtorClientFactory(
 ) {
     private fun buildAnonymousClient() : HttpClient {
         val client = HttpClient(engine) {
+            install(HttpTimeout) {
+                connectTimeoutMillis = 3000
+                requestTimeoutMillis = 6000
+            }
             install(ContentNegotiation) {
                 json(Json {
                     prettyPrint = true
@@ -34,6 +38,10 @@ class KtorClientFactory(
         val client = buildAnonymousClient()
 
         val authClient = HttpClient(engine) {
+            install(HttpTimeout) {
+                connectTimeoutMillis = 3000
+                requestTimeoutMillis = 6000
+            }
             expectSuccess = true
             HttpResponseValidator {
                 handleResponseExceptionWithRequest { exception, request ->

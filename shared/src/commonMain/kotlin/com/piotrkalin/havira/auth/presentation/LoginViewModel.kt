@@ -1,6 +1,7 @@
 package com.piotrkalin.havira.auth.presentation
 
 import com.piotrkalin.havira.auth.domain.interactors.AuthInteractors
+import com.piotrkalin.havira.auth.domain.interactors.LoginWithGoogleState
 import com.piotrkalin.havira.core.domain.util.toCommonStateFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,13 +26,28 @@ class LoginViewModel(
                     stage = LoginStage.CONNECTING_TO_AZURE
                 ) }
                 viewModelScope.launch {
-                    authInteractors.loginWithGoogle(event.idToken).collect { loginResult ->
-                        if(loginResult.isSuccess) {
-                            onLoginSuccess(event.onSuccess)
+                    authInteractors.loginWithGoogle(event.idToken).collect { result ->
+                        result.onSuccess { s ->
+                            when(s){
+                                LoginWithGoogleState.CONNECTED_TO_AZURE -> {
+                                    _state.update { it.copy(
+                                        stage = LoginStage.LOADING_PROFILE_INFO
+                                    ) }
+                                }
+                                LoginWithGoogleState.PROFILE_FOUND -> {
+                                    event.onSuccess()
+                                }
+                                LoginWithGoogleState.PROFILE_NOT_FOUND -> {
+                                    _state.update { it.copy(
+                                        stage = LoginStage.WAITING_FOR_PROFILE_CREATION
+                                    ) }
+                                }
+                            }
                         }
-                        else if(loginResult.isFailure){
+                        result.onFailure { t ->
                             _state.update { it.copy(
-                                error = loginResult.exceptionOrNull()?.message
+                                stage = LoginStage.WAITING_FOR_PROVIDER_SELECTION,
+                                error = t.message ?: "Unknown Error"
                             ) }
                         }
                     }
@@ -73,30 +89,11 @@ class LoginViewModel(
                     }
                 }
             }
-        }
-    }
-
-    private suspend fun onLoginSuccess(onProfileCreated : () -> Unit){
-        println("Auth LoginViewModel onLoginSuccess: Started")
-        _state.update { it.copy(
-            stage = LoginStage.LOADING_PROFILE_INFO
-        ) }
-
-        val isUserProfileCreatedResult = authInteractors.isUserProfileCreated()
-
-        isUserProfileCreatedResult.onSuccess { isUserProfileCreated ->
-            println("Auth LoginViewModel onLoginSuccess: onSuccess - $isUserProfileCreated")
-            if(isUserProfileCreated) onProfileCreated()
-            else _state.update { it.copy(
-                stage = LoginStage.WAITING_FOR_PROFILE_CREATION
-            ) }
-        }
-        isUserProfileCreatedResult.onFailure { throwable ->
-            println("Auth LoginViewModel onLoginSuccess error: ${throwable.message}")
-            _state.update { it.copy(
-                error = throwable.message,
-                stage = LoginStage.WAITING_FOR_PROVIDER_SELECTION
-            ) }
+            is LoginEvent.SetError -> {
+                _state.update { it.copy(
+                    error = event.errorMessage
+                ) }
+            }
         }
     }
 

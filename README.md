@@ -15,12 +15,14 @@ The app is being developed using
 - Dagger Hilt
 - Ktor Client
 - Coil
+- JUnit
+- Mockito
 - Kotlin Flows
 - Kotlin Mobile Multiplatform
 
 ## Project Status
 
-Project is currently in early stages of development.
+Project is currently in development.
 
 Functionalities to be added:
 - iOS UI
