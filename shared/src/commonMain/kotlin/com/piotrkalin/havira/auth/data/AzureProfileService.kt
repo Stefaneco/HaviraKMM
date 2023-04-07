@@ -2,6 +2,7 @@ package com.piotrkalin.havira.auth.data
 
 import com.piotrkalin.havira.auth.domain.IProfileService
 import com.piotrkalin.havira.auth.domain.model.UserProfile
+import com.piotrkalin.havira.core.data.remote.NotFoundException
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -14,16 +15,19 @@ class AzureProfileService(
 
     override suspend fun getUserProfile(): UserProfile {
         val response = httpClient.get("https://havira-api.azurewebsites.net/api/Profile")
-        //if(response.status == HttpStatusCode.NotFound) return null
         return response.body()
     }
 
     override suspend fun getUserProfileOrNull(): UserProfile? {
-        val response = httpClient.get("https://havira-api.azurewebsites.net/api/Profile")
-        println("Auth AzureProfileService getUserProfileOrNull: $response")
-        println("Auth AzureProfileService getUserProfileOrNull: ${response.body<String>()}")
-        if(response.status == HttpStatusCode.NotFound) return null
-        return response.body()
+        return try {
+            val response = httpClient.get("https://havira-api.azurewebsites.net/api/Profile")
+            println("Auth AzureProfileService getUserProfileOrNull: $response")
+            println("Auth AzureProfileService getUserProfileOrNull: ${response.body<String>()}")
+            response.body()
+        } catch (e: NotFoundException){
+            println("Auth AzureProfileService getUserProfileOrNull: $e")
+            null
+        }
     }
 
     override suspend fun createUserProfile(name: String, image : ByteArray?) : UserProfile {
