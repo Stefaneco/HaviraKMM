@@ -97,7 +97,7 @@ fun DishFilterBox(
             onClick = { onEvent(DishListEvent.SelectSortDirection(SortDirection.DESC)) },
             label = { Text(text = stringResource(id = R.string.descending_sort_button_label_short))},
             leadingIcon = { Icon(
-                imageVector = Icons.Filled.North,
+                imageVector = Icons.Filled.South,
                 contentDescription = stringResource(id = R.string.descending_sort_button_description)
             )}
         )
@@ -108,7 +108,7 @@ fun DishFilterBox(
             onClick = { onEvent(DishListEvent.SelectSortDirection(SortDirection.ASC)) },
             label = { Text(text = stringResource(id = R.string.ascending_sort_button_label_short))},
             leadingIcon = { Icon(
-                imageVector = Icons.Filled.South,
+                imageVector = Icons.Filled.North,
                 contentDescription = stringResource(id = R.string.ascending_sort_button_description))}
         )
     }

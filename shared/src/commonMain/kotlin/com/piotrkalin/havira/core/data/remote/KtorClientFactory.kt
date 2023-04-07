@@ -39,8 +39,8 @@ class KtorClientFactory(
 
         val authClient = HttpClient(engine) {
             install(HttpTimeout) {
-                connectTimeoutMillis = 3000
-                requestTimeoutMillis = 6000
+                connectTimeoutMillis = 6000
+                requestTimeoutMillis = 12000
             }
             expectSuccess = true
             HttpResponseValidator {

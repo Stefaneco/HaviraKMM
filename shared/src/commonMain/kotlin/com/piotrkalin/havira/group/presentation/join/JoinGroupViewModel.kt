@@ -38,7 +38,8 @@ class JoinGroupViewModel(
                         if (result.isSuccess){
                             _state.update { it.copy(
                                 isJoining = false,
-                                group = result.getOrNull()
+                                group = result.getOrNull(),
+                                isJoined = true
                             )}
                         }
                         else if (result.isFailure){

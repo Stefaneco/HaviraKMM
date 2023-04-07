@@ -48,7 +48,8 @@ class CreateGroupViewModel(
                             _state.update { it.copy(
                                 isCreating = false,
                                 joinCode = result.getOrNull()?.joinCode,
-                                groupId = result.getOrNull()?.id
+                                groupId = result.getOrNull()?.id,
+                                isCreated = true
                             ) }
                         }
                         else if (result.isFailure) {

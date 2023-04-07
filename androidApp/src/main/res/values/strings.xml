@@ -36,8 +36,11 @@
     <string name="delete_dialog_title" formatted="false">Delete %1$s</string>
     <string name="delete_dish_dialog_message" formatted="false">Are you sure you want to delete this dish? This action can\'t be reversed!</string>
 
-    <!-- Dialog messages -->
+    <!-- Error messages -->
     <string name="could_not_sign_in_with_this_provider_error">Sign In with this identity provider was unsuccessful</string>
+
+    <!-- Other messages -->
+    <string name="copied_to_clipboard">Copied to clipboard</string>
 
     <!-- Button labels -->
     <string name="cool_acknowledge_button_label">Cool!</string>
@@ -55,6 +58,7 @@
     <string name="add_new_dish_button_label">New Dish</string>
 
     <!-- Content Descriptions -->
+    <string name="copy_join_code_to_clipboard_button_description">Copy join code to clipboard</string>
     <string name="settings_button_description">Navigate to settings</string>
     <string name="join_group_button_description">Join Group</string>
     <string name="create_group_button_description">Create Group</string>

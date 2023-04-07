@@ -68,5 +68,7 @@
     <string name="default_image_description">Domyślne zdjęcie</string>
     <string name="selected_image_description">Wybrane zdjęcie</string>
     <string name="could_not_sign_in_with_this_provider_error">Logowanie z wybranym dostawcą tożsamości niepowiodło się</string>
+    <string name="copied_to_clipboard">Skopiowano do schowka</string>
+    <string name="copy_join_code_to_clipboard_button_description">Skopiuj kod dołączenia do schowka</string>
 
 </resources>

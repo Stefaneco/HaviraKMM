@@ -110,10 +110,11 @@ fun CreatedGroupScreen(
                 editTitle = { onEvent(CreateGroupEvent.EditGroupName(it)) },
                 enabled = false
             )
-            Text(
+            JoinCodeDisplay(joinCode = state.joinCode ?: "Join code not loaded")
+            /*Text(
                 modifier = Modifier.padding(16.dp),
                 text = stringResource(id = R.string.join_code_x_text, state.joinCode ?: "")
-            )
+            )*/
         }
         Button(
             onClick =  { onEvent(CreateGroupEvent.NavigateToCreatedGroup) }) {
