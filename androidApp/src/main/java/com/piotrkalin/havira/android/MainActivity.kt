@@ -88,7 +88,7 @@ fun HaviraRoot(){
         NavHost(
             modifier = Modifier.padding(padding),
             navController = navController,
-            startDestination = Routes.LOGIN
+            startDestination = Routes.DISH_LIST
         ) {
             composable(route = Routes.GROUP_DISH_DETAILS){
                 val viewModel = hiltViewModel<AndroidGroupDishDetailViewModel>()

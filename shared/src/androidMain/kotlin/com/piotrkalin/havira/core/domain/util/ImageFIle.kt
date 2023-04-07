@@ -20,15 +20,27 @@ class ImageUri(val uri: Uri, val contentResolver: ContentResolver) : IImageFile 
         val byteArray = contentResolver.openInputStream(uri)?.use {
             it.readBytes()
         } ?: throw IllegalStateException("Couldn't open inputStream $uri")
+
         // Decode the byteArray into a bitmap
         val bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
 
+        // Calculate the size and position for cropping the image into a square
+        val cropSize = minOf(bitmap.width, bitmap.height)
+        val offsetX = (bitmap.width - cropSize) / 2
+        val offsetY = (bitmap.height - cropSize) / 2
+
+        // Crop the bitmap to a square
+        val croppedBitmap = Bitmap.createBitmap(bitmap, offsetX, offsetY, cropSize, cropSize)
+
         // Calculate the scale factor and the new width and height
-        val scaleFactor = minOf(sizeX.toFloat() / bitmap.width, sizeY.toFloat() / bitmap.height)
-        val newWidth = (bitmap.width * scaleFactor).toInt()
-        val newHeight = (bitmap.height * scaleFactor).toInt()
-        val resizedBitmap = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true)
-        // Convert the cropped bitmap back to a byteArray
+        val scaleFactor = minOf(sizeX.toFloat() / croppedBitmap.width, sizeY.toFloat() / croppedBitmap.height)
+        val newWidth = (croppedBitmap.width * scaleFactor).toInt()
+        val newHeight = (croppedBitmap.height * scaleFactor).toInt()
+
+        // Resize the cropped bitmap
+        val resizedBitmap = Bitmap.createScaledBitmap(croppedBitmap, newWidth, newHeight, true)
+
+        // Convert the resized bitmap back to a byteArray
         val outputStream = ByteArrayOutputStream()
         resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
         return outputStream.toByteArray()
