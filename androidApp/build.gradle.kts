@@ -57,8 +57,8 @@ dependencies {
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.0-Beta")
     testImplementation("app.cash.turbine:turbine:0.12.3")
 
-    implementation(Deps.material3)
-    implementation(Deps.material3WindowSize)
+    implementation("androidx.compose.material3:material3:1.1.0-beta02")
+    implementation("androidx.compose.material3:material3-window-size-class:1.1.0-beta02")
 
     implementation(Deps.kotlinDateTime)
 

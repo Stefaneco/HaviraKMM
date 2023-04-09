@@ -1,9 +1,9 @@
 object Deps {
 
     //MATERIAL3 COMPOSE
-    private const val material3Version = "1.0.1"
-    const val material3 = "androidx.compose.material3:material3:$material3Version"
-    const val material3WindowSize = "androidx.compose.material3:material3-window-size-class:$material3Version"
+    //private const val material3Version = "1.0.1"
+    //const val material3 = "androidx.compose.material3:material3:$material3Version"
+    //const val material3WindowSize = "androidx.compose.material3:material3-window-size-class:$material3Version"
 
     // COMPOSE
     private const val activityComposeVersion = "1.6.1"

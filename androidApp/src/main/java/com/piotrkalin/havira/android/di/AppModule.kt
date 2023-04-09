@@ -127,6 +127,8 @@ class AppModule {
     @Provides
     @Singleton
     fun provideHttpClient(tokenDataSource: ITokenDataSource) : HttpClient {
+        //val mockApiEngine = MockApiEngine()
+        //return KtorClientFactory(mockApiEngine.get(), tokenDataSource).build()
         return KtorClientFactory(CIO.create(), tokenDataSource).build()
     }
 

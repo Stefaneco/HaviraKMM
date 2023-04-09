@@ -25,4 +25,6 @@ class AndroidGroupDishDetailViewModel @Inject constructor(
     val state = viewModel.state
 
     fun onEvent(event: DishDetailEvent) = viewModel.onEvent(event)
+
+
 }

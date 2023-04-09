@@ -9,7 +9,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -51,14 +51,19 @@ fun DishListScreen(
 fun DishBaseView(
     state: DishListState,
     onEvent: (DishListEvent) -> Unit,
-    onMenuPressed : () -> Unit
+    onMenuPressed : () -> Unit,
+    additionalActions : @Composable () -> Unit = {}
 ){
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    //val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            TopAppBar(
-                title = { Text(modifier = Modifier.fillMaxWidth(), text = stringResource(id = R.string.title_list_of_dishes)) },
+            LargeTopAppBar(
+                title = { Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = state.groupName ?: stringResource(id = R.string.title_list_of_dishes)
+                ) },
                 navigationIcon = {
                     IconButton(onClick = { onMenuPressed() }) {
                         Icon(
@@ -80,6 +85,7 @@ fun DishBaseView(
                             contentDescription = stringResource(id = R.string.tune_dishes_button_description)
                         )
                     }
+                    additionalActions()
                 },
                 scrollBehavior = scrollBehavior)
         }
@@ -89,6 +95,7 @@ fun DishBaseView(
         ) {
             if(state.isFilterBoxVisible) DishFilterBox(state = state, onEvent = onEvent, scrollBehavior = scrollBehavior)
             LazyColumn(
+                modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(4.dp),
                 contentPadding = PaddingValues(vertical = 4.dp, horizontal = 4.dp)
             ){
@@ -101,6 +108,14 @@ fun DishBaseView(
                         trailingSupportingText = "%.1f".format(dish.rating),
                         modifier = Modifier.clickable { onEvent(DishListEvent.SelectDish(dish.id!!)) })
                 }
+                /*items(20){
+                    DishCard(
+                        headline = "dish.title",
+                        supportingText = stringResource(id = R.string.last_made_new_dish),
+                        supportingText2 = stringResource(id = R.string.x_ratings, 3),
+                        trailingSupportingText = "%.1f".format(4.5f),
+                        modifier = Modifier.clickable {  })
+                }*/
             }
         }
         Column(

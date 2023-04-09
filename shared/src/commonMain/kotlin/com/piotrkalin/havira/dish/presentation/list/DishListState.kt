@@ -7,7 +7,14 @@ import com.piotrkalin.havira.core.domain.util.SortType
 data class DishListState(
     val isLoading : Boolean = true,
     val dishes : List<Dish> = emptyList(),
+
+    //group
     val groupId : Long? = null,
+    val groupName : String? = null,
+    val groupJoinCode : String? = null,
+
+    //bottomSheet
+    val isBottomSheetOpen : Boolean = false,
 
     //sort and filter
     val filteredDishes: List<Dish> = emptyList(),

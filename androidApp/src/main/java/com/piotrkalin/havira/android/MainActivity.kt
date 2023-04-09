@@ -186,6 +186,12 @@ fun HaviraRoot(){
                             }
                             else -> { navDrawerViewModel.onEvent(event)}
                         }
+                    },
+                    groupOnEvent = { event ->
+                        when(event){
+
+                            else -> {viewModel.onEvent(event)}
+                        }
                     }
                 )
             }

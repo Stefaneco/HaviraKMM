@@ -6,7 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.piotrkalin.havira.dish.domain.interactors.DishInteractors
 import com.piotrkalin.havira.dish.presentation.list.DishListEvent
 import com.piotrkalin.havira.group.domain.interactors.GroupInteractors
-import com.piotrkalin.havira.groupDish.presentation.GroupDishListViewModel
+import com.piotrkalin.havira.groupDish.presentation.list.GroupDishListEvent
+import com.piotrkalin.havira.groupDish.presentation.list.GroupDishListViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -28,4 +29,6 @@ class AndroidGroupDishListViewModel @Inject constructor(
     val state = viewModel.state
 
     fun onEvent(event: DishListEvent) = viewModel.onEvent(event)
+
+    fun onEvent(event: GroupDishListEvent) = viewModel.onEvent(event)
 }
