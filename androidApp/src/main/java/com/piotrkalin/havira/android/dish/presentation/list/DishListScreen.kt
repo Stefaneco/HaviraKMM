@@ -107,6 +107,25 @@ fun DishBaseView(
                         supportingText2 = stringResource(id = R.string.x_ratings, dish.nofRatings),
                         trailingSupportingText = "%.1f".format(dish.rating),
                         modifier = Modifier.clickable { onEvent(DishListEvent.SelectDish(dish.id!!)) })
+
+                   /* ListItem(
+                        headlineContent = { Text(dish.title) },
+                        supportingContent = {
+                            Text(text = dish.lastMade?.let { DateTimeUtil.formatDate(it) }
+                            ?: stringResource(id = R.string.last_made_new_dish))
+                        },
+                        trailingContent = {
+                            Column(
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp)
+                                    .fillMaxWidth(),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(text = "%.1f".format(dish.rating), style = MaterialTheme.typography.bodyLarge)
+                                Text(text = stringResource(id = R.string.x_ratings, dish.nofRatings), style = MaterialTheme.typography.bodySmall)
+                            }
+                        }
+                    )*/
                 }
                 /*items(20){
                     DishCard(
