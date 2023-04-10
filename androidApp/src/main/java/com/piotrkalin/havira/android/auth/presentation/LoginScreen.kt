@@ -1,7 +1,5 @@
 package com.piotrkalin.havira.android.auth.presentation
 
-import android.app.Activity.RESULT_CANCELED
-import android.app.Activity.RESULT_OK
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -177,17 +175,21 @@ fun GoogleSignIn(
     val intent = mGoogleSignInClient.signInIntent
 
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if(result.resultCode != RESULT_OK && result.resultCode != RESULT_CANCELED) {
+/*        if(result.resultCode != RESULT_OK && result.resultCode != RESULT_CANCELED) {
             println("Auth LoginScreen: Google Sign In Failed! ResultCode: ${result.resultCode}")
             onFailure()
             return@rememberLauncherForActivityResult
-        }
-        val task = com.google.android.gms.auth.api.signin.GoogleSignIn.getSignedInAccountFromIntent(result.data)
-        val resultAccount = task.getResult(ApiException::class.java)
+        }*/
+        try {
+            val task = com.google.android.gms.auth.api.signin.GoogleSignIn.getSignedInAccountFromIntent(result.data)
+            val resultAccount = task.getResult(ApiException::class.java)
 
-        resultAccount?.idToken?.let { token ->
-            println("Auth LoginScreen: google id token - $token")
-            onIdTokenReceived(token)
+            resultAccount?.idToken?.let { token ->
+                println("Auth LoginScreen: google id token - $token")
+                onIdTokenReceived(token)
+            }
+        } catch (e: ApiException){
+            onFailure()
         }
     }
 
