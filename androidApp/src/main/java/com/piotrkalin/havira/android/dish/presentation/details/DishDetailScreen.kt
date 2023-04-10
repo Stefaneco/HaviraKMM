@@ -7,8 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.rounded.Cookie
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -199,25 +198,48 @@ fun DishDetailInfoCard(
     dishDescription: String
 ){
     Card(
-        shape = MaterialTheme.shapes.large,
+        shape = MaterialTheme.shapes.medium,
         modifier = Modifier
             .fillMaxWidth()
             .defaultMinSize(minHeight = 200.dp)
     ) {
         Column(modifier = Modifier.padding(horizontal = 4.dp, vertical = 8.dp)) {
             Row(
-                horizontalArrangement = Arrangement.SpaceAround,
+                horizontalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                InfoChip(text = stringResource(R.string.last_made_x_info_chip, lastMade))
+                /*InfoChip(text = stringResource(R.string.last_made_x_info_chip, lastMade), )
                 InfoChip(text = stringResource(R.string.made_x_times_info_chip, nofRatings))
-                InfoChip(text = stringResource(R.string.score_x_info_chip, rating))
+                InfoChip(text = stringResource(R.string.score_x_info_chip, rating))*/
+
+                InfoChip(
+                    text = lastMade,
+                    leadingIcon = {
+                        Icon(imageVector = Icons.Filled.Event, contentDescription = "")
+                    },
+                    outlined = false
+                )
+                InfoChip(
+                    text = nofRatings,
+                    leadingIcon = {
+                        //Refresh, Done, DoneAll
+                        Icon(imageVector = Icons.Default.DoneAll, contentDescription = "")
+                    },
+                    outlined = false
+                )
+                InfoChip(
+                    text = rating,
+                    leadingIcon = {
+                        Icon(imageVector = Icons.Filled.Star, contentDescription = "")
+                    },
+                    outlined = false
+                )
             }
             Divider(
                 modifier = Modifier.padding(bottom = 16.dp, top = 8.dp),
                 color = MaterialTheme.colorScheme.background
             )
-            Text(dishDescription)
+            Text(text = dishDescription, modifier = Modifier.padding(horizontal = 8.dp))
         }
     }
 }
