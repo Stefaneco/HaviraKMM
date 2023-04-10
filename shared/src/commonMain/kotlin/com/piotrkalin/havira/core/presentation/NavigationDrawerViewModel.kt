@@ -21,24 +21,7 @@ class NavigationDrawerViewModel(
 
     init {
         println("NavigationDrawerViewModel: init")
-        viewModelScope.launch {
-            val isUserLoggedIn = authInteractors.isUserLoggedIn()
-            println("NavigationDrawerViewModel isUserLoggedIn: $isUserLoggedIn")
-            _state.update { it.copy(
-                isUserLoggedIn = isUserLoggedIn
-            ) }
-            if (!isUserLoggedIn) return@launch
-            groupInteractors.getAllGroups().collect { result ->
-                if (result.isSuccess){
-                    _state.update { it.copy(
-                        groups = result.getOrElse { emptyList() }
-                    ) }
-                }
-                else if (result.isFailure){
-                    println("NavigationDrawerViewModel: Failed to load groups")
-                }
-            }
-        }
+        refreshGroups()
     }
 
     fun onEvent(event: NavigationDrawerEvent){
@@ -79,6 +62,31 @@ class NavigationDrawerViewModel(
                 _state.update { it.copy(
                     isDrawerOpen = true
                 ) }
+            }
+            NavigationDrawerEvent.OnGroupAdded -> {
+                refreshGroups()
+            }
+        }
+    }
+
+    private fun refreshGroups(){
+        println("NavigationDrawerViewModel: refresh groups")
+        viewModelScope.launch {
+            val isUserLoggedIn = authInteractors.isUserLoggedIn()
+            println("NavigationDrawerViewModel isUserLoggedIn: $isUserLoggedIn")
+            _state.update { it.copy(
+                isUserLoggedIn = isUserLoggedIn
+            ) }
+            if (!isUserLoggedIn) return@launch
+            groupInteractors.getAllGroups().collect { result ->
+                if (result.isSuccess){
+                    _state.update { it.copy(
+                        groups = result.getOrElse { emptyList() }
+                    ) }
+                }
+                else if (result.isFailure){
+                    println("NavigationDrawerViewModel: Failed to load groups")
+                }
             }
         }
     }

@@ -8,4 +8,5 @@ sealed class NavigationDrawerEvent {
     object NavigateToSolo : NavigationDrawerEvent()
     object CloseDrawer : NavigationDrawerEvent()
     object OpenDrawer : NavigationDrawerEvent()
+    object OnGroupAdded : NavigationDrawerEvent()
 }
