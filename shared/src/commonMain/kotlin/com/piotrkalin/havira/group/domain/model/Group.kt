@@ -5,7 +5,10 @@ import com.piotrkalin.havira.core.domain.model.Dish
 import com.piotrkalin.havira.core.domain.util.DateTimeUtil
 import com.piotrkalin.havira.group.data.model.CreateGroupRequest
 import com.piotrkalin.havira.group.data.model.GroupResponse
+import database.GroupEntity
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
 
 data class Group(
     val ownerId: String,
@@ -18,6 +21,10 @@ data class Group(
 ){
     fun toCreateGroupRequest() : CreateGroupRequest =
         CreateGroupRequest(name)
+
+    fun toGroupEntity() : GroupEntity {
+        return GroupEntity(id, ownerId, joinCode, name, created.toInstant(TimeZone.currentSystemDefault()).toEpochMilliseconds())
+    }
 
     companion object {
         fun fromGroupResponse(groupResponse: GroupResponse) : Group {

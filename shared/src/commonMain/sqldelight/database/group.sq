@@ -1,0 +1,19 @@
+CREATE TABLE groupEntity (
+    id INTEGER NOT NULL PRIMARY KEY,
+    ownerId TEXT NOT NULL,
+    joinCode TEXT NOT NULL,
+    name TEXT NOT NULL,
+    created INTEGER NOT NULL
+);
+
+getAllGroups:
+SELECT * FROM groupEntity;
+
+insertGroup:
+INSERT OR REPLACE
+INTO groupEntity
+VALUES ?;
+
+deleteGroupById:
+DELETE FROM groupEntity
+WHERE id = ?;

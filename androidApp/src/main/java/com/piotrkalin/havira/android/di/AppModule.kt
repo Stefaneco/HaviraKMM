@@ -17,6 +17,8 @@ import com.piotrkalin.havira.dish.domain.IDishDataSource
 import com.piotrkalin.havira.dish.domain.IDishRepository
 import com.piotrkalin.havira.dish.domain.interactors.*
 import com.piotrkalin.havira.group.data.AzureGroupService
+import com.piotrkalin.havira.group.data.SqlDelightGroupDataSource
+import com.piotrkalin.havira.group.domain.IGroupDataSource
 import com.piotrkalin.havira.group.domain.IGroupService
 import com.piotrkalin.havira.group.domain.interactors.CreateGroup
 import com.piotrkalin.havira.group.domain.interactors.GetAllGroups
@@ -44,10 +46,10 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideGroupInteractors(groupService :IGroupService) : GroupInteractors {
+    fun provideGroupInteractors(groupService :IGroupService, groupDataSource: IGroupDataSource) : GroupInteractors {
         return GroupInteractors(
             CreateGroup(groupService),
-            GetAllGroups(groupService),
+            GetAllGroups(groupService, groupDataSource),
             GetGroup(groupService),
             JoinGroup(groupService)
         )
@@ -110,6 +112,12 @@ class AppModule {
     @Singleton
     fun provideLocalDishDataSource(driver : SqlDriver) : IDishDataSource {
         return SqlDelightDishDataSource(HaviraDatabase(driver))
+    }
+
+    @Provides
+    @Singleton
+    fun provideLocalGroupDataSource(driver: SqlDriver) : IGroupDataSource {
+        return SqlDelightGroupDataSource(HaviraDatabase(driver))
     }
 
     @Provides

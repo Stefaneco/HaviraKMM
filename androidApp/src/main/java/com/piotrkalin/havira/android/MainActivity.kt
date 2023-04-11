@@ -233,6 +233,7 @@ fun HaviraRoot(){
                                                 inclusive = true
                                             }
                                         }
+                                        navDrawerViewModel.onEvent(NavigationDrawerEvent.OnGroupAdded)
                                     }
                                 )
                             )
@@ -246,6 +247,7 @@ fun HaviraRoot(){
                                                 inclusive = true
                                             }
                                         }
+                                        navDrawerViewModel.onEvent(NavigationDrawerEvent.OnGroupAdded)
                                     }
                                 )
                             )

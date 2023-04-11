@@ -5,6 +5,7 @@ import com.piotrkalin.havira.group.data.model.GroupResponse
 import com.piotrkalin.havira.group.domain.IGroupService
 import io.ktor.client.*
 import io.ktor.client.call.*
+import io.ktor.client.plugins.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 
@@ -28,7 +29,11 @@ class AzureGroupService(
     }
 
     override suspend fun getAllGroups(): List<GroupResponse> {
-        val response = httpClient.get("https://havira-api.azurewebsites.net/api/Group")
+        val response = httpClient.get("https://havira-api.azurewebsites.net/api/Group") {
+            timeout {
+                requestTimeoutMillis = 25000
+            }
+        }
         return response.body()
     }
 
