@@ -5,8 +5,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -15,7 +15,6 @@ import com.piotrkalin.havira.android.R
 import com.piotrkalin.havira.android.core.presentation.FilledTitleTextField
 import com.piotrkalin.havira.group.presentation.create.CreateGroupEvent
 import com.piotrkalin.havira.group.presentation.create.CreateGroupState
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -25,7 +24,12 @@ fun CreateGroupScreen(
 ) {
 
     val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
+    LaunchedEffect(key1 = state.error, block = {
+        state.error?.let {
+            snackbarHostState.showSnackbar(it)
+            onEvent(CreateGroupEvent.OnErrorSeen)
+        }
+    })
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -51,13 +55,6 @@ fun CreateGroupScreen(
         }
         else {
             BaseCreateGroupScreen(state = state, onEvent = onEvent, paddingValues = paddingValues)
-        }
-
-        state.error?.let {
-            scope.launch {
-                snackbarHostState.showSnackbar(it)
-                onEvent(CreateGroupEvent.OnErrorSeen)
-            }
         }
     }
 }

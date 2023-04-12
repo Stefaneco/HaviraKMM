@@ -61,7 +61,6 @@ fun NavigationDrawer(
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
                 for (group in state.groups){
-                    println("NavigationDrawer: groupId - ${group.id}; selectedGroup - ${state.selectedGroup};")
                     NavigationDrawerItem(
                         icon = { Icon(imageVector = Icons.Filled.People, contentDescription = "") },
                         label = { Text(text = group.name) },

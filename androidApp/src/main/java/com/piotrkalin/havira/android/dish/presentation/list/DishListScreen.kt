@@ -54,9 +54,19 @@ fun DishBaseView(
     onMenuPressed : () -> Unit,
     additionalActions : @Composable () -> Unit = {}
 ){
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(key1 = state.error, block = {
+        state.error?.let {
+            snackbarHostState.showSnackbar(it)
+            onEvent(DishListEvent.OnErrorSeen)
+        }
+    })
+
     //val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             LargeTopAppBar(

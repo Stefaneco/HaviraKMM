@@ -45,6 +45,9 @@ class KtorClientFactory(
             expectSuccess = true
             HttpResponseValidator {
                 handleResponseExceptionWithRequest { exception, request ->
+                    if (exception is HttpRequestTimeoutException)
+                        throw TimeoutException()
+
                     val clientException = exception as? ClientRequestException ?: return@handleResponseExceptionWithRequest
                     val exceptionResponse = clientException.response
                     val exceptionResponseText = exceptionResponse.bodyAsText()

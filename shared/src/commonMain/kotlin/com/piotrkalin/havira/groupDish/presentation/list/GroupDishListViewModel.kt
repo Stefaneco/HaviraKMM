@@ -38,7 +38,7 @@ class GroupDishListViewModel(
         result.onFailure { t ->
             println("GroupDishListViewModel: ${result.exceptionOrNull()?.message}")
             return@combine _state.copy(
-                error = t.message,
+                error = t.message ?: "Unknown error",
                 isLoading = false,
                 groupId = groupId
             )

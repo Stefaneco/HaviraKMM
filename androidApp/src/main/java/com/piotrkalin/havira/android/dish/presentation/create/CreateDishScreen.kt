@@ -20,7 +20,6 @@ import com.piotrkalin.havira.android.core.presentation.FilledTitleTextField
 import com.piotrkalin.havira.android.core.presentation.LoadingScreen
 import com.piotrkalin.havira.dish.presentation.create.CreateDishEvent
 import com.piotrkalin.havira.dish.presentation.create.CreateDishState
-import kotlinx.coroutines.launch
 
 
 @Composable
@@ -30,9 +29,16 @@ fun CreateDishScreen(
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(key1 = state.error, block = {
+        state.error?.let {
+            snackbarHostState.showSnackbar(it)
+            onEvent(CreateDishEvent.OnErrorSeen)
+        }
+    })
 
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopAppBar(
@@ -50,13 +56,6 @@ fun CreateDishScreen(
     ) { paddingValues ->
         if(state.isCreating) LoadingScreen(Modifier.padding(paddingValues))
         else BaseCreateDishScreen(state = state, onEvent = onEvent, paddingValues = paddingValues)
-
-        state.error?.let {
-            scope.launch {
-                snackbarHostState.showSnackbar(it)
-                onEvent(CreateDishEvent.OnErrorSeen)
-            }
-        }
     }
 }
 

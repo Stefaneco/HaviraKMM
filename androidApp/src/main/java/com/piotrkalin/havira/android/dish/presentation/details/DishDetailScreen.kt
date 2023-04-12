@@ -23,6 +23,7 @@ import com.piotrkalin.havira.android.R
 import com.piotrkalin.havira.android.dish.presentation.details.components.DishPrepCard
 import com.piotrkalin.havira.android.dish.presentation.details.components.DishPrepCreator
 import com.piotrkalin.havira.android.dish.presentation.details.components.InfoChip
+import com.piotrkalin.havira.auth.presentation.LoginEvent
 import com.piotrkalin.havira.core.domain.util.DateTimeUtil
 import com.piotrkalin.havira.dish.presentation.detail.DishDetailEvent
 import com.piotrkalin.havira.dish.presentation.detail.DishDetailState
@@ -36,10 +37,17 @@ fun DishDetailScreen(
     onEvent : (DishDetailEvent) -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(key1 = state.error, block = {
+        state.error?.let {
+            snackbarHostState.showSnackbar(it)
+            onEvent(DishDetailEvent.OnErrorSeen)
+        }
+    })
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             LargeTopAppBar(
@@ -113,12 +121,6 @@ fun DishDetailScreen(
                         }
                     }
                 }
-            }
-        }
-        state.error?.let {
-            scope.launch {
-                snackbarHostState.showSnackbar(it)
-                onEvent(DishDetailEvent.OnErrorSeen)
             }
         }
         if(state.isDishPrepCreatorOpen) DishDetailDishPrepCreator(state = state, onEvent = onEvent)

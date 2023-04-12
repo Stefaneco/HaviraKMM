@@ -11,8 +11,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,7 +34,6 @@ import com.piotrkalin.havira.auth.presentation.LoginEvent
 import com.piotrkalin.havira.auth.presentation.LoginScreenState
 import com.piotrkalin.havira.auth.presentation.LoginStage.*
 import com.piotrkalin.havira.core.domain.util.ImageFile
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoilApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -43,14 +42,13 @@ fun LoginScreen(
     onEvent: (LoginEvent) -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
 
-    state.error?.let {
-        scope.launch {
-            onEvent(LoginEvent.OnErrorSeen)
+    LaunchedEffect(key1 = state.error, block = {
+        state.error?.let {
             snackbarHostState.showSnackbar(it)
+            onEvent(LoginEvent.OnErrorSeen)
         }
-    }
+    })
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ){ paddingValues ->
