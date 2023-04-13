@@ -10,7 +10,7 @@
     <string name="name_hint">Name</string>
 
     <string name="sign_in_with_google_button_label">Sign In with Google</string>
-    <string name="title_list_of_dishes">Dishes</string>
+    <string name="title_list_of_dishes">Your list</string>
     <string name="title_create_dish">Create Dish</string>
     <string name="title_dish_title">Title</string>
     <string name="title_dish_description">Description</string>

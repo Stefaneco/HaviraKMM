@@ -9,7 +9,7 @@
     <string name="name_hint">Nazwa</string>
 
     <string name="sign_in_with_google_button_label">Zaloguj się przez Google</string>
-    <string name="title_list_of_dishes">Dania</string>
+    <string name="title_list_of_dishes">Twoja lista</string>
     <string name="title_create_dish">Dodaj danie</string>
     <string name="title_dish_title">Tytuł</string>
     <string name="title_dish_description">Opis</string>

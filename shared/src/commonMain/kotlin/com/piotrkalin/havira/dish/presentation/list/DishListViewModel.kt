@@ -21,17 +21,20 @@ open class DishListViewModel(
         _state,
         dishInteractors.getAllDishes()
     ) { _state, dishes ->
+        println("DishListViewModel: $dishes")
         if (dishes.throwable != null) {
             _state.copy(
-                error = dishes.throwable.message ?: "Unknown error"
+                error = dishes.throwable.message ?: "Unknown error",
+                isLoading = false
             )
         }
-        else if (_state.dishes != dishes.data) {
+        else if (dishes.data != null) {
             _state.copy(
-                dishes = dishes.data ?: emptyList(),
-                filteredDishes = dishes.data ?: emptyList(),
-                searchedDishes = search(dishes.data ?: emptyList(), _state.searchText),
-                sortedDishes = sort(dishes.data ?: emptyList(), _state.selectedSort, _state.selectedSortDirection)
+                dishes = dishes.data,
+                filteredDishes = dishes.data,
+                searchedDishes = search(dishes.data, _state.searchText),
+                sortedDishes = sort(dishes.data, _state.selectedSort, _state.selectedSortDirection),
+                isLoading = false
             )
         } else _state
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), DishListState())

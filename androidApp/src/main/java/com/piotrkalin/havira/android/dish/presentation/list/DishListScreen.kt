@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.piotrkalin.havira.android.R
 import com.piotrkalin.havira.android.core.presentation.NavigationDrawer
@@ -104,47 +105,33 @@ fun DishBaseView(
             modifier = Modifier.padding(paddingValues)
         ) {
             if(state.isFilterBoxVisible) DishFilterBox(state = state, onEvent = onEvent, scrollBehavior = scrollBehavior)
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(4.dp),
-                contentPadding = PaddingValues(vertical = 4.dp, horizontal = 4.dp)
-            ){
-                items(state.sortedDishes) { dish ->
-                    DishCard(
-                        headline = dish.title,
-                        supportingText =  dish.lastMade?.let { DateTimeUtil.formatDate(it) }
-                            ?: stringResource(id = R.string.last_made_new_dish),
-                        supportingText2 = stringResource(id = R.string.x_ratings, dish.nofRatings),
-                        trailingSupportingText = "%.1f".format(dish.rating),
-                        modifier = Modifier.clickable { onEvent(DishListEvent.SelectDish(dish.id!!)) })
-
-                   /* ListItem(
-                        headlineContent = { Text(dish.title) },
-                        supportingContent = {
-                            Text(text = dish.lastMade?.let { DateTimeUtil.formatDate(it) }
-                            ?: stringResource(id = R.string.last_made_new_dish))
-                        },
-                        trailingContent = {
-                            Column(
-                                modifier = Modifier
-                                    .padding(horizontal = 16.dp)
-                                    .fillMaxWidth(),
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Text(text = "%.1f".format(dish.rating), style = MaterialTheme.typography.bodyLarge)
-                                Text(text = stringResource(id = R.string.x_ratings, dish.nofRatings), style = MaterialTheme.typography.bodySmall)
-                            }
-                        }
-                    )*/
+            if(state.dishes.isNotEmpty()){
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                    contentPadding = PaddingValues(vertical = 4.dp, horizontal = 4.dp)
+                ) {
+                    items(state.sortedDishes) { dish ->
+                        DishCard(
+                            headline = dish.title,
+                            supportingText = dish.lastMade?.let { DateTimeUtil.formatDate(it) }
+                                ?: stringResource(id = R.string.last_made_new_dish),
+                            supportingText2 = stringResource(
+                                id = R.string.x_ratings,
+                                dish.nofRatings
+                            ),
+                            trailingSupportingText = "%.1f".format(dish.rating),
+                            modifier = Modifier.clickable { onEvent(DishListEvent.SelectDish(dish.id!!)) })
+                    }
+                    /*items(20){
+                        DishCard(
+                            headline = "dish.title",
+                            supportingText = stringResource(id = R.string.last_made_new_dish),
+                            supportingText2 = stringResource(id = R.string.x_ratings, 3),
+                            trailingSupportingText = "%.1f".format(4.5f),
+                            modifier = Modifier.clickable {  })
+                    }*/
                 }
-                /*items(20){
-                    DishCard(
-                        headline = "dish.title",
-                        supportingText = stringResource(id = R.string.last_made_new_dish),
-                        supportingText2 = stringResource(id = R.string.x_ratings, 3),
-                        trailingSupportingText = "%.1f".format(4.5f),
-                        modifier = Modifier.clickable {  })
-                }*/
             }
         }
         Column(
@@ -157,4 +144,18 @@ fun DishBaseView(
             }
         }
     }
+
+    if(state.dishes.isEmpty() && !state.isLoading)
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                modifier = Modifier.padding(12.dp),
+                text = "You have no meals on your list. Add your first dish by clicking the button at the bottom of the screen!",
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.bodyLarge
+            )
+        }
 }
