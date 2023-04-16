@@ -18,17 +18,17 @@ class GetAllGroups(
 
             println("GetAllGroups: Started request")
             val remoteGroups = groupService.getAllGroups().map { Group.fromGroupResponse(it) }
-            println("GetAllGroups: $remoteGroups")
+            println("GetAllGroups: remote groups - $remoteGroups")
             emit(Result.success(remoteGroups))
 
             val remoteGroupsIds = remoteGroups.map { it.id }
             val removedGroupsIds = cachedGroups
-                .filter { remoteGroupsIds.contains(it.id) }
+                .filter { cached -> !remoteGroupsIds.contains(cached.id) }
                 .map { it.id }
-
+            println("GetAllGroups: Removed Ids - $removedGroupsIds")
             groupDataSource.deleteGroupsByIds(removedGroupsIds)
             groupDataSource.insertGroups(remoteGroups)
-
+            println("GetAllGroups: Completed Successfully")
         } catch (e: Exception){
             println("GetAllGroups error: ${e.message}")
             emit(Result.failure(e))
