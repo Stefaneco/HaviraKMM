@@ -76,6 +76,7 @@ fun GroupDishListScreen(
                         .fillMaxWidth()
                         .padding(8.dp)
                     ){
+
                         TextButton(
                             //modifier = Modifier.fillMaxWidth(),
                             onClick = {
@@ -90,6 +91,19 @@ fun GroupDishListScreen(
                             }) {
                             Text(text = "Share Join Code")
                         }
+
+                        if(state.isUserGroupOwner)
+                            TextButton(onClick = {
+                                groupOnEvent(GroupDishListEvent.DisbandGroup())
+                                }) {
+                                Text(text = "Disband Group")
+                            }
+                        else
+                            TextButton(onClick = {
+                                groupOnEvent(GroupDishListEvent.LeaveGroup())
+                            }) {
+                                Text(text = "Leave Group")
+                            }
                     }
                 }
             }

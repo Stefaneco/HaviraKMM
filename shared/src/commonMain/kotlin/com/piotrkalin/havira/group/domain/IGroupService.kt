@@ -12,4 +12,8 @@ interface IGroupService {
     suspend fun getAllGroups() : List<GroupResponse>
 
     suspend fun joinGroup(joinCode: String) : GroupResponse
+
+    suspend fun leaveGroup(groupId: Long)
+
+    suspend fun disbandGroup(groupId: Long)
 }

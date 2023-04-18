@@ -43,6 +43,7 @@ import com.piotrkalin.havira.dish.presentation.edit.DishEditEvent
 import com.piotrkalin.havira.dish.presentation.list.DishListEvent
 import com.piotrkalin.havira.group.presentation.create.CreateGroupEvent
 import com.piotrkalin.havira.group.presentation.join.JoinGroupEvent
+import com.piotrkalin.havira.groupDish.presentation.list.GroupDishListEvent
 import dagger.hilt.android.AndroidEntryPoint
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -192,7 +193,22 @@ fun HaviraRoot(){
                     },
                     groupOnEvent = { event ->
                         when(event){
-
+                            is GroupDishListEvent.DisbandGroup -> {
+                                viewModel.onEvent(
+                                    GroupDishListEvent.DisbandGroup {
+                                        navDrawerViewModel.onEvent(NavigationDrawerEvent.OnGroupAdded)
+                                        navController.navigate(Routes.DISH_LIST)
+                                    }
+                                )
+                            }
+                            is GroupDishListEvent.LeaveGroup -> {
+                                viewModel.onEvent(
+                                    GroupDishListEvent.LeaveGroup {
+                                        navDrawerViewModel.onEvent(NavigationDrawerEvent.OnGroupAdded)
+                                        navController.navigate(Routes.DISH_LIST)
+                                    }
+                                )
+                            }
                             else -> {viewModel.onEvent(event)}
                         }
                     }

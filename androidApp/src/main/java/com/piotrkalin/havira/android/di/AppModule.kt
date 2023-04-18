@@ -20,10 +20,7 @@ import com.piotrkalin.havira.group.data.AzureGroupService
 import com.piotrkalin.havira.group.data.SqlDelightGroupDataSource
 import com.piotrkalin.havira.group.domain.IGroupDataSource
 import com.piotrkalin.havira.group.domain.IGroupService
-import com.piotrkalin.havira.group.domain.interactors.CreateGroup
-import com.piotrkalin.havira.group.domain.interactors.GetAllGroups
-import com.piotrkalin.havira.group.domain.interactors.GroupInteractors
-import com.piotrkalin.havira.group.domain.interactors.JoinGroup
+import com.piotrkalin.havira.group.domain.interactors.*
 import com.piotrkalin.havira.groupDish.data.AzureDishService
 import com.piotrkalin.havira.groupDish.domain.IDishService
 import com.piotrkalin.havira.groupDish.domain.interactors.AddGroupDishPrep
@@ -51,7 +48,9 @@ class AppModule {
             CreateGroup(groupService),
             GetAllGroups(groupService, groupDataSource),
             GetGroup(groupService),
-            JoinGroup(groupService)
+            JoinGroup(groupService),
+            LeaveGroup(groupService),
+            DisbandGroup(groupService)
         )
     }
 
@@ -82,7 +81,8 @@ class AppModule {
             GetUserProfile(profileService),
             IsUserProfileCreated(profileService, tokenDataSource),
             CreateUserProfile(profileService, tokenDataSource),
-            IsUserLoggedIn(tokenDataSource)
+            IsUserLoggedIn(tokenDataSource),
+            GetUserProfileId(tokenDataSource)
         )
     }
 

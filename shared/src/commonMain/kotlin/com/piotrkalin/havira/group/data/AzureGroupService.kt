@@ -42,4 +42,12 @@ class AzureGroupService(
         return response.body()
     }
 
+    override suspend fun leaveGroup(groupId: Long) {
+        httpClient.put("https://havira-api.azurewebsites.net/api/Group/$groupId/leave")
+    }
+
+    override suspend fun disbandGroup(groupId: Long) {
+        httpClient.delete("https://havira-api.azurewebsites.net/api/Group/$groupId")
+    }
+
 }

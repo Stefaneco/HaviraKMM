@@ -12,6 +12,8 @@ data class DishListState(
     val groupId : Long? = null,
     val groupName : String? = null,
     val groupJoinCode : String? = null,
+    val userId : String? = null,
+    val isUserGroupOwner : Boolean = false,
 
     //bottomSheet
     val isBottomSheetOpen : Boolean = false,

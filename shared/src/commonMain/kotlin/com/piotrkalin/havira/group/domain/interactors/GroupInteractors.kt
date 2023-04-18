@@ -6,6 +6,8 @@ data class GroupInteractors(
     val createGroup: CreateGroup,
     val getAllGroups: GetAllGroups,
     val getGroup: GetGroup,
-    val joinGroup: JoinGroup
+    val joinGroup: JoinGroup,
+    val leaveGroup: LeaveGroup,
+    val disbandGroup: DisbandGroup
 ) {
 }

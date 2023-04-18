@@ -4,5 +4,6 @@ sealed class GroupDishListEvent {
     object ShareJoinCode : GroupDishListEvent()
     object CloseBottomSheet : GroupDishListEvent()
     object OpenBottomSheet : GroupDishListEvent()
-    object LeaveGroup : GroupDishListEvent()
+    class LeaveGroup(val onSuccess: () -> Unit  = {}) : GroupDishListEvent()
+    class DisbandGroup(val onSuccess: () -> Unit  = {}) : GroupDishListEvent()
 }
