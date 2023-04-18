@@ -140,7 +140,11 @@ fun HaviraRoot(){
                 JoinGroupScreen(state = state, onEvent = { event ->
                     when(event){
                         JoinGroupEvent.BackButtonPressed -> {
-                            navController.popBackStack()
+                            if(state.isJoined){
+                                navDrawerViewModel.onEvent(NavigationDrawerEvent.OnGroupAdded)
+                                state.group?.let { navController.navigate(Routes.GROUP_ARGS.format(it.id)) }
+                            }
+                            else navController.popBackStack()
                         }
                         JoinGroupEvent.NavigateToJoinedGroup -> {
                             navDrawerViewModel.onEvent(NavigationDrawerEvent.OnGroupAdded)
@@ -222,7 +226,11 @@ fun HaviraRoot(){
                 CreateGroupScreen(state = state, onEvent = { event ->
                     when(event){
                         CreateGroupEvent.BackButtonPressed -> {
-                            navController.popBackStack()
+                            if(state.isCreated){
+                                navDrawerViewModel.onEvent(NavigationDrawerEvent.OnGroupAdded)
+                                navController.navigate(Routes.GROUP_ARGS.format(state.groupId))
+                            }
+                            else navController.popBackStack()
                         }
                         CreateGroupEvent.NavigateToCreatedGroup -> {
                             navDrawerViewModel.onEvent(NavigationDrawerEvent.OnGroupAdded)
