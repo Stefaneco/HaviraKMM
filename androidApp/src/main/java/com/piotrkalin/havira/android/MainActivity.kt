@@ -33,6 +33,7 @@ import com.piotrkalin.havira.android.group.join.AndroidJoinGroupViewModel
 import com.piotrkalin.havira.android.group.join.JoinGroupScreen
 import com.piotrkalin.havira.android.groupDish.presentation.create.AndroidCreateGroupDishViewModel
 import com.piotrkalin.havira.android.groupDish.presentation.details.AndroidGroupDishDetailViewModel
+import com.piotrkalin.havira.android.groupDish.presentation.edit.AndroidEditGroupDishViewModel
 import com.piotrkalin.havira.android.groupDish.presentation.list.AndroidGroupDishListViewModel
 import com.piotrkalin.havira.android.groupDish.presentation.list.GroupDishListScreen
 import com.piotrkalin.havira.auth.presentation.LoginEvent
@@ -98,10 +99,44 @@ fun HaviraRoot(){
                 DishDetailScreen(state = state, onEvent = { event ->
                     when(event){
                         is DishDetailEvent.BackButtonPressed -> {
-                            navController.popBackStack()
+                            navController.popBackStack(route = Routes.GROUP, inclusive = false)
                         }
                         is DishDetailEvent.EditButtonPressed -> {
-                            //navController.navigate(Routes.DISH_EDIT_ARGS.format(event.dishId))
+                            navController.navigate(Routes.GROUP_DISH_EDIT_ARGS.format(event.dishId))
+                        }
+                        else -> {viewModel.onEvent(event)}
+                    }
+                })
+            }
+
+            composable(route = Routes.GROUP_DISH_EDIT){
+                val viewModel = hiltViewModel<AndroidEditGroupDishViewModel>()
+                val state by viewModel.state.collectAsState()
+
+                EditDishScreen(state = state, onEvent = { event ->
+                    when(event){
+                        is DishEditEvent.BackButtonPressed -> {
+                            navController.popBackStack()
+                        }
+                        is DishEditEvent.EditDish -> {
+                            viewModel.onEvent(
+                                DishEditEvent.EditDish {
+                                    navController.navigate(Routes.GROUP_DISH_DETAILS_ARGS.format(state.dishId)) {
+                                        popUpTo(Routes.GROUP_ARGS.format(state.groupId))
+                                    }
+                                    //navController.popBackStack()
+                                }
+                            )
+                        }
+                        is DishEditEvent.DeleteDish -> {
+                            viewModel.onEvent(
+                                DishEditEvent.DeleteDish {
+                                    navController.popBackStack(
+                                        route = Routes.GROUP.format(state.groupId),
+                                        inclusive = false
+                                    )
+                                }
+                            )
                         }
                         else -> {viewModel.onEvent(event)}
                     }
@@ -185,12 +220,20 @@ fun HaviraRoot(){
                             }
                             is NavigationDrawerEvent.NavigateToGroup -> {
                                 navDrawerViewModel.onEvent(event)
-                                navController.navigate(Routes.GROUP_ARGS.format(event.id))
+                                navController.navigate(Routes.GROUP_ARGS.format(event.id)){
+                                    popUpTo(navController.graph.id){
+                                        inclusive = true
+                                    }
+                                }
                             }
                             NavigationDrawerEvent.NavigateToSettings -> TODO()
                             NavigationDrawerEvent.NavigateToSolo -> {
                                 navDrawerViewModel.onEvent(event)
-                                navController.navigate(Routes.DISH_LIST)
+                                navController.navigate(Routes.DISH_LIST){
+                                    popUpTo(navController.graph.id){
+                                        inclusive = true
+                                    }
+                                }
                             }
                             else -> { navDrawerViewModel.onEvent(event)}
                         }
@@ -336,7 +379,7 @@ fun HaviraRoot(){
                         is NavigationDrawerEvent.NavigateToGroup -> {
                             navDrawerViewModel.onEvent(event)
                             navController.navigate(Routes.GROUP_ARGS.format(event.id)) {
-                                popUpTo(Routes.GROUP_ARGS.format(event.id)) {
+                                popUpTo(navController.graph.id){
                                     inclusive = true
                                 }
                             }

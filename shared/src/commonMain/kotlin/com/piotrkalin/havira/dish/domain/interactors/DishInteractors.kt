@@ -1,8 +1,6 @@
 package com.piotrkalin.havira.dish.domain.interactors
 
-import com.piotrkalin.havira.groupDish.domain.interactors.AddGroupDishPrep
-import com.piotrkalin.havira.groupDish.domain.interactors.CreateGroupDish
-import com.piotrkalin.havira.groupDish.domain.interactors.GetGroupDishById
+import com.piotrkalin.havira.groupDish.domain.interactors.*
 
 data class DishInteractors(
     val addDish: AddDish,
@@ -13,5 +11,7 @@ data class DishInteractors(
     val editDish: EditDish,
     val createGroupDish: CreateGroupDish,
     val addGroupDishPrep: AddGroupDishPrep,
-    val getGroupDishById: GetGroupDishById
+    val getGroupDishById: GetGroupDishById,
+    val editGroupDish: EditGroupDish,
+    val deleteGroupDish: DeleteGroupDish
 )

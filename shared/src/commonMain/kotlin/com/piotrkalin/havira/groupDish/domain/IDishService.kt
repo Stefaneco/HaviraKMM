@@ -1,9 +1,6 @@
 package com.piotrkalin.havira.groupDish.domain
 
-import com.piotrkalin.havira.groupDish.data.model.AddDishPrepRequest
-import com.piotrkalin.havira.groupDish.data.model.CreateDishRequest
-import com.piotrkalin.havira.groupDish.data.model.DishPrepDto
-import com.piotrkalin.havira.groupDish.data.model.DishResponse
+import com.piotrkalin.havira.groupDish.data.model.*
 
 interface IDishService {
 
@@ -12,4 +9,8 @@ interface IDishService {
     suspend fun addGroupDishPrep(request: AddDishPrepRequest, dishId: Long) : DishPrepDto
 
     suspend fun getGroupDishById(dishId : Long) : DishResponse
+
+    suspend fun updateGroupDish(request: UpdateDishRequest, dishId: Long) : DishResponse
+
+    suspend fun deleteGroupDish(dishId: Long)
 }

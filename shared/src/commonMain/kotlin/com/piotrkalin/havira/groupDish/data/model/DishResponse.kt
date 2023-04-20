@@ -11,5 +11,5 @@ data class DishResponse(
     var nofRatings : Int = 0,
     var lastMadeTimestamp : Long? = null,
     val createdTimestamp : Long,
-    val dishPreps : List<DishPrepDto> = emptyList()
+    val dishPreps : List<DishPrepDto>? = emptyList()
 )

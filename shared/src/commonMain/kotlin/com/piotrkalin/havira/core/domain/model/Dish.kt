@@ -69,7 +69,7 @@ data class Dish(
                 nofRatings = dto.nofRatings,
                 lastMade = dto.lastMadeTimestamp?.let { DateTimeUtil.fromEpochMillis(it) },
                 created = DateTimeUtil.fromEpochMillis(dto.createdTimestamp),
-                dishPreps = dto.dishPreps.map { DishPrep.fromDishPrepResponse(it) }
+                dishPreps = dto.dishPreps?.map { DishPrep.fromDishPrepResponse(it) }
             )
         }
     }

@@ -16,6 +16,7 @@ class AndroidGroupDishDetailViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val dishId = savedStateHandle.get<String>("dishId")?.toLong() ?: -1L
+    //private val groupId = savedStateHandle.get<String>("groupId")?.toLong() ?: -1L
     private val viewModel by lazy {
         GroupDishDetailViewModel(
             dishId, dishInteractors, viewModelScope

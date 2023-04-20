@@ -10,10 +10,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class DishEditViewModel(
+open class DishEditViewModel(
     private val dishId: Long,
     private val dishInteractors: DishInteractors,
-    private val coroutineScope: CoroutineScope?
+    private val coroutineScope: CoroutineScope?,
+    private val loadDish : suspend () -> Result<Dish> = {dishInteractors.getDishById(dishId)}
 ) {
 
     private val viewModelScope = coroutineScope ?: CoroutineScope(Dispatchers.Main)
@@ -29,7 +30,8 @@ class DishEditViewModel(
                     dishId = dishId,
                     title = dish.title,
                     desc = dish.desc,
-                    isValidDish = isValidDish(dish.id, dish.title)
+                    isValidDish = isValidDish(dish.id, dish.title),
+                    groupId = dish.groupId?.toLong()
                 ) }
             }
             result.onFailure { t ->
@@ -49,7 +51,24 @@ class DishEditViewModel(
                 ) }
             }
             is DishEditEvent.EditDish -> {
-                editDish(_state.value, event.onEdit)
+                if (!_state.value.isValidDish) return
+                _state.update { it.copy( isSaving = true ) }
+                viewModelScope.launch {
+                    val result = editDish(_state.value)
+                    result.onFailure { t ->
+                        println(t.message)
+                        _state.update { it.copy(
+                            error = t.message,
+                            isSaving = false
+                        ) }
+                    }
+                    result.onSuccess {
+                        _state.update { it.copy(
+                            isSaving = false
+                        ) }
+                        event.onEdit()
+                    }
+                }
             }
             is DishEditEvent.EditTitle -> {
                 _state.update { it.copy(
@@ -64,7 +83,19 @@ class DishEditViewModel(
             }
             is DishEditEvent.DeleteDish -> {
                 _state.value.dishId?.let { dishId ->
-                    deleteDish(dishId, event.onDelete)
+                    viewModelScope.launch {
+                        val result = deleteDish(dishId)
+                        result.onSuccess {
+                            event.onDelete()
+                        }
+                        result.onFailure { t ->
+                            println(t.message)
+                            _state.update { it.copy(
+                                error = t.message,
+                                isDeleteDialogOpen = false
+                            ) }
+                        }
+                    }
                 }
             }
             DishEditEvent.DismissDeleteDialog -> {
@@ -80,52 +111,16 @@ class DishEditViewModel(
         }
     }
 
-    protected suspend fun loadDish() : Result<Dish> {
-        return dishInteractors.getDishById(dishId)
+    protected open suspend fun editDish(state: DishEditState): Result<Unit?> {
+        return dishInteractors.editDish(
+            id = state.dishId!!,
+            title = state.title,
+            description = state.desc
+        )
     }
 
-    private fun editDish(state: DishEditState, onEdit: () -> Unit){
-        if (!state.isValidDish) return
-        viewModelScope.launch {
-            _state.update { it.copy( isSaving = true ) }
-
-            val result = dishInteractors.editDish(
-                id = state.dishId!!,
-                title = state.title,
-                description = state.desc
-            )
-
-            if(result.isFailure) {
-                println(result.exceptionOrNull()?.message)
-                _state.update { it.copy(
-                    error = result.exceptionOrNull()?.message,
-                    isSaving = false
-                ) }
-            }
-            else if(result.isSuccess){
-                _state.update { it.copy(
-                    isSaving = false
-                ) }
-                onEdit()
-            }
-        }
-    }
-
-    private fun deleteDish(dishId: Long, onDelete: () -> Unit){
-        viewModelScope.launch {
-
-            val result = dishInteractors.deleteDishById(dishId)
-
-            if(result.isFailure){
-                println(result.exceptionOrNull()?.message)
-                _state.update { it.copy(
-                    error = result.exceptionOrNull()?.message
-                ) }
-            }
-            else if(result.isSuccess){
-                onDelete()
-            }
-        }
+    protected open suspend fun deleteDish(dishId: Long): Result<Unit?> {
+        return dishInteractors.deleteDishById(dishId)
     }
 
     private fun isValidDish(id: Long?, title: String) : Boolean{

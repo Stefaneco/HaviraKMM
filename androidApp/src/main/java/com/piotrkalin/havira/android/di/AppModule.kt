@@ -23,10 +23,7 @@ import com.piotrkalin.havira.group.domain.IGroupService
 import com.piotrkalin.havira.group.domain.interactors.*
 import com.piotrkalin.havira.groupDish.data.AzureDishService
 import com.piotrkalin.havira.groupDish.domain.IDishService
-import com.piotrkalin.havira.groupDish.domain.interactors.AddGroupDishPrep
-import com.piotrkalin.havira.groupDish.domain.interactors.CreateGroupDish
-import com.piotrkalin.havira.groupDish.domain.interactors.GetGroup
-import com.piotrkalin.havira.groupDish.domain.interactors.GetGroupDishById
+import com.piotrkalin.havira.groupDish.domain.interactors.*
 import com.squareup.sqldelight.db.SqlDriver
 import dagger.Module
 import dagger.Provides
@@ -98,7 +95,9 @@ class AppModule {
             EditDish(dishRepository),
             CreateGroupDish(dishService),
             AddGroupDishPrep(dishService),
-            GetGroupDishById(dishService)
+            GetGroupDishById(dishService),
+            EditGroupDish(dishService),
+            DeleteGroupDish(dishService)
         )
     }
 

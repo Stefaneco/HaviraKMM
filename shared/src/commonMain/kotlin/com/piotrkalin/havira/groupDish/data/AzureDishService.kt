@@ -1,9 +1,6 @@
 package com.piotrkalin.havira.groupDish.data
 
-import com.piotrkalin.havira.groupDish.data.model.AddDishPrepRequest
-import com.piotrkalin.havira.groupDish.data.model.CreateDishRequest
-import com.piotrkalin.havira.groupDish.data.model.DishPrepDto
-import com.piotrkalin.havira.groupDish.data.model.DishResponse
+import com.piotrkalin.havira.groupDish.data.model.*
 import com.piotrkalin.havira.groupDish.domain.IDishService
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -34,12 +31,25 @@ class AzureDishService(
         return response.body()
     }
 
-
     override suspend fun getGroupDishById(dishId: Long): DishResponse {
         val response = httpClient.get("https://havira-api.azurewebsites.net/api/Dish/${dishId}")
         println("AzureDishService getGroupDishById status: ${response.status}")
         println("AzureDishService getGroupDishById body: ${response.body<String>()}")
         return response.body()
+    }
+
+    override suspend fun updateGroupDish(request: UpdateDishRequest, dishId: Long): DishResponse {
+        val response = httpClient.put("https://havira-api.azurewebsites.net/api/Dish/${dishId}"){
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }
+        println("AzureDishService UpdateGroupDish status: ${response.status}")
+        println("AzureDishService UpdateGroupDish body: ${response.body<String>()}")
+        return response.body()
+    }
+
+    override suspend fun deleteGroupDish(dishId: Long) {
+        httpClient.delete("https://havira-api.azurewebsites.net/api/Dish/${dishId}")
     }
 
 }

@@ -13,7 +13,10 @@ data class DishDetailState(
     val isAddingDishPrep : Boolean = false,
     val isDishPrepCreatorOpen : Boolean = false,
     val newDishPrepRating : Int = 0,
-    val newDishPrepDate : LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+    val newDishPrepDate : LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+
+    //group
+    val groupId: Long? = null
 )
 
 /*
