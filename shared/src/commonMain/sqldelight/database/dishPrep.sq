@@ -26,6 +26,10 @@ deleteDishPrepsByDishId:
 DELETE FROM dishPrepEntity
 WHERE dish_id = ?;
 
+deleteDishPrepById:
+DELETE FROM dishPrepEntity
+WHERE id = ?;
+
 getLastInsertedRowId:
 SELECT last_insert_rowid();
 

@@ -13,5 +13,6 @@ data class DishInteractors(
     val addGroupDishPrep: AddGroupDishPrep,
     val getGroupDishById: GetGroupDishById,
     val editGroupDish: EditGroupDish,
-    val deleteGroupDish: DeleteGroupDish
+    val deleteGroupDish: DeleteGroupDish,
+    val deleteDishPrepById: DeleteDishPrepById
 )

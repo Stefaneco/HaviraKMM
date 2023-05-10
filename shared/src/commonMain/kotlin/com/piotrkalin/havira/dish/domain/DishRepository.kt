@@ -13,6 +13,8 @@ class DishRepository(
 
     override suspend fun deleteDishById(id: Long) = localDishDataSource.deleteDishById(id)
 
+    override suspend fun deleteDishPrepById(id: Long) = localDishDataSource.deleteDishPrepById(id)
+
     override suspend fun insertDish(dish: Dish) = localDishDataSource.insertDish(dish)
 
     override suspend fun insertDishPrep(dishPrep: DishPrep, dish: Dish)

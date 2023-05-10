@@ -97,7 +97,8 @@ class AppModule {
             AddGroupDishPrep(dishService),
             GetGroupDishById(dishService),
             EditGroupDish(dishService),
-            DeleteGroupDish(dishService)
+            DeleteGroupDish(dishService),
+            DeleteDishPrepById(dishRepository)
         )
     }
 

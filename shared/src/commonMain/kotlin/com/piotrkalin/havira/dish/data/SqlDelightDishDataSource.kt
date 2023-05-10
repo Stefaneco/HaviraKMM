@@ -31,6 +31,10 @@ class SqlDelightDishDataSource(
         }
     }
 
+    override suspend fun deleteDishPrepById(id: Long) {
+        dishPrepQueries.deleteDishPrepById(id)
+    }
+
     override suspend fun insertDish(dish: Dish) {
         dishQueries.insertDish(
             id = dish.id,
